@@ -68,50 +68,50 @@ const ProfileSetup = () => {
   
     // Other fields
     formData.append('name', name);
-    formData.append('age', age);
-    formData.append('height', height);
-    formData.append('weight', weight);
-    formData.append('targetWeight', targetWeight);
-    formData.append('dietType', selectedDiet);
+    formData.append('memberAge', age);
+    formData.append('memberHeight', height);
+    formData.append('memberWeight', weight);
+    formData.append('memberTargetWeight', targetWeight);
+    formData.append('memberDietType', selectedDiet);
   
-    // try {
-    //   const accessToken = await AsyncStorage.getItem('accessToken');
+    try {
+      const accessToken = await AsyncStorage.getItem('accessToken');
   
-    //   if (!accessToken) {
-    //     Alert.alert('오류', '로그인 토큰을 찾을 수 없습니다. 다시 로그인 해주세요.');
-    //     return;
-    //   }
+      if (!accessToken) {
+        Alert.alert('오류', '로그인 토큰을 찾을 수 없습니다. 다시 로그인 해주세요.');
+        return;
+      }
   
-    //   const response = await fetch('http://172.20.10.10:8080/member/enroll', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data',
-    //       Authorization: `Bearer ${accessToken}`,
-    //     },
-    //     body: formData,
-    //   });
+      const response = await fetch('http://172.29.113.130:8080/profileSetting', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `${accessToken}`,
+        },
+        body: formData,
+      });
   
-    //   const data = await response.json();
+      const data = await response.json();
   
-    //   if (response.ok && data.isSuccess) {
-    //     Alert.alert('성공', '프로필 등록이 완료되었습니다.', [
-    //       {
-    //         text: '확인',
-    //         onPress: () => navigation.navigate('Home'), // Home 화면으로 이동
-    //       },
-    //     ]);
-    //   } else {
-    //     Alert.alert('오류', data.message || '등록 중 문제가 발생했습니다.');
-    //   }
-    // } catch (error) {
-    //   Alert.alert('오류', '네트워크 문제로 요청을 완료할 수 없습니다.');
-    // }
-    Alert.alert('성공', '프로필 등록이 완료되었습니다.', [
-            {
-              text: '확인',
-              onPress: () => navigation.replace('Main'), // MainTabNavigator로 이동
-            },
-          ]);
+      if (response.ok && data.isSuccess) {
+        Alert.alert('성공', '프로필 등록이 완료되었습니다.', [
+          {
+            text: '확인',
+            onPress: () => navigation.navigate('Home'), // Home 화면으로 이동
+          },
+        ]);
+      } else {
+        Alert.alert('오류', data.message || '등록 중 문제가 발생했습니다.');
+      }
+    } catch (error) {
+      Alert.alert('오류', '네트워크 문제로 요청을 완료할 수 없습니다.');
+    }
+    // Alert.alert('성공', '프로필 등록이 완료되었습니다.', [
+    //         {
+    //           text: '확인',
+    //           onPress: () => navigation.replace('Main'), // MainTabNavigator로 이동
+    //         },
+    //       ]);
   };
 
   return (
@@ -194,8 +194,8 @@ const ProfileSetup = () => {
 
       <View style={styles.dietTypeContainer}>
         {[
-          { type: 'weight-loss', label: '체중감량', icon: require('../../assets/images/weight-loss.png') },
-          { type: 'bulk-up', label: '벌크업', icon: require('../../assets/images/bulk-up.png') },
+          { type: 'DIET', label: '체중감량', icon: require('../../assets/images/weight-loss.png') },
+          { type: 'BULK', label: '벌크업', icon: require('../../assets/images/bulk-up.png') },
           { type: 'carb-cycle', label: '탄수화물 사이클링', icon: require('../../assets/images/carb-cycle.png') },
           { type: 'keto', label: '키토제닉', icon: require('../../assets/images/keto.png') },
         ].map((diet) => (

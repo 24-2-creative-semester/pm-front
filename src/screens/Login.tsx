@@ -24,35 +24,35 @@ const Login = () => {
   const navigation = useNavigation<LoginScreenNavigationProp>();
 
   const handleLogin = async () => {
-    // try {
-    //   const response = await fetch(`http://172.16.86.241:8080/login/local`, {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({ email: email, password: password }),
-    //   });
+    try {
+      const response = await fetch(`http://172.20.10.10:8080/login/local`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email, password: password }),
+      });
 
-    //   const accessToken = response.headers.get("Authorization");
-    //   const refreshToken = response.headers.get("Set-Cookie");
+      const accessToken = response.headers.get("Authorization");
+      const refreshToken = response.headers.get("Set-Cookie");
 
-    //   const data = await response.json();
+      const data = await response.json();
 
-    //   if (data.isSuccess) {
-    //     if (accessToken) {
-    //       await AsyncStorage.setItem("accessToken", accessToken);
-    //     }
-    //     if (refreshToken) {
-    //       await AsyncStorage.setItem("refreshToken", refreshToken);
-    //     }
+      if (data.isSuccess) {
+        if (accessToken) {
+          await AsyncStorage.setItem("accessToken", accessToken);
+        }
+        if (refreshToken) {
+          await AsyncStorage.setItem("refreshToken", refreshToken);
+        }
 
-    //     Alert.alert("로그인 성공", data.message);
-    //     navigation.navigate("ProfileSetup");
-    //   } else {
-    //     Alert.alert("로그인 실패", data.message);
-    //   }
-    // } catch (error) {
-    //   Alert.alert("에러", "네트워크 연결에 문제가 있습니다.");
-    // }
-	  navigation.navigate("ProfileSetup");
+        Alert.alert("로그인 성공", data.message);
+        navigation.navigate("ProfileSetup");
+      } else {
+        Alert.alert("로그인 실패", data.message);
+      }
+    } catch (error) {
+      Alert.alert("에러", "네트워크 연결에 문제가 있습니다.");
+    }
+	  // navigation.navigate("ProfileSetup");
   };
 
   return (

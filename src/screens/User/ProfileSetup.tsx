@@ -82,7 +82,7 @@ const ProfileSetup = () => {
     //     return;
     //   }
   
-    //   const response = await fetch('http://172.16.86.241:8080/member/enroll', {
+    //   const response = await fetch('http://172.20.10.10:8080/member/enroll', {
     //     method: 'POST',
     //     headers: {
     //       'Content-Type': 'multipart/form-data',

@@ -1,13 +1,27 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import BattleMain from '../screens/Battle/BattleMain';
-import MateList from '../screens/Mate/MateList';
 import DietMain from '../screens/Record/Diet/DietMain';
 import TimerSetting from '../screens/Timer/TimerSetting';
 import Home from '../screens/Home';
+import MateList from '../screens/Mate/MateList';
+import MateCreate from '../screens/Mate/MateCreate';
+import MyMate from '../screens/Mate/MyMate';
 import TabBarIcon from '../components/TabBarIcon';
 
 const Tab = createBottomTabNavigator();
+const MateStack = createStackNavigator();
+
+const MateStackNavigator = () => {
+  return (
+    <MateStack.Navigator screenOptions={{ headerShown: false }}>
+      <MateStack.Screen name="MateList" component={MateList} />
+      <MateStack.Screen name="MateCreate" component={MateCreate} />
+      <MateStack.Screen name="MyMate" component={MyMate} />
+    </MateStack.Navigator>
+  );
+};
 
 const MainTabNavigator = () => {
   return (
@@ -16,7 +30,7 @@ const MainTabNavigator = () => {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: '#1A1A1A',
-          position: 'absolute', // 고정
+          position: 'absolute',
           height: 60,
         },
       }}
@@ -75,7 +89,7 @@ const MainTabNavigator = () => {
       />
       <Tab.Screen
         name="Mate"
-        component={MateList}
+        component={MateStackNavigator}
         options={{
           tabBarIcon: ({ focused }) => (
             <TabBarIcon

@@ -49,13 +49,13 @@ const Signup = () => {
     }
   
     try {
-      const response = await fetch(`http://172.16.86.241:8080/signup/local`, {
+      const response = await fetch(`http://172.20.10.10:8080/signup/local`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          gender,
+          // gender,
           email,
           password,
         }),

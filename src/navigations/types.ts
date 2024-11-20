@@ -17,5 +17,5 @@ export type RootStackParamList = {
   Record: undefined; // Record 추가
   Battle: undefined; // Battle도 추가 필요
   Timer: undefined; // Timer 추가
-  Mate: undefined; // Mate 추가
+  MateList: undefined; // Mate 추가
 };

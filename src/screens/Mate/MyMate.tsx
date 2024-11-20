@@ -1,528 +1,263 @@
-import React from "react";
-import { SafeAreaView, View, ScrollView, Text, Image, } from "react-native";
-const MyMate = () => {
-	return (
-		<SafeAreaView 
-			style={{
-				flex: 1,
-				backgroundColor: "#FFFFFF",
-			}}>
-			<ScrollView 
-				horizontal 
-				style={{
-					flex: 1,
-					flexDirection: "row",
-					backgroundColor: "#FFFFFF",
-					paddingVertical: 1,
-				}}>
-				<View 
-					style={{
-						width: 393,
-					}}>
-					<View >
-						<View 
-							style={{
-								backgroundColor: "#1D1B20",
-								paddingTop: 167,
-								paddingBottom: 45,
-								paddingHorizontal: 24,
-							}}>
-							<Text 
-								style={{
-									color: "#FFFFFF",
-									fontSize: 16,
-									marginBottom: 7,
-								}}>
-								{"제목"}
-							</Text>
-							<View 
-								style={{
-									backgroundColor: "#625E67",
-									borderRadius: 8,
-									paddingVertical: 17,
-									paddingHorizontal: 16,
-									marginBottom: 17,
-								}}>
-								<Text 
-									style={{
-										color: "#BABABA",
-										fontSize: 16,
-									}}>
-									{"제목을 입력하세요"}
-								</Text>
-							</View>
-							<Text 
-								style={{
-									color: "#FFFFFF",
-									fontSize: 16,
-									marginBottom: 7,
-								}}>
-								{"내용"}
-							</Text>
-							<View 
-								style={{
-									backgroundColor: "#625E67",
-									borderRadius: 8,
-									paddingVertical: 17,
-									paddingHorizontal: 16,
-									marginBottom: 17,
-								}}>
-								<Text 
-									style={{
-										color: "#BABABA",
-										fontSize: 16,
-									}}>
-									{"예) 뚝섬역 2번출구에서 봬요!"}
-								</Text>
-							</View>
-							<Text 
-								style={{
-									color: "#FFFFFF",
-									fontSize: 16,
-									marginBottom: 7,
-								}}>
-								{"종목"}
-							</Text>
-							<View 
-								style={{
-									backgroundColor: "#625E67",
-									borderRadius: 8,
-									paddingVertical: 17,
-									paddingHorizontal: 16,
-									marginBottom: 32,
-								}}>
-								<Text 
-									style={{
-										color: "#BABABA",
-										fontSize: 16,
-									}}>
-									{"종목을 입력하세요"}
-								</Text>
-							</View>
-							<View 
-								style={{
-									flexDirection: "row",
-									alignItems: "center",
-									marginBottom: 16,
-								}}>
-								<Text 
-									style={{
-										color: "#FFFFFF",
-										fontSize: 16,
-										marginRight: 9,
-									}}>
-									{"날짜"}
-								</Text>
-								<View 
-									style={{
-										width: 120,
-										height: 40,
-										backgroundColor: "#625F67",
-										borderRadius: 8,
-										marginRight: 33,
-									}}>
-								</View>
-								<Text 
-									style={{
-										color: "#FFFFFF",
-										fontSize: 16,
-										marginRight: 10,
-									}}>
-									{"시간"}
-								</Text>
-								<View 
-									style={{
-										width: 120,
-										height: 40,
-										backgroundColor: "#625F67",
-										borderRadius: 8,
-									}}>
-								</View>
-							</View>
-							<View 
-								style={{
-									flexDirection: "row",
-									alignItems: "center",
-									marginBottom: 25,
-								}}>
-								<Text 
-									style={{
-										color: "#FFFFFF",
-										fontSize: 16,
-										marginRight: 11,
-									}}>
-									{"인원"}
-								</Text>
-								<View 
-									style={{
-										width: 120,
-										height: 40,
-										backgroundColor: "#625F67",
-										borderRadius: 8,
-									}}>
-								</View>
-							</View>
-							<Text 
-								style={{
-									color: "#FFFFFF",
-									fontSize: 16,
-									marginBottom: 7,
-								}}>
-								{"성별"}
-							</Text>
-							<View 
-								style={{
-									flexDirection: "row",
-									alignItems: "center",
-									marginBottom: 17,
-								}}>
-								<View 
-									style={{
-										width: 111,
-										alignItems: "center",
-										backgroundColor: "#625F67",
-										borderRadius: 8,
-										paddingVertical: 13,
-										marginRight: 6,
-									}}>
-									<Text 
-										style={{
-											color: "#BABABA",
-											fontSize: 14,
-										}}>
-										{"남성"}
-									</Text>
-								</View>
-								<View 
-									style={{
-										width: 111,
-										alignItems: "center",
-										backgroundColor: "#625F67",
-										borderRadius: 8,
-										paddingVertical: 13,
-										marginRight: 6,
-									}}>
-									<Text 
-										style={{
-											color: "#BABABA",
-											fontSize: 14,
-										}}>
-										{"여성"}
-									</Text>
-								</View>
-								<View 
-									style={{
-										width: 111,
-										alignItems: "center",
-										backgroundColor: "#625F67",
-										borderRadius: 8,
-										paddingVertical: 13,
-									}}>
-									<Text 
-										style={{
-											color: "#BABABA",
-											fontSize: 14,
-										}}>
-										{"성별무관"}
-									</Text>
-								</View>
-							</View>
-							<Text 
-								style={{
-									color: "#FFFFFF",
-									fontSize: 16,
-									marginBottom: 7,
-								}}>
-								{"지역"}
-							</Text>
-							<View 
-								style={{
-									backgroundColor: "#625E67",
-									borderRadius: 8,
-									paddingVertical: 17,
-									paddingHorizontal: 16,
-									marginBottom: 17,
-								}}>
-								<Text 
-									style={{
-										color: "#BABABA",
-										fontSize: 16,
-									}}>
-									{"지역을 입력하세요"}
-								</Text>
-							</View>
-							<Text 
-								style={{
-									color: "#FFFFFF",
-									fontSize: 16,
-									marginBottom: 7,
-								}}>
-								{"장소"}
-							</Text>
-							<View 
-								style={{
-									backgroundColor: "#625E67",
-									borderRadius: 8,
-									paddingVertical: 17,
-									paddingHorizontal: 16,
-								}}>
-								<Text 
-									style={{
-										color: "#BABABA",
-										fontSize: 16,
-									}}>
-									{"장소를 입력하세요"}
-								</Text>
-							</View>
-						</View>
-						<View 
-							style={{
-								position: "absolute",
-								top: -1,
-								right: 0,
-								left: 0,
-								height: 135,
-								backgroundColor: "#1D1B20",
-							}}>
-							<View 
-								style={{
-									flexDirection: "row",
-									alignItems: "center",
-									marginTop: 11,
-									marginBottom: 38,
-									marginHorizontal: 34,
-								}}>
-								<Text 
-									style={{
-										color: "#FFFFFF",
-										fontSize: 16,
-										marginRight: 4,
-										flex: 1,
-									}}>
-									{"9:41"}
-								</Text>
-								<View 
-									style={{
-										width: 125,
-										flexDirection: "row",
-										justifyContent: "space-between",
-										alignItems: "center",
-										backgroundColor: "#000000",
-										borderRadius: 100,
-										marginRight: 22,
-									}}>
-									<View 
-										style={{
-											width: 80,
-											height: 37,
-											backgroundColor: "#000000",
-											borderRadius: 100,
-										}}>
-									</View>
-									<View 
-										style={{
-											width: 37,
-											height: 37,
-											backgroundColor: "#000000",
-											borderRadius: 100,
-										}}>
-									</View>
-								</View>
-								<Image
-									source = {{uri: "https://i.imgur.com/1tMFzp8.png"}} 
-									resizeMode = {"stretch"}
-									style={{
-										width: 18,
-										height: 12,
-										marginRight: 8,
-									}}
-								/>
-								<Image
-									source = {{uri: "https://i.imgur.com/1tMFzp8.png"}} 
-									resizeMode = {"stretch"}
-									style={{
-										width: 17,
-										height: 11,
-										marginRight: 8,
-									}}
-								/>
-								<View 
-									style={{
-										width: 25,
-										borderColor: "#FFFFFF",
-										borderRadius: 4,
-										borderWidth: 1,
-										paddingHorizontal: 2,
-										marginRight: 1,
-									}}>
-									<View 
-										style={{
-											height: 9,
-											backgroundColor: "#FFFFFF",
-											borderRadius: 2,
-											marginTop: 2,
-										}}>
-									</View>
-								</View>
-								<View 
-									style={{
-										width: 1,
-										height: 4,
-										backgroundColor: "#FFFFFF",
-									}}>
-								</View>
-							</View>
-							<View 
-								style={{
-									flexDirection: "row",
-									justifyContent: "space-between",
-									alignItems: "center",
-									marginHorizontal: 24,
-								}}>
-								<Text 
-									style={{
-										color: "#FFFFFF",
-										fontSize: 20,
-									}}>
-									{"취소"}
-								</Text>
-								<Text 
-									style={{
-										color: "#FFFFFF",
-										fontSize: 20,
-									}}>
-									{"모임 생성하기"}
-								</Text>
-								<Text 
-									style={{
-										color: "#FFFFFF",
-										fontSize: 20,
-									}}>
-									{"생성"}
-								</Text>
-							</View>
-						</View>
-					</View>
-					<View 
-						style={{
-							position: "absolute",
-							bottom: -98,
-							right: 0,
-							left: 0,
-							height: 104,
-							backgroundColor: "#1D1B20",
-						}}>
-						<View 
-							style={{
-								flexDirection: "row",
-								justifyContent: "space-between",
-								alignItems: "center",
-								marginTop: 24,
-								marginBottom: 9,
-								marginHorizontal: 24,
-							}}>
-							<Image
-								source = {{uri: "https://i.imgur.com/1tMFzp8.png"}} 
-								resizeMode = {"stretch"}
-								style={{
-									width: 30,
-									height: 30,
-								}}
-							/>
-							<Image
-								source = {{uri: "https://i.imgur.com/1tMFzp8.png"}} 
-								resizeMode = {"stretch"}
-								style={{
-									width: 30,
-									height: 30,
-								}}
-							/>
-							<Image
-								source = {{uri: "https://i.imgur.com/1tMFzp8.png"}} 
-								resizeMode = {"stretch"}
-								style={{
-									width: 30,
-									height: 30,
-								}}
-							/>
-							<Image
-								source = {{uri: "https://i.imgur.com/1tMFzp8.png"}} 
-								resizeMode = {"stretch"}
-								style={{
-									width: 30,
-									height: 30,
-								}}
-							/>
-							<Image
-								source = {{uri: "https://i.imgur.com/1tMFzp8.png"}} 
-								resizeMode = {"stretch"}
-								style={{
-									width: 30,
-									height: 30,
-								}}
-							/>
-						</View>
-						<View 
-							style={{
-								flexDirection: "row",
-								alignItems: "center",
-								marginBottom: 17,
-								marginHorizontal: 19,
-							}}>
-							<Text 
-								style={{
-									color: "#7C7C7C",
-									fontSize: 10,
-									marginRight: 4,
-									flex: 1,
-								}}>
-								{"기록"}
-							</Text>
-							<Text 
-								style={{
-									color: "#7C7C7C",
-									fontSize: 10,
-									marginRight: 69,
-								}}>
-								{"대결"}
-							</Text>
-							<Text 
-								style={{
-									color: "#7C7C7C",
-									fontSize: 10,
-									marginRight: 63,
-								}}>
-								{"홈"}
-							</Text>
-							<Text 
-								style={{
-									color: "#7C7C7C",
-									fontSize: 10,
-									marginRight: 46,
-								}}>
-								{"타이머"}
-							</Text>
-							<Text 
-								style={{
-									color: "#6F6CFF",
-									fontSize: 10,
-								}}>
-								{"운동메이트"}
-							</Text>
-						</View>
-						<View 
-							style={{
-								height: 5,
-								backgroundColor: "#FFFFFF",
-								borderRadius: 100,
-								marginHorizontal: 127,
-							}}>
-						</View>
-					</View>
-				</View>
-			</ScrollView>
-		</SafeAreaView>
-	)
+import React, { useEffect, useState } from "react";
+import {
+  SafeAreaView,
+  View,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  Alert,
+  StyleSheet,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native"; // Navigation 훅 추가
+
+interface Post {
+  postId: number;
+  postTitle: string;
+  meetPlace: string;
+  exerciseName: string;
+  meetTime: string;
+  allNumberOfPeople: number;
+  currentNumberOfPeople: number;
 }
+
+const MyMate = () => {
+  const navigation = useNavigation(); // Navigation 훅 사용
+  const [myPosts, setMyPosts] = useState<Post[]>([]);
+  const [myApplications, setMyApplications] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const memberId = 1; // 현재 사용자 ID 설정
+
+  // /myposts API 호출
+  const fetchMyPosts = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("http://172.20.10.10:8080/myposts?memberId=1", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      if (data.isSuccess) {
+        setMyPosts(data.result);
+      } else {
+        Alert.alert("오류", data.message || "내 게시글을 불러올 수 없습니다.");
+      }
+    } catch (error) {
+      Alert.alert("오류", `내 게시글 요청 실패: ${(error as any).message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // /myapplicants API 호출
+  const fetchMyApplications = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("http://172.20.10.10:8080/myapplicants?memberId=1", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      if (data.isSuccess) {
+        setMyApplications(data.result);
+      } else {
+        Alert.alert("오류", data.message || "신청한 게시글을 불러올 수 없습니다.");
+      }
+    } catch (error) {
+      Alert.alert("오류", `신청한 게시글 요청 실패: ${(error as any).message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 게시글 삭제 함수
+  const deletePost = async (postId: number) => {
+    try {
+      const response = await fetch("http://172.20.10.10:8080/deletepost", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ postId }),
+      });
+      const data = await response.json();
+      if (data.isSuccess) {
+        Alert.alert("성공", "게시글이 삭제되었습니다.");
+        fetchMyPosts(); // 삭제 후 데이터 갱신
+      } else {
+        Alert.alert("오류", data.message || "게시글 삭제에 실패했습니다.");
+      }
+    } catch (error) {
+      Alert.alert("오류", `게시글 삭제 요청 실패: ${(error as any).message}`);
+    }
+  };
+
+  // 참여 취소 함수
+  const cancelApplication = async (postId: number) => {
+    try {
+      const response = await fetch("http://172.20.10.10:8080/deleteapplicant", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ postId, memberId }),
+      });
+      const data = await response.json();
+      if (data.isSuccess) {
+        Alert.alert("성공", "참여가 취소되었습니다.");
+        fetchMyApplications(); // 취소 후 데이터 갱신
+      } else {
+        Alert.alert("오류", data.message || "참여 취소에 실패했습니다.");
+      }
+    } catch (error) {
+      Alert.alert("오류", `참여 취소 요청 실패: ${(error as any).message}`);
+    }
+  };
+
+  // 초기 데이터 로드
+  useEffect(() => {
+    fetchMyPosts();
+    fetchMyApplications();
+  }, []);
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {/* 뒤로가기 버튼 */}
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.backButtonText}>←</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.title}>모임 관리</Text>
+
+      {loading ? (
+        <Text style={styles.loadingText}>로딩 중...</Text>
+      ) : (
+        <ScrollView>
+          {/* 내가 생성한 게시글 */}
+          <Text style={styles.sectionTitle}>내가 생성한 모임</Text>
+          {myPosts.map((post) => (
+            <View key={post.postId} style={styles.card}>
+              <Text style={styles.cardTitle}>{post.exerciseName}</Text>
+              <Text style={styles.cardDetails}>{post.postTitle}</Text>
+              <Text style={styles.cardDetails}>
+                {new Date(post.meetTime).toLocaleString("ko-KR")}
+              </Text>
+              <Text style={styles.cardDetails}>{post.meetPlace}</Text>
+              <Text style={styles.cardDetails}>
+                {post.currentNumberOfPeople}/{post.allNumberOfPeople}명
+              </Text>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => deletePost(post.postId)}
+              >
+                <Text style={styles.deleteButtonText}>모임 취소</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+
+          {/* 내가 신청한 게시글 */}
+          <Text style={styles.sectionTitle}>내가 신청한 모임</Text>
+          {myApplications.map((post) => (
+            <View key={post.postId} style={styles.card}>
+              <Text style={styles.cardTitle}>{post.exerciseName}</Text>
+              <Text style={styles.cardDetails}>{post.postTitle}</Text>
+              <Text style={styles.cardDetails}>
+                {new Date(post.meetTime).toLocaleString("ko-KR")}
+              </Text>
+              <Text style={styles.cardDetails}>{post.meetPlace}</Text>
+              <Text style={styles.cardDetails}>
+                {post.currentNumberOfPeople}/{post.allNumberOfPeople}명
+              </Text>
+              <TouchableOpacity
+                style={styles.cancelButton}
+                onPress={() => cancelApplication(post.postId)}
+              >
+                <Text style={styles.cancelButtonText}>참여 취소</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </ScrollView>
+      )}
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#1A1A1A",
+    padding: 20,
+  },
+  backButton: {
+    position: "absolute",
+    top: 20,
+    left: 20,
+    zIndex: 1,
+  },
+  backButtonText: {
+    color: "#FFF",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  title: {
+    fontSize: 22,
+    color: "#FFF",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  loadingText: {
+    fontSize: 16,
+    color: "#FFF",
+    textAlign: "center",
+  },
+  sectionTitle: {
+    fontSize: 18,
+    color: "#6F6CFF",
+    marginBottom: 10,
+    marginTop: 20,
+  },
+  card: {
+    backgroundColor: "#2A2A2A",
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 10,
+  },
+  cardTitle: {
+    fontSize: 16,
+    color: "#6F6CFF",
+    marginBottom: 5,
+  },
+  cardDetails: {
+    fontSize: 14,
+    color: "#BABABA",
+    marginBottom: 5,
+  },
+  deleteButton: {
+    backgroundColor: "#FF6C6C",
+    paddingVertical: 5,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  deleteButtonText: {
+    color: "#FFF",
+    textAlign: "center",
+    fontSize: 14,
+  },
+  cancelButton: {
+    backgroundColor: "#6F6CFF",
+    paddingVertical: 5,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  cancelButtonText: {
+    color: "#FFF",
+    textAlign: "center",
+    fontSize: 14,
+  },
+});
 
 export default MyMate;

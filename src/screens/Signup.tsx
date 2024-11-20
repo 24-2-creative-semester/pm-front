@@ -55,7 +55,7 @@ const Signup = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          // gender,
+          gender,
           email,
           password,
         }),
@@ -91,14 +91,14 @@ const Signup = () => {
         <TouchableOpacity
           style={[
             styles.genderButton,
-            gender === "남성" && styles.selectedGenderButton,
+            gender === "MALE" && styles.selectedGenderButton,
           ]}
-          onPress={() => handleGenderSelection("남성")}
+          onPress={() => handleGenderSelection("MALE")}
         >
           <Text
             style={[
               styles.genderButtonText,
-              gender === "남성" && styles.selectedGenderButtonText,
+              gender === "MALE" && styles.selectedGenderButtonText,
             ]}
           >
             남성
@@ -107,14 +107,14 @@ const Signup = () => {
         <TouchableOpacity
           style={[
             styles.genderButton,
-            gender === "여성" && styles.selectedGenderButton,
+            gender === "FEMALE" && styles.selectedGenderButton,
           ]}
-          onPress={() => handleGenderSelection("여성")}
+          onPress={() => handleGenderSelection("FEMALE")}
         >
           <Text
             style={[
               styles.genderButtonText,
-              gender === "여성" && styles.selectedGenderButtonText,
+              gender === "FEMALE" && styles.selectedGenderButtonText,
             ]}
           >
             여성

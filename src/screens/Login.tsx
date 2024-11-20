@@ -39,11 +39,11 @@ const Login = () => {
       if (data.isSuccess) {
         if (accessToken) {
           await AsyncStorage.setItem("accessToken", accessToken);
+          console.log("Access Token:", accessToken);
         }
         if (refreshToken) {
           await AsyncStorage.setItem("refreshToken", refreshToken);
         }
-
         Alert.alert("로그인 성공", data.message);
         navigation.navigate("ProfileSetup");
       } else {

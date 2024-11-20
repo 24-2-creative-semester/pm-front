@@ -11,6 +11,7 @@ import {
   Modal,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
 const MateCreate = () => {
@@ -48,17 +49,27 @@ const MateCreate = () => {
       meetPlace,
       numberOfPeople: parseInt(numberOfPeople, 10),
       recruitmentGender: selectedGender === "남성" ? "MALE" : selectedGender === "여성" ? "FEMALE" : "ALL",
-      memberId: 1,
     };
 
     try {
+      // Get the access token from AsyncStorage
+      const accessToken = await AsyncStorage.getItem("accessToken");
+      if (!accessToken) {
+        Alert.alert("오류", "로그인이 필요합니다.");
+        navigation.navigate("Login");
+        return;
+      }
+
       const response = await fetch("http://172.20.10.10:8080/createpost", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `${accessToken}`, // Add token to headers
         },
         body: JSON.stringify(requestBody),
       });
+
+	  console.log(requestBody);
 
       if (response.ok) {
         Alert.alert("성공", "모임이 생성되었습니다.");

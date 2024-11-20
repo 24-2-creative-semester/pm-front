@@ -9,6 +9,7 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Post {
   postId: number;
@@ -23,27 +24,33 @@ interface Post {
 const MateList = () => {
   const navigation = useNavigation();
   const [posts, setPosts] = useState<Post[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]); // 검색된 게시글
+  const [searchTerm, setSearchTerm] = useState(""); // 검색어
   const [loading, setLoading] = useState(false);
-
-  const memberId = 1; // 현재 사용자 ID를 설정
 
   // API 호출 함수
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        "http://172.20.10.10:8080/allposts?gender=FEMALE",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
+      const accessToken = await AsyncStorage.getItem("accessToken");
+      if (!accessToken) {
+        Alert.alert("오류", "로그인이 필요합니다.");
+        navigation.navigate("Login");
+        return;
+      }
+  
+      const response = await fetch("http://172.20.10.10:8080/allposts", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${accessToken}`,
+        },
+      });
+  
       const data = await response.json();
       if (data.isSuccess && data.result) {
         setPosts(data.result);
+        setFilteredPosts(data.result); // 초기 데이터 설정
       } else {
         Alert.alert("오류", data.message || "데이터를 불러오는데 실패했습니다.");
       }
@@ -53,18 +60,25 @@ const MateList = () => {
       setLoading(false);
     }
   };
-
-  // 신청하기 API 호출 함수
+  
   const applyToPost = async (postId: number) => {
     try {
+      const accessToken = await AsyncStorage.getItem("accessToken");
+      if (!accessToken) {
+        Alert.alert("오류", "로그인이 필요합니다.");
+        navigation.navigate("Login");
+        return;
+      }
+  
       const response = await fetch("http://172.20.10.10:8080/applytopost", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({ postId, memberId }),
+        body: JSON.stringify({ postId }),
       });
-
+  
       const data = await response.json();
       if (data.isSuccess) {
         Alert.alert("성공", "신청이 완료되었습니다.");
@@ -75,6 +89,16 @@ const MateList = () => {
     } catch (error) {
       Alert.alert("오류", `신청 요청 실패: ${(error as any).message}`);
     }
+  };  
+
+  // 검색 핸들러
+  const handleSearch = (text: string) => {
+    setSearchTerm(text); // 검색어 업데이트
+    const filtered = posts.filter((post) =>
+      post.exerciseName.toLowerCase().includes(text.toLowerCase()) ||
+      post.meetPlace.toLowerCase().includes(text.toLowerCase())
+    );
+    setFilteredPosts(filtered); // 필터링된 게시글 업데이트
   };
 
   // 화면에 포커스될 때마다 데이터 새로고침
@@ -86,14 +110,6 @@ const MateList = () => {
 
   return (
     <View style={styles.container}>
-      {/* 뒤로가기 버튼 */}
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => navigation.goBack()}
-      >
-        <Text style={styles.backButtonText}>←</Text>
-      </TouchableOpacity>
-
       <Text style={styles.title}>
         <Text style={styles.highlight}>운동메이트</Text>와 함께{"\n"}운동해보세요!
       </Text>
@@ -103,6 +119,8 @@ const MateList = () => {
         style={styles.searchInput}
         placeholder="검색"
         placeholderTextColor="#BABABA"
+        value={searchTerm}
+        onChangeText={handleSearch} // 검색어 변경 시 필터링 실행
       />
 
       {/* 모임 생성 및 관리 버튼 */}
@@ -121,7 +139,7 @@ const MateList = () => {
         <Text style={styles.loadingText}>로딩 중...</Text>
       ) : (
         <ScrollView style={styles.listContainer}>
-          {posts.map((post) => (
+          {filteredPosts.map((post) => (
             <View key={post.postId} style={styles.card}>
               <Text style={styles.cardTitle}>{post.exerciseName}</Text>
               <Text style={styles.cardTime}>
@@ -172,22 +190,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#1A1A1A",
     padding: 20,
   },
-  backButton: {
-    position: "absolute",
-    top: 20,
-    left: 20,
-    zIndex: 1,
-  },
-  backButtonText: {
-    color: "#FFF",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
   title: {
     fontSize: 22,
     color: "#FFF",
     marginBottom: 20,
-    marginTop: 40, // 뒤로가기 버튼 아래로
     textAlign: "center",
   },
   highlight: {

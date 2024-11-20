@@ -7,8 +7,12 @@ import style from "../../styles/ProfileStyles";
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../navigations/types';
 
+import { StackNavigationProp } from '@react-navigation/stack';
+
+
 const ProfileSetup = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>(); // 타입 명시
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'ProfileSetup'>>();
+
   const [selectedDiet, setSelectedDiet] = useState('');
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [name, setName] = useState('');
@@ -105,7 +109,7 @@ const ProfileSetup = () => {
     Alert.alert('성공', '프로필 등록이 완료되었습니다.', [
             {
               text: '확인',
-              onPress: () => navigation.navigate('Home'), // Home 화면으로 이동
+              onPress: () => navigation.replace('Main'), // MainTabNavigator로 이동
             },
           ]);
   };

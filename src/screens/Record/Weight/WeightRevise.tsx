@@ -14,7 +14,7 @@ const WeightRegisterScreen = () => {
   const sendDataToServer = async () => {
     try {
       const response = await fetch('http://172.16.86.241:8080/createweight', {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -57,7 +57,7 @@ const WeightRegisterScreen = () => {
           <Text style={[styles.tabText, styles.activeTab]}>체중</Text>
         </View>
 
-        <Text style={styles.messageText}>아직 체중이 등록되지 않았어요. 오늘의 체중을 등록하세요!</Text>
+        <Text style={styles.messageText}>수정 값을 입력하세요</Text>
 
         <View style={styles.inputContainer}>
           <Text style={styles.labelText}>몸무게 (kg)</Text>

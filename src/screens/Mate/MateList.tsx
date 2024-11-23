@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../navigations/types";
 
 interface Post {
   postId: number;
@@ -21,8 +23,10 @@ interface Post {
   gender: string;
 }
 
+type MateCreateScreenNavigationProp = StackNavigationProp<RootStackParamList, "MateList">;
+
 const MateList = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<MateCreateScreenNavigationProp>();
   const [posts, setPosts] = useState<Post[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]); // 검색된 게시글
   const [searchTerm, setSearchTerm] = useState(""); // 검색어
@@ -186,11 +190,13 @@ const MateList = () => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop:20,
     flex: 1,
     backgroundColor: "#1A1A1A",
     padding: 20,
   },
   title: {
+    marginTop:20,
     fontSize: 22,
     color: "#FFF",
     marginBottom: 20,

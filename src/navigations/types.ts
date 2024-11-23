@@ -5,10 +5,12 @@ export type RootStackParamList = {
   Login: undefined;
   Signup: undefined;
   ProfileSetup: undefined;
+
   ExerciseMain: undefined;
   ExerciseSearch: undefined;
   ExerciseDetail: undefined;
   ExerciseEnroll: undefined;
+
   BodyMain: undefined;
   MateCreate: undefined;
   MyMate: undefined;
@@ -18,4 +20,23 @@ export type RootStackParamList = {
   Battle: undefined; // Battle도 추가 필요
   Timer: undefined; // Timer 추가
   MateList: undefined; // Mate 추가
+  DietMain : undefined;
+  DietDetail:undefined;
+  DietEnroll:undefined;
+  DietSearch:undefined;
+
+  BattleCreate :undefined;
+  BattleCreateSecond: { inviteCode: string };
+  BattleList:undefined;
+  BattleMain:undefined;
+  BattleOpponentDiet:undefined;
+  BattleOtherState: { battleId: string }; // battleId 전달 정의
+  BattleResult: { battleId: string; memberId: string }; // battleId와 memberId 정의
+  inviteCode:undefined;
+  BattleParticipate: undefined;
+  
+  WeightAfter:undefined;
+  WeightBefore:undefined;
+  WeightRevise:undefined;
+
 };

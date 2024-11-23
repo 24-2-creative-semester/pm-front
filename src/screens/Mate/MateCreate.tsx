@@ -13,19 +13,23 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../navigations/types";
+
+type MateCreateScreenNavigationProp = StackNavigationProp<RootStackParamList, "MateCreate">;
 
 const MateCreate = () => {
-  const navigation = useNavigation();
+	const navigation = useNavigation<MateCreateScreenNavigationProp>();
 
-  const [postTitle, setPostTitle] = useState("");
-  const [postContent, setPostContent] = useState("");
-  const [exerciseName, setExerciseName] = useState("");
-  const [meetPlace, setMeetPlace] = useState("");
-  const [numberOfPeople, setNumberOfPeople] = useState("");
-  const [selectedGender, setSelectedGender] = useState<string | null>(null);
-  const [date, setDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [time, setTime] = useState("");
+	const [postTitle, setPostTitle] = useState("");
+	const [postContent, setPostContent] = useState("");
+	const [exerciseName, setExerciseName] = useState("");
+	const [meetPlace, setMeetPlace] = useState("");
+	const [numberOfPeople, setNumberOfPeople] = useState("");
+	const [selectedGender, setSelectedGender] = useState<string | null>(null);
+	const [date, setDate] = useState(new Date());
+	const [showDatePicker, setShowDatePicker] = useState(false);
+	const [time, setTime] = useState("");
 
   // 날짜 선택 핸들러
   const handleDateChange = (event: any, selectedDate?: Date) => {

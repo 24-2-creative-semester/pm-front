@@ -83,7 +83,7 @@ const Signup = () => {
       {/* 뒤로가기 버튼 */}
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Text style={styles.backButtonText}>←</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> 
 
       <Text style={styles.title}>회원가입을 위해{"\n"}정보를 입력해 주세요</Text>
 

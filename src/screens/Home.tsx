@@ -1,6 +1,5 @@
 import React from "react";
 import { SafeAreaView, View, Text, StyleSheet, ScrollView } from "react-native";
-import MainTabNavigator from "../navigations/MainTabNavigator";
 
 const Home = () => {
   return (
@@ -50,8 +49,6 @@ const Home = () => {
           <Text style={styles.cardDetail}>지방: 1g</Text>
         </View>
       </ScrollView>
-      {/* 네비게이션 컴포넌트는 ScrollView 밖에 위치 */}
-      <MainTabNavigator />
     </SafeAreaView>
   );
 };

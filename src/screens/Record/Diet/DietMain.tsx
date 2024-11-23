@@ -3,7 +3,7 @@ import { SafeAreaView, View, ScrollView, Text, Image, StyleSheet, } from "react-
 import Icon from 'react-native-vector-icons/Ionicons';
 export default () => {
 	return (
-		<SafeAreaView style={styles.container}>
+		<View style={styles.container}>
 			<ScrollView  style={styles.scrollView}>
 				<View style={styles.column}>
 					<View style={styles.row3}>
@@ -153,7 +153,7 @@ export default () => {
 					</View>
 				</View>
 			</ScrollView>
-		</SafeAreaView>
+		</View>
 	)
 }
 const styles = StyleSheet.create({

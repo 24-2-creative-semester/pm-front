@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { RootStackParamList } from '../../../navigations/types';
 
-const WeightRegisterScreen = () => {
+const WeightRevise = () => {
   const [memberWeight, setMemberWeight] = useState('');
   const [skeletalmuscle, setSkeletalmuscle] = useState('');
   const [bodyfat, setBodyfat] = useState('');
@@ -201,4 +201,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WeightRegisterScreen;
+export default WeightRevise;

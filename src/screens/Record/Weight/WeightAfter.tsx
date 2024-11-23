@@ -10,7 +10,7 @@ type WeightAfterScreenNavigationProp = StackNavigationProp<RootStackParamList, '
 
 
 
-const WeightDetailScreen = () => {
+const WeightAfter = () => {
   const navigation = useNavigation<WeightAfterScreenNavigationProp>();
 
   const [weightData, setWeightData] = useState({
@@ -202,4 +202,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WeightDetailScreen;
+export default WeightAfter;

@@ -25,6 +25,10 @@ const MainTabNavigator = () => {
         name="Record"
         component={RecordStackNavigator}
         options={{
+          tabBarStyle:{
+            padding:5,
+            backgroundColor: '#1A1A1A',
+          },
           tabBarIcon: ({ focused }) => (
             <TabBarIcon
               focused={focused}
@@ -76,7 +80,7 @@ const MainTabNavigator = () => {
       <Tab.Screen
         name="Mate"
         component={MateStackNavigator}
-        options={{
+        options={{  
           tabBarIcon: ({ focused }) => (
             <TabBarIcon
               focused={focused}

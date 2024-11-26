@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, Dimensions } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { LineChart } from 'react-native-chart-kit';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface WeightData {
   labels: string[];
@@ -27,15 +28,16 @@ const WeightCalendarScreen = () => {
   const fetchWeightData = async (date: string) => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://172.16.86.241:8080/monthweight', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          today: date, // 전달받은 날짜
-          memberId: 1,
-        }),
+      const accessToken = await AsyncStorage.getItem("accessToken");
+      console.log(date);
+      const response = await fetch(`http://172.16.4.171:8080/monthweight?today=${date}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json',
+          Authorization: `${accessToken}`, // Add token to headers
+         },
       });
       const data = await response.json();
+      console.log(data);
 
       if (data.isSuccess) {
         const newMarkedDates: Record<string, { selected: boolean; selectedColor: string }> = {};

@@ -8,6 +8,7 @@ import BodyMain from '../screens/Record/Body/BodyMain';
 import WeightBefore from '../screens/Record/Weight/WeightBefore';
 import WeightAfter from '../screens/Record/Weight/WeightAfter';
 import WeightRevise from '../screens/Record/Weight/WeightRevise';
+import WeightCalendarScreen from '../screens/Record/Calendar';
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,8 @@ const RecordStackNavigator = () => {
       <Stack.Screen name="WeightAfter" component={WeightAfter} />
       <Stack.Screen name="WeightBefore" component={WeightBefore} />
       <Stack.Screen name="WeightRevise" component={WeightRevise} />
+
+      <Stack.Screen name="WeightCalendarScreen" component={WeightCalendarScreen} />
     </Stack.Navigator>
   );
 };

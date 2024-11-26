@@ -39,4 +39,6 @@ export type RootStackParamList = {
   WeightBefore:undefined;
   WeightRevise:undefined;
 
+  WeightCalendarScreen:undefined;
+
 };

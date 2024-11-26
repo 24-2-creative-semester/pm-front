@@ -1,6 +1,6 @@
 import React from "react";
 import { SafeAreaView, View, ScrollView, Text, Image, StyleSheet, } from "react-native";
-import { RootStackParamList } from '../../../App'; // RootStackParamList를 정의한 경로
+import { RootStackParamList } from '../../navigations/types'; // RootStackParamList를 정의한 경로
 
 export default () => {
 	return (

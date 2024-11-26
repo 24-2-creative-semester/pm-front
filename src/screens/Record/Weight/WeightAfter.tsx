@@ -8,8 +8,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 type WeightAfterScreenNavigationProp = StackNavigationProp<RootStackParamList, 'WeightRevise'>;
 
-
-
 const WeightAfter = () => {
   const navigation = useNavigation<WeightAfterScreenNavigationProp>();
 
@@ -24,7 +22,7 @@ const WeightAfter = () => {
   // 서버로 데이터를 요청하는 함수
   const fetchWeightDetails = async () => {
     try {
-      const response = await fetch('http://172.16.86.241:8080/dayweight', {
+      const response = await fetch('http://172.16.4.171:8080/dayweight', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

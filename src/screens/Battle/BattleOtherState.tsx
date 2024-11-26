@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { SafeAreaView, View, ScrollView, ImageBackground, Text, Image, StyleSheet, ActivityIndicator, } from "react-native";
 import { RouteProp } from "@react-navigation/native";
-import { RootStackParamList } from "../../../App";
+import { RootStackParamList } from '../../navigations/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type BattleOtherStateRouteProp = RouteProp<RootStackParamList, "BattleOtherState">;
 
@@ -36,17 +37,15 @@ const BattleOtherState = ({ route }: { route: BattleOtherStateRouteProp }) => {
 
 	// API 호출
 	useEffect(() => {
-
-
-
 		const fetchBattleData = async () => {
 			try {
-				const response = await fetch("http://172.29.113.130:8080/battlestatus", {
-					method: "POST",
+				const accessToken = await AsyncStorage.getItem('accessToken');
+				const response = await fetch(`http://172.16.4.171:8080/battlestatus?battleId=${battleId}`, {
+					method: "GET",
 					headers: {
 						"Content-Type": "application/json",
+						Authorization: `${accessToken}`,
 					},
-					body: JSON.stringify({ battleId }),
 				});
 
 				const data = await response.json();

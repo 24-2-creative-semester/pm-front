@@ -64,7 +64,7 @@ const MateCreate = () => {
         return;
       }
 
-      const response = await fetch("http://172.20.10.10:8080/createpost", {
+      const response = await fetch("http://172.16.4.171:8080/createpost", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

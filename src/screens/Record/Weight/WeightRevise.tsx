@@ -13,7 +13,7 @@ const WeightRevise = () => {
 
   const sendDataToServer = async () => {
     try {
-      const response = await fetch('http://172.16.86.241:8080/createweight', {
+      const response = await fetch('http://172.16.4.171:8080/createweight', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

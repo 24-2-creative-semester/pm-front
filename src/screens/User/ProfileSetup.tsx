@@ -48,71 +48,64 @@ const ProfileSetup = () => {
   };
 
   const handleSubmit = async () => {
-    // if (!name || !age || !height || !weight || !targetWeight || !selectedDiet) {
-    //   Alert.alert('입력 오류', '모든 필드를 채워주세요.');
-    //   return;
-    // }
+    if (!name || !age || !height || !weight || !targetWeight || !selectedDiet) {
+      Alert.alert('입력 오류', '모든 필드를 채워주세요.');
+      return;
+    }
   
-    // const formData = new FormData();
+    // JSON 데이터 생성
+    const requestData = {
+      name: name,
+      memberAge: parseInt(age, 10),
+      memberHeight: parseFloat(height),
+      memberWeight: parseFloat(weight),
+      memberTargetWeight: parseFloat(targetWeight),
+      memberDietType: selectedDiet,
+    };
   
-    // // Profile image
-    // if (profileImage) {
-    //   const filename = profileImage.split('/').pop();
-    //   const type = `image/${filename?.split('.').pop()}`;
-    //   formData.append('profileImage', {
-    //     uri: profileImage,
-    //     name: filename,
-    //     type,
-    //   } as any);
-    // }
+    console.log("보낼 데이터:", requestData);
   
-    // // Other fields
-    // formData.append('name', name);
-    // formData.append('memberAge', age);
-    // formData.append('memberHeight', height);
-    // formData.append('memberWeight', weight);
-    // formData.append('memberTargetWeight', targetWeight);
-    // formData.append('memberDietType', selectedDiet);
+    try {
+      const accessToken = await AsyncStorage.getItem('accessToken');
   
-    // try {
-    //   const accessToken = await AsyncStorage.getItem('accessToken');
+      if (!accessToken) {
+        Alert.alert('오류', '로그인 토큰을 찾을 수 없습니다. 다시 로그인 해주세요.');
+        return;
+      }
   
-    //   if (!accessToken) {
-    //     Alert.alert('오류', '로그인 토큰을 찾을 수 없습니다. 다시 로그인 해주세요.');
-    //     return;
-    //   }
+      // JSON 형식으로 데이터 전송
+      const response = await fetch('http://172.16.4.171:8080/profileSetting', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json', // JSON 형식의 Content-Type
+          Authorization: `${accessToken}`,    // 인증 토큰 추가
+        },
+        body: JSON.stringify(requestData),    // JSON 데이터를 문자열로 변환
+      });
   
-    //   const response = await fetch('http://172.29.113.130:8080/profileSetting', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data',
-    //       Authorization: `${accessToken}`,
-    //     },
-    //     body: formData,
-    //   });
+      const data = await response.json();
+      console.log("서버 응답:", data);
   
-    //   const data = await response.json();
-  
-    //   if (response.ok && data.isSuccess) {
-    //     Alert.alert('성공', '프로필 등록이 완료되었습니다.', [
-    //       {
-    //         text: '확인',
-    //         onPress: () => navigation.navigate('Home'), // Home 화면으로 이동
-    //       },
-    //     ]);
-    //   } else {
-    //     Alert.alert('오류', data.message || '등록 중 문제가 발생했습니다.');
-    //   }
-    // } catch (error) {
-    //   Alert.alert('오류', '네트워크 문제로 요청을 완료할 수 없습니다.');
-    // }
-    Alert.alert('성공', '프로필 등록이 완료되었습니다.', [
-            {
-              text: '확인',
-              onPress: () => navigation.navigate('Main'), // MainTabNavigator로 이동
-            },
-          ]);
+      if (response.ok) {
+        Alert.alert('성공', '프로필 등록이 완료되었습니다.', [
+          {
+            text: '확인',
+            onPress: () => navigation.reset({
+              index: 0,
+              routes: [{ name: 'Main', params: { screen: 'Home' } }],
+            }),   
+          },
+        ]);
+      } else {
+        Alert.alert('오류', data.message || '등록 중 문제가 발생했습니다.');
+      }
+    } catch (error) {
+      console.error("네트워크 오류:", error);
+      Alert.alert('오류', '네트워크 문제로 요청을 완료할 수 없습니다.');
+    }
   };
+  
+
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>

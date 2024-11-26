@@ -9,6 +9,8 @@ import {
   StyleSheet,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native"; // Navigation 훅 추가
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 interface Post {
   postId: number;
@@ -26,16 +28,16 @@ const MyMate = () => {
   const [myApplications, setMyApplications] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const memberId = 1; // 현재 사용자 ID 설정
-
   // /myposts API 호출
   const fetchMyPosts = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://172.20.10.10:8080/myposts?memberId=1", {
+      const accessToken = await AsyncStorage.getItem("accessToken");
+      const response = await fetch("http://172.16.4.171:8080/myposts", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `${accessToken}`,
         },
       });
       const data = await response.json();
@@ -55,10 +57,12 @@ const MyMate = () => {
   const fetchMyApplications = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://172.20.10.10:8080/myapplicants?memberId=1", {
+      const accessToken = await AsyncStorage.getItem('accessToken');
+      const response = await fetch(`http://172.16.4.171:8080/myapplicants`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `${accessToken}`,
         },
       });
       const data = await response.json();
@@ -77,7 +81,7 @@ const MyMate = () => {
   // 게시글 삭제 함수
   const deletePost = async (postId: number) => {
     try {
-      const response = await fetch("http://172.20.10.10:8080/deletepost", {
+      const response = await fetch("http://172.16.4.171:8080/deletepost", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -99,12 +103,12 @@ const MyMate = () => {
   // 참여 취소 함수
   const cancelApplication = async (postId: number) => {
     try {
-      const response = await fetch("http://172.20.10.10:8080/deleteapplicant", {
+      const response = await fetch("http://172.16.4.171:8080/deleteapplicant", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ postId, memberId }),
+        body: JSON.stringify({ postId }),
       });
       const data = await response.json();
       if (data.isSuccess) {

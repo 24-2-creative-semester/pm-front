@@ -3,6 +3,7 @@ import { SafeAreaView, View, ScrollView, Image, Text, StyleSheet, Button,Touchab
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../navigations/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // 멤버 타입 정의
 interface Member {
@@ -27,22 +28,38 @@ const calculateDays = (start: string, end: string) => {
 const BattleList = () => {
   const [members, setMembers] = useState<Member[]>([]);
   const navigation = useNavigation<BattleListScreenNavigationProp>(); // 타입 지정
+  //
+  // API 호출 함수
+  const fetchMembers = async () => {
+    try {
+      const accessToken = await AsyncStorage.getItem('accessToken');
+      if (!accessToken) {
+        console.error("Access token not found");
+        return;
+      }
 
+      const url = `http://172.16.4.171:8080/battlelist`; // URL 수정
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `${accessToken}`, // 토큰을 헤더로 추가
+        },
+      });
+
+      const data = await response.json();
+      if (data.isSuccess) {
+        setMembers(data.result); // 결과 배열 처리
+      } else {
+        console.error("API Error:", data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching members:", error);
+    }
+  };
+
+  // 초기 데이터 로드
   useEffect(() => {
-    fetch("http://172.29.113.130:8080/battlelist", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ memberId: 1 }),  // 이 부분에서 memberId 1을 보내는 예시
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.isSuccess) {
-          setMembers(data.result);  // 결과 배열에 battleId와 memberId 추가된 데이터를 받음
-        } else {
-          console.error("API Error:", data.message);
-        }
-      })
-      .catch((error) => console.error("Error fetching members:", error));
+    fetchMembers();
   }, []);
 
   // 목표 날짜가 지난 경우 체크하는 함수

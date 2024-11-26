@@ -43,7 +43,7 @@ const MateList = () => {
         return;
       }
   
-      const response = await fetch("http://172.20.10.10:8080/allposts", {
+      const response = await fetch("http://172.16.4.171:8080/allposts", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -74,11 +74,11 @@ const MateList = () => {
         return;
       }
   
-      const response = await fetch("http://172.20.10.10:8080/applytopost", {
+      const response = await fetch("http://172.16.4.171:8080/applytopost", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `${accessToken}`,
         },
         body: JSON.stringify({ postId }),
       });

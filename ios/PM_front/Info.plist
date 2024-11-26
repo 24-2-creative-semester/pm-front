@@ -62,6 +62,12 @@
 		<string>fetch</string>
 	</array>
 	<key>UIAppFonts</key>
+	<key>NSCameraUsageDescription</key>
+	<string>카메라를 사용하기 위한 권한이 필요합니다.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>사진 라이브러리에서 이미지를 선택하기 위한 권한이 필요합니다.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>사진을 저장하기 위한 권한이 필요합니다.</string>
 	<array>
 		<string>AntDesign.ttf</string>
 		<string>Entypo.ttf</string>

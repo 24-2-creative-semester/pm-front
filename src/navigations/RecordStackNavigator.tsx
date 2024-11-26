@@ -9,8 +9,22 @@ import WeightBefore from '../screens/Record/Weight/WeightBefore';
 import WeightAfter from '../screens/Record/Weight/WeightAfter';
 import WeightRevise from '../screens/Record/Weight/WeightRevise';
 import WeightCalendarScreen from '../screens/Record/Calendar';
+import ExerciseMain from '../screens/Record/Exercise/ExerciseMain';
+import ExerciseSearch from '../screens/Record/Exercise/ExerciseSearch';
+import ExerciseDetail from '../screens/Record/Exercise/ExerciseDetail';
+import ExerciseEnroll from '../screens/Record/Exercise/ExerciseEnroll';
+import BodySpecific from '../screens/Record/Body/BodySpecific';
+import BodyToday from '../screens/Record/Body/BodyToday';
+import SeeAllBody from '../screens/Record/Body/SeeAllBody';
 
 const Stack = createStackNavigator();
+
+export type RecordStackParamList = {
+  DietMain: undefined;
+  ExerciseMain: undefined;
+  BodyMain: undefined;
+  WeightMain: undefined;
+};
 
 const RecordStackNavigator = () => {
   return (
@@ -26,6 +40,15 @@ const RecordStackNavigator = () => {
       <Stack.Screen name="WeightRevise" component={WeightRevise} />
 
       <Stack.Screen name="WeightCalendarScreen" component={WeightCalendarScreen} />
+
+      <Stack.Screen name="ExerciseMain" component={ExerciseMain} />
+      <Stack.Screen name="ExerciseSearch" component={ExerciseSearch} />
+      <Stack.Screen name="ExerciseDetail" component={ExerciseDetail} />
+      <Stack.Screen name="ExerciseEnroll" component={ExerciseEnroll} />
+
+      <Stack.Screen name="BodySpecific" component={BodySpecific} />
+      <Stack.Screen name="BodyToday" component={BodyToday} />
+      <Stack.Screen name="SeeAllBody" component={SeeAllBody} />
     </Stack.Navigator>
   );
 };

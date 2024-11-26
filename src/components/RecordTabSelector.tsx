@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../navigations/types";
 
@@ -8,7 +8,7 @@ type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 const RecordTabSelector: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
-  const [activeTab, setActiveTab] = useState<keyof RootStackParamList>("DietMain");
+  const route = useRoute(); // 현재 활성화된 Route 가져오기
 
   // 탭 정보 정의
   const tabs = [
@@ -18,23 +18,18 @@ const RecordTabSelector: React.FC = () => {
     { name: "체중", route: "WeightBefore" as keyof RootStackParamList },
   ];
 
-  const handleTabPress = (route: keyof RootStackParamList) => {
-    setActiveTab(route); // 현재 활성화된 탭 업데이트
-    navigation.navigate(route); // 네비게이션 이동
-  };
-
   return (
     <View style={styles.tabContainer}>
       {tabs.map((tab) => (
         <TouchableOpacity
           key={tab.route}
-          onPress={() => handleTabPress(tab.route)}
+          onPress={() => navigation.navigate(tab.route)} // 네비게이션 이동
           style={styles.tab}
         >
           <Text
             style={[
               styles.tabText,
-              tab.route === activeTab && styles.activeTabText,
+              route.name === tab.route && styles.activeTabText, // 현재 Route와 비교
             ]}
           >
             {tab.name}

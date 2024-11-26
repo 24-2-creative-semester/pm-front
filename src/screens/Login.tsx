@@ -30,12 +30,12 @@ const Login = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email, password: password }),
       });
-
+  
       const accessToken = response.headers.get("Authorization");
       const refreshToken = response.headers.get("Set-Cookie");
-
+  
       const data = await response.json();
-
+  
       if (data.isSuccess) {
         if (accessToken) {
           await AsyncStorage.setItem("accessToken", accessToken);
@@ -45,16 +45,45 @@ const Login = () => {
           await AsyncStorage.setItem("refreshToken", refreshToken);
         }
         Alert.alert("로그인 성공", data.message);
-        navigation.navigate("ProfileSetup");
+  
+        try {
+          const profileResponse = await fetch(`http://172.16.4.171:8080/isProfile`, {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              Authorization: `${accessToken}`,
+            },
+          });
+  
+          const profileData = await profileResponse.json();
+  
+          if (profileResponse.ok && profileData.isSuccess) {
+            if (profileData.result === true) {
+              // 프로필 등록 완료된 경우
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'Main', params: { screen: 'Home' } }],
+              })
+            } else {
+              // 프로필 등록이 안 된 경우
+              navigation.navigate("ProfileSetup");
+            }
+          } else {
+            Alert.alert("오류", profileData.message || "프로필 확인 중 문제가 발생했습니다.");
+          }
+        } catch (error) {
+          console.error("프로필 확인 요청 실패:", error);
+          Alert.alert("오류", "프로필 상태를 확인할 수 없습니다.");
+        }
       } else {
         Alert.alert("로그인 실패", data.message);
       }
     } catch (error) {
+      console.error("로그인 요청 실패:", error);
       Alert.alert("에러", "네트워크 연결에 문제가 있습니다.");
     }
-	  // navigation.navigate("ProfileSetup");
   };
-
+  
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.logo}>PM</Text>

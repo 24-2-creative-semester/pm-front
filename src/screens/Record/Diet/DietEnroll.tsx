@@ -90,36 +90,10 @@ type DietEnrollProps = {
 		<SafeAreaView style={styles.container}>
 			<ScrollView style={styles.scrollView}>
 				<View style={styles.column}>
-					<View style={styles.row}>
-						<Text style={styles.text}>
-							{"9:41"}
-						</Text>
-						<View style={styles.row2}>
-							<View style={styles.box}>
-							</View>
-							<View style={styles.box2}>
-							</View>
-						</View>
-						<Image
-							source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-							resizeMode={"stretch"}
-							style={styles.image}
-						/>
-						<Image
-							source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-							resizeMode={"stretch"}
-							style={styles.image2}
-						/>
-						<View style={styles.view}>
-							<View style={styles.box3}>
-							</View>
-						</View>
-						<View style={styles.box4}>
-						</View>
-					</View>
 					<View style={styles.row3}>
-						<Icon name="chevron-back-outline" size={26} color="red" style={styles.image3} />
-
+						<TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+							<Text style={styles.backButtonText}>←</Text>
+						</TouchableOpacity>
 						<Text style={styles.text2}>
 							{"음식 등록"}
 						</Text>
@@ -282,6 +256,17 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "#FFFFFF",
 	},
+	backButton: {
+		position: "absolute", // 백버튼을 독립적으로 배치
+		left: 20, // 왼쪽 여백 설정
+		top: 15, // 위쪽 여백 설정
+		zIndex: 1, // 백버튼이 텍스트 위에 렌더링되지 않도록 보장
+	},
+	  backButtonText: {
+		color: "#FFF",
+		fontSize: 30,
+		fontWeight: "bold",
+	  },
 	box: {
 		width: 80,
 		height: 37,
@@ -320,7 +305,7 @@ const styles = StyleSheet.create({
 	column: {
 		backgroundColor: "#1D1B20",
 		paddingTop: 11,
-		paddingBottom: 29,
+		// paddingBottom: 29,
 		paddingRight: 31,
 	},
 	column2: {
@@ -367,9 +352,11 @@ const styles = StyleSheet.create({
 		marginRight: 22,
 	},
 	row3: {
-		flexDirection: "row",
-		alignItems: "center",
-		marginLeft: 31,
+		position: "relative", // 백버튼과 텍스트를 독립적으로 배치하기 위해 상대 위치 설정
+		alignItems: "center", // 텍스트를 세로 가운데 정렬
+		justifyContent: "center", // 텍스트를 가로 가운데 정렬
+		paddingVertical: 15, // 상하 패딩 추가
+		backgroundColor: "#1D1B20", // 배경색 설정 (필요시 제거 가능)
 	},
 	row4: {
 		flexDirection: "row",
@@ -411,8 +398,9 @@ const styles = StyleSheet.create({
 	text2: {
 		color: "#FFFFFF",
 		fontSize: 20,
-		flex: 1,
-	},
+		fontWeight: "bold",
+		textAlign: "center", // 텍스트를 중앙 정렬
+	},	
 	text3: {
 		color: "#FFFFFF",
 		fontSize: 20,

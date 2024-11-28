@@ -174,7 +174,7 @@ const DietMain: React.FC = () => {
 						<TouchableOpacity
 							onPress={() => navigation.navigate('DietSearch', { mealtime: 'MORNING' })} // 'morning' 전달
 						>
-							<Icon name="add-circle-outline" size={32} color="red" />
+							<Icon name="add-circle-outline" size={32} color="white" />
 						</TouchableOpacity>
 					</View>
 					<View style={styles.row7}>
@@ -187,39 +187,40 @@ const DietMain: React.FC = () => {
 						{/* <Icon name="close-outline" size={32} color="red" /> */}
 					</View>
 
+
+
 					{/* 점심식사 */}
 					<View style={styles.row6}>
-						<Text style={styles.text11}>{"점심식사"}</Text>
-						<Icon name="add-circle-outline" size={32} color="red" />
-					</View>
-					<View style={styles.row600}>
+						<Text style={styles.text11}>
+							{"점심식사"}
+						</Text>
 						<TouchableOpacity
 							onPress={() => navigation.navigate('DietSearch', { mealtime: 'LUNCH' })} // 'morning' 전달
 						>
-							
+							<Icon name="add-circle-outline" size={32} color="white" />
 						</TouchableOpacity>
 					</View>
-
-					<View style={styles.row600}>
-						{dietData?.lunch?.length > 0 ? (
-							dietData.lunch.map((item: string, index: number) => (
-								<Text key={index} style={styles.text12}>
-									{item}{"\n"}
-								</Text>
-							))
-						) : (
-							<Text style={styles.text12}>데이터 없음</Text>
-						)}
+					<View style={styles.row7}>
+						<Text style={styles.text12}>
+							{dietData?.lunch?.length > 0
+								? dietData.lunch.map((item: string, index: number) => (
+									<Text key={index}>{item}{"\n"}</Text>
+								))
+								: "데이터 없음"}						</Text>
 						{/* <Icon name="close-outline" size={32} color="red" /> */}
 					</View>
 
+
+
 					{/* 저녁식사 */}
 					<View style={styles.row6}>
-						<Text style={styles.text11}>{"저녁식사"}</Text>
+						<Text style={styles.text11}>
+							{"저녁식사"}
+						</Text>
 						<TouchableOpacity
 							onPress={() => navigation.navigate('DietSearch', { mealtime: 'DINNER' })} // 'morning' 전달
 						>
-							<Icon name="add-circle-outline" size={32} color="red" />
+							<Icon name="add-circle-outline" size={32} color="white" />
 						</TouchableOpacity>
 					</View>
 					<View style={styles.row7}>
@@ -231,6 +232,10 @@ const DietMain: React.FC = () => {
 								: "데이터 없음"}						</Text>
 						{/* <Icon name="close-outline" size={32} color="red" /> */}
 					</View>
+
+
+
+
 					<View style={styles.row6}>
 						<Text style={styles.text11}>
 							{"간식"}
@@ -238,7 +243,7 @@ const DietMain: React.FC = () => {
 						<TouchableOpacity
 							onPress={() => navigation.navigate('DietSearch', { mealtime: 'SNACK' })} // 'morning' 전달
 						>
-							<Icon name="add-circle-outline" size={32} color="red" />
+							<Icon name="add-circle-outline" size={32} color="white" />
 						</TouchableOpacity>
 					</View>
 					<View style={styles.row7}>
@@ -434,7 +439,7 @@ const styles = StyleSheet.create({
 	},
 	scrollView: {
 		flex: 1,
-		backgroundColor: "#FFFFFF",
+		backgroundColor: "#1D1B20",
 	},
 	text: {
 		color: "#FFFFFF",
@@ -557,4 +562,5 @@ const styles = StyleSheet.create({
 		flex: 1, 
 	}
 });
+
 export default DietMain;

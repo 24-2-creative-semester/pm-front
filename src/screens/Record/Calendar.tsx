@@ -3,6 +3,11 @@ import { SafeAreaView, View, Text, StyleSheet, Dimensions } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { LineChart } from 'react-native-chart-kit';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../navigations/types';
+
+type CalendarNavigationProp = StackNavigationProp<RootStackParamList, 'Calendar'>;
 
 interface WeightData {
   labels: string[];
@@ -10,6 +15,7 @@ interface WeightData {
 }
 
 const WeightCalendarScreen = () => {
+  const navigation = useNavigation<CalendarNavigationProp>();
   const [currentMonth, setCurrentMonth] = useState<string>('2024-11');
   const [weightData, setWeightData] = useState<WeightData>({
     labels: [],
@@ -29,15 +35,14 @@ const WeightCalendarScreen = () => {
     setIsLoading(true);
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
-      console.log(date);
       const response = await fetch(`http://172.16.86.241:8080/monthweight?today=${date}`, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json',
+        headers: {
+          'Content-Type': 'application/json',
           Authorization: `${accessToken}`, // Add token to headers
-         },
+        },
       });
       const data = await response.json();
-      console.log("calendar:",data);
 
       if (data.isSuccess) {
         const newMarkedDates: Record<string, { selected: boolean; selectedColor: string }> = {};
@@ -78,15 +83,20 @@ const WeightCalendarScreen = () => {
     const selectedMonth = month.dateString.slice(0, 7); // YYYY-MM 형식
     setCurrentMonth(selectedMonth);
 
-    // 선택된 월의 15일 계산
     const midMonthDate = `${selectedMonth}-15`;
     fetchWeightData(midMonthDate);
+  };
+
+  const handleDayPress = (day: { dateString: string }) => {
+    // 특정 날짜 클릭 시 DietMain으로 이동하며 선택된 날짜 전달
+    navigation.navigate('DietMain',{ date: day.dateString });
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <Calendar
         markedDates={markedDates}
+        onDayPress={handleDayPress} // 날짜 클릭 이벤트 연결
         onMonthChange={handleMonthChange} // 월 변경 이벤트 연결
         theme={{
           backgroundColor: '#1a1a1a',
@@ -135,21 +145,11 @@ const WeightCalendarScreen = () => {
   );
 };
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1a1a1a',
     paddingHorizontal: 20,
-  },
-  header: {
-    marginVertical: 10,
-    alignItems: 'center',
-  },
-  monthText: {
-    color: 'white',
-    fontSize: 24,
-    fontWeight: 'bold',
   },
   calendar: {
     borderRadius: 10,
@@ -165,14 +165,6 @@ const styles = StyleSheet.create({
   },
   chart: {
     borderRadius: 10,
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#333',
-    marginTop: 20,
   },
   loadingText: {
     color: 'white',

@@ -13,16 +13,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const BodyToday: React.FC<{ navigation: any }> = ({ navigation }) => {
   const [todayImageBase64, setTodayImageBase64] = useState<string | null>(null);
-  const [date, setDate] = useState<Date>(new Date()); // 날짜 상태를 Date 객체로 변경
+
+  // Set today's date
+  const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
-    fetchTodayImage(formatDate(date));
-  }, [date]);
-
-  // 날짜를 YYYY-MM-DD 형식으로 포맷하는 함수
-  const formatDate = (date: Date): string => {
-    return date.toISOString().split("T")[0];
-  };
+    fetchTodayImage(today);
+  }, [today]);
 
   const fetchTodayImage = async (formattedDate: string) => {
     try {
@@ -55,8 +52,9 @@ const BodyToday: React.FC<{ navigation: any }> = ({ navigation }) => {
 
           setTodayImageBase64(base64String);
         } else {
-          Alert.alert("오류", "오늘의 눈바디 이미지가 없습니다.");
+          // If no image, navigate to the registration page
           setTodayImageBase64(null);
+          navigation.navigate("BodyMain", { date: formattedDate });
         }
       } else {
         Alert.alert("오류", data.message || "오늘의 눈바디를 불러올 수 없습니다.");
@@ -67,31 +65,11 @@ const BodyToday: React.FC<{ navigation: any }> = ({ navigation }) => {
     }
   };
 
-  // 이전 날짜로 이동
-  const handlePrevDate = () => {
-    const prevDate = new Date(date);
-    prevDate.setDate(date.getDate() - 1);
-    setDate(prevDate);
-  };
-
-  // 다음 날짜로 이동
-  const handleNextDate = () => {
-    const nextDate = new Date(date);
-    nextDate.setDate(date.getDate() + 1);
-    setDate(nextDate);
-  };
-
   return (
     <View style={styles.container}>
-      {/* 날짜 네비게이터 */}
-      <View style={styles.dateNavigator}>
-        <TouchableOpacity onPress={handlePrevDate}>
-          <Icon name="chevron-back-outline" size={30} color="#FFFFFF" />
-        </TouchableOpacity>
-        <Text style={styles.dateText}>{formatDate(date)}</Text>
-        <TouchableOpacity onPress={handleNextDate}>
-          <Icon name="chevron-forward-outline" size={30} color="#FFFFFF" />
-        </TouchableOpacity>
+      {/* Static date text in the center */}
+      <View style={styles.dateContainer}>
+        <Text style={styles.dateText}>{`< ${today} >`}</Text>
       </View>
 
       <RecordTabSelector />
@@ -123,17 +101,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
-  dateNavigator: {
-    flexDirection: "row",
+  dateContainer: {
+    marginTop: 10,
     alignItems: "center",
-    // marginVertical: 20,
+    justifyContent: "center",
   },
   dateText: {
     color: "#FFFFFF",
     fontSize: 25,
-    fontWeight: "bold",
     textAlign: "center",
-    marginHorizontal: 10,
   },
   title: {
     color: "#FFFFFF",

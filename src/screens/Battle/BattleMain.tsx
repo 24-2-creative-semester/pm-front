@@ -27,7 +27,7 @@ const BattleMain: React.FC = () => {
       </View>
 
       <TouchableOpacity style={styles.listButton} onPress={() => navigation.navigate('BattleList')}>
-        <Text style={styles.listButtonText}>대결 목록</Text>
+        <Text style={styles.listButtonText}>대결 목록  </Text>
         <Icon name="arrow-forward" size={24} color="#7c77ff" />
       </TouchableOpacity>
     </View>
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    color: '#ffffff',
+    color: '#FFF',
     marginBottom: 40,
   },
   buttonContainer: {
@@ -54,19 +54,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#7c77ff',
     padding: 20,
     borderRadius: 10,
-    width: 120,
-    height: 120,
+    width: 140,
+    height: 200,
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 10,
   },
   buttonText: {
-    color: '#ffffff',
+    color: '#FFF',
     fontSize: 16,
     marginBottom: 8,
   },
   listButton: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFF',
     paddingVertical: 20,
     paddingHorizontal: 100,
     borderRadius: 10,

@@ -20,11 +20,12 @@ import SeeAllBody from '../screens/Record/Body/SeeAllBody';
 const Stack = createStackNavigator();
 
 export type RecordStackParamList = {
-  DietMain: undefined;
+  DietMain: {date:string};
   ExerciseMain: undefined;
   BodyMain: undefined;
   WeightMain: undefined;
   BodyToday:undefined;
+  Calandar:undefined;
 };
 
 const RecordStackNavigator = () => {
@@ -40,7 +41,7 @@ const RecordStackNavigator = () => {
       <Stack.Screen name="WeightBefore" component={WeightBefore} />
       <Stack.Screen name="WeightRevise" component={WeightRevise} />
 
-      <Stack.Screen name="WeightCalendarScreen" component={WeightCalendarScreen} />
+      <Stack.Screen name="Calendar" component={WeightCalendarScreen} />
 
       <Stack.Screen name="ExerciseMain" component={ExerciseMain} />
       <Stack.Screen name="ExerciseSearch" component={ExerciseSearch} />

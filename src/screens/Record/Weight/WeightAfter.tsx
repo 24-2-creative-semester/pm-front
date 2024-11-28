@@ -101,14 +101,6 @@ const WeightDetailScreen = ({ route }: any) => {
             <Text style={styles.detailValue}>{weightData.memberBodyfat}kg</Text>
           </View>
         </View>
-
-        <View style={styles.bottomNav}>
-          <Icon name="document-text-outline" size={30} color="white" />
-          <Icon name="trophy-outline" size={30} color="white" />
-          <Icon name="home-outline" size={30} color="white" />
-          <Icon name="stopwatch-outline" size={30} color="white" />
-          <Icon name="people-outline" size={30} color="white" />
-        </View>
       </HeaderLayout>
     </SafeAreaView>
   );

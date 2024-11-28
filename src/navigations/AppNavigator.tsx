@@ -5,6 +5,8 @@ import Login from '../screens/Login';
 import Signup from '../screens/Signup';
 import ProfileSetup from '../screens/User/ProfileSetup';
 import MainTabNavigator from './MainTabNavigator'; // MainTabNavigator만 관리
+import WeightCalendarScreen from '../screens/Record/Calendar';
+
 
 const Stack = createStackNavigator();
 
@@ -16,6 +18,7 @@ const AppNavigator = () => {
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="ProfileSetup" component={ProfileSetup} />
       <Stack.Screen name="Main" component={MainTabNavigator} />
+      <Stack.Screen name="Calendar" component={WeightCalendarScreen} />
     </Stack.Navigator>
   );
 };

@@ -20,7 +20,7 @@ export type RootStackParamList = {
   Battle: undefined; // Battle도 추가 필요
   Timer: undefined; // Timer 추가
   MateList: undefined; // Mate 추가
-  DietMain : undefined;
+  DietMain : {date: string };
   DietDetail: {
     foodid: number;
     mealtime: string;
@@ -43,8 +43,7 @@ export type RootStackParamList = {
   WeightBefore: { date: string };
   WeightRevise: { date: string };
 
-  WeightCalendarScreen:undefined;
-
+  Calendar:undefined;
   SeeAllBody :undefined;
   BodyToday:undefined;
 

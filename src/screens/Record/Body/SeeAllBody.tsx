@@ -55,7 +55,7 @@ const SeeAllBody: React.FC<{ navigation: any }> = ({ navigation }) => {
   };
 
   const handleImagePress = (image: EyeBodyDto) => {
-    navigation.navigate("BodySpecific", { imageId: image.imgId, date: new Date().toISOString() }); // imgId와 날짜 전달
+    navigation.navigate("BodySpecific", { imageId: image.imgId }); // imgId와 날짜 전달
   };
 
   return (

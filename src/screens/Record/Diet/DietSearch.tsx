@@ -43,7 +43,7 @@ type DietSearchProps = {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		  }
 		  const result = await response.json();
-		  //console.log("API Response:", result);  // 응답 확인
+		  console.log("API Response:", result);  // 응답 확인
 		  setData(result.result);  // 데이터 상태 업데이트
 		} catch (error) {
 		  console.error("Failed to fetch data:", error);
@@ -90,28 +90,21 @@ type DietSearchProps = {
 	  };
 
 	return (
-		<SafeAreaView style={styles.container}>
-
+		<SafeAreaView style={[styles.container]}>
 			<View style={styles.column}>
-				
 				<View style={styles.row3}>
-					<Image
-						source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-						resizeMode={"stretch"}
-						style={styles.image3}
-					/>
-					<Text style={styles.text2}>
-						{"식단 검색"}
-					</Text>
+					<TouchableOpacity
+						style={styles.backButton}
+						onPress={() => navigation.goBack()}
+					>
+						<Text style={styles.backButtonText}>←</Text>
+					</TouchableOpacity>
+					<Text style={styles.text2}>{"식단 검색"}</Text>
 				</View>
 			</View>
 			<View style={styles.column3}>
 				<View style={styles.row4}>
-					<Image
-						source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-						resizeMode={"stretch"}
-						style={styles.image4}
-					/>
+					
 					<TextInput
 						//style={styles.searchInput}
 						placeholder="식단을 검색하세요"
@@ -122,16 +115,16 @@ type DietSearchProps = {
 				</View>
 
 				{/* 음식 카드 영역 */}
-				
+
 				<View style={styles.flatListContainer}>
 					<FlatList
 						data={filteredData}
 						renderItem={renderFoodItem}
-						keyExtractor={(item) => item.foodId.toString()}  // 변경된 부분
+						keyExtractor={(item) => item.foodId.toString()}
 						contentContainerStyle={styles.foodCardContainer}
 						ListEmptyComponent={<Text style={styles.emptyText}>검색 결과가 없습니다.</Text>}
-					
-					/> 	
+						showsVerticalScrollIndicator={false} // 스크롤바 숨김
+					/>
 				</View>
 
 
@@ -182,13 +175,13 @@ type DietSearchProps = {
 					  }
 				}}
 			>
-				<Icon name="add-circle-outline" size={32} color="red" />
+				{/* <Icon name="add-circle-outline" size={32} color="red" /> */}
+				<Icon name="add" size={32} color="#FFFFFF" />
 			</TouchableOpacity>
 
 		</SafeAreaView >
 	)
 }
-
 
 const styles = StyleSheet.create({
 	container: {
@@ -254,7 +247,7 @@ const styles = StyleSheet.create({
 	column: {
 		backgroundColor: "#1D1B20",
 		paddingTop: 11,
-		paddingBottom: 29,
+		paddingBottom: 10,
 		paddingRight: 32,
 	},
 	column2: {
@@ -335,7 +328,9 @@ const styles = StyleSheet.create({
 	row3: {
 		flexDirection: "row",
 		alignItems: "center",
-		marginLeft: 32,
+		justifyContent: "center", // 텍스트를 중앙 정렬
+		position: "relative", // 백버튼을 상대적으로 배치
+		paddingVertical: 15,
 	},
 	row4: {
 		flexDirection: "row",
@@ -376,9 +371,10 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	text2: {
+		fontSize: 18,
 		color: "#FFFFFF",
-		fontSize: 20,
-		flex: 1,
+		fontWeight: "bold",
+		textAlign: "center",
 	},
 	text3: {
 		color: "#47434E",
@@ -442,7 +438,7 @@ const styles = StyleSheet.create({
 	},
 	flatListContainer: {
 		//flex: 1, // 화면의 나머지 공간을 차지
-		marginHorizontal: 20, // 양 옆 여백 추가
+		marginHorizontal: 7, // 양 옆 여백 추가
 		marginBottom: 10, // 하단 여백 추가
 		height: 630,
 	},
@@ -454,11 +450,332 @@ const styles = StyleSheet.create({
 	},
 	floatingButton: {
 		position: 'absolute',
-		bottom: 70,
+		bottom: 40,
 		right: 20,
-		backgroundColor: 'transparent',  // 투명한 배경
-		
+		width: 60, // 원형 버튼 크기
+		height: 60,
+		borderRadius: 30, // 버튼을 원형으로 만들기 위해 반지름을 설정
+		backgroundColor: '#6F6DFF', // 배경색 변경
+		alignItems: 'center', // 아이콘 가운데 정렬
+		justifyContent: 'center', // 아이콘 가운데 정렬
+		shadowColor: '#000', // 그림자 설정
+		shadowOffset: { width: 0, height: 4 },
+		shadowOpacity: 0.3,
+		shadowRadius: 4,
+		elevation: 5, // Android 그림자 효과
 	},
+	  backButton: {
+		position: "absolute", // 백버튼 위치를 고정
+		left: 20, // 왼쪽 여백
+		zIndex: 1, // 다른 요소 위로 표시
+	},
+	  backButtonText: {
+		color: "#FFF",
+		fontSize: 18,
+		fontWeight: "bold",
+	  },
+	
 });
 
 export default DietSearch;
+
+
+// const styles = StyleSheet.create({
+// 	container: {
+// 		flex: 1,
+// 		backgroundColor: "#1D1B20",
+// 	},
+// 	absoluteBox: {
+// 		position: "absolute",
+// 		bottom: 4,
+// 		right: -1,
+// 		width: 1,
+// 		height: 4,
+// 		backgroundColor: "#1D1B20",
+// 	},
+// 	box: {
+// 		width: 80,
+// 		height: 37,
+// 		backgroundColor: "#1D1B20",
+// 		borderRadius: 100,
+// 	},
+// 	box2: {
+// 		width: 37,
+// 		height: 37,
+// 		backgroundColor: "#1D1B20",
+// 		borderRadius: 100,
+// 	},
+// 	box3: {
+// 		height: 9,
+// 		backgroundColor: "#1D1B20",
+// 		borderRadius: 2,
+// 		marginTop: 2,
+// 	},
+// 	box4: {
+// 		width: 1,
+// 		height: 24,
+// 		backgroundColor: "#00FF7B",
+// 		marginTop: 7,
+// 		marginRight: 16,
+// 	},
+// 	box5: {
+// 		flex: 1,
+// 	},
+// 	box6: {
+// 		width: 1,
+// 		height: 24,
+// 		backgroundColor: "#FF0072",
+// 		marginTop: 7,
+// 		marginRight: 16,
+// 	},
+// 	box7: {
+// 		width: 1,
+// 		height: 24,
+// 		backgroundColor: "#FFD400",
+// 		marginTop: 7,
+// 		marginRight: 16,
+// 	},
+// 	box8: {
+// 		height: 5,
+// 		backgroundColor: "#1D1B20",
+// 		borderRadius: 100,
+// 		marginHorizontal: 127,
+// 	},
+// 	column: {
+// 		backgroundColor: "#1D1B20",
+// 		paddingTop: 11,
+// 		paddingBottom: 29,
+// 		paddingRight: 32,
+// 	},
+// 	column2: {
+// 		width: 25,
+// 	},
+// 	column3: {
+// 		backgroundColor: "#1D1B20",
+// 		paddingTop: 24,
+// 	},
+// 	column4: {
+// 		backgroundColor: "#1D1B20",
+// 		borderRadius: 8,
+// 		paddingVertical: 8,
+// 		marginBottom: 20,
+// 		marginHorizontal: 24,
+// 		flex:1,
+// 	},
+// 	column5: {
+// 		backgroundColor: "#1D1B20",
+// 		borderRadius: 8,
+// 		paddingVertical: 8,
+// 		marginBottom: 157,
+// 		marginHorizontal: 24,
+// 	},
+// 	column6: {
+// 		backgroundColor: "#1D1B20",
+// 		paddingTop: 28,
+// 		paddingBottom: 8,
+// 	},
+// 	image: {
+// 		width: 18,
+// 		height: 12,
+// 		marginRight: 8,
+// 	},
+// 	image2: {
+// 		width: 17,
+// 		height: 11,
+// 		marginRight: 8,
+// 	},
+// 	image3: {
+// 		width: 9,
+// 		height: 19,
+// 		marginRight: 118,
+// 	},
+// 	image4: {
+// 		width: 20,
+// 		height: 20,
+// 		marginRight: 11,
+// 	},
+// 	image5: {
+// 		width: 19,
+// 		height: 19,
+// 	},
+// 	image6: {
+// 		width: 56,
+// 		height: 56,
+// 		marginBottom: 24,
+// 		marginHorizontal: 24,
+// 	},
+// 	image7: {
+// 		width: 27,
+// 		height: 27,
+// 	},
+// 	row: {
+// 		flexDirection: "row",
+// 		alignItems: "center",
+// 		marginBottom: 37,
+// 		marginLeft: 57,
+// 	},
+// 	row2: {
+// 		width: 125,
+// 		flexDirection: "row",
+// 		justifyContent: "space-between",
+// 		alignItems: "center",
+// 		backgroundColor: "#1D1B20",
+// 		borderRadius: 100,
+// 		marginRight: 23,
+// 	},
+	
+// 	row4: {
+// 		flexDirection: "row",
+// 		alignItems: "center",
+// 		backgroundColor: "#625F67",
+// 		borderRadius: 8,
+// 		paddingVertical: 9,
+// 		paddingHorizontal: 10,
+// 		marginBottom: 32,
+// 		marginHorizontal: 24,
+// 	},
+// 	row5: {
+// 		flexDirection: "row",
+// 		marginBottom: 9,
+// 		marginHorizontal: 8,
+// 	},
+// 	row6: {
+// 		flexDirection: "row",
+// 		justifyContent: "space-between",
+// 		alignItems: "center",
+// 		marginBottom: 7,
+// 		marginHorizontal: 29,
+// 	},
+// 	row7: {
+// 		flexDirection: "row",
+// 		alignItems: "center",
+// 		marginBottom: 19,
+// 		marginHorizontal: 21,
+// 	},
+// 	scrollView: {
+// 		flex: 1,
+// 		backgroundColor: "#FFF",
+// 	},
+// 	text: {
+// 		color: "#FFF",
+// 		fontSize: 16,
+// 		marginRight: 4,
+// 		flex: 1,
+// 	},
+// 	text2: {
+// 		flex: 1, // 텍스트가 가운데 배치될 수 있도록 flex 설정
+// 		textAlign: "center", // 텍스트를 중앙 정렬
+// 		fontSize: 18,
+// 		color: "#FFF",
+// 		fontWeight: "bold",
+// 	},
+// 	text3: {
+// 		color: "#47434E",
+// 		fontSize: 16,
+		
+// 	},
+// 	text4: {
+// 		color: "#FFF",
+// 		fontSize: 18,
+// 		marginTop: 10,
+// 	},
+// 	text5: {
+// 		color: "#625F67",
+// 		fontSize: 16,
+// 		marginLeft: 33,
+// 	},
+// 	text6: {
+// 		color: "#7C7C7C",
+// 		fontSize: 10,
+// 		marginRight: 4,
+// 		flex: 1,
+// 	},
+// 	text7: {
+// 		color: "#7C7C7C",
+// 		fontSize: 10,
+// 		marginRight: 66,
+// 	},
+// 	text8: {
+// 		color: "#7161FF",
+// 		fontSize: 10,
+// 		marginRight: 62,
+// 	},
+// 	text9: {
+// 		color: "#7C7C7C",
+// 		fontSize: 10,
+// 		marginRight: 44,
+// 	},
+// 	text10: {
+// 		color: "#7C7C7C",
+// 		fontSize: 10,
+// 	},
+// 	view: {
+// 		borderColor: "#FFF",
+// 		borderRadius: 4,
+// 		borderWidth: 1,
+// 		paddingHorizontal: 2,
+// 	},
+// 	loadingText: {
+// 		textAlign: "center",
+// 		marginTop: 20,
+// 		fontSize: 18,
+// 		color: "#888",
+// 	}, foodListContainer: {
+// 		flex: 1,
+// 		padding: 8,
+// 		//height: 400,
+// 	},
+// 	flatListContainer: {
+// 		// flex: 1, // 남은 화면 공간을 모두 사용
+// 		marginHorizontal: 7, // 좌우 여백
+// 		marginBottom: 10, // 하단 여백
+// 	  },
+// 	  foodCardContainer: {
+// 		paddingBottom: 16, // 추가적인 패딩
+// 		paddingTop: 10,
+// 	  },
+// 	emptyText: {
+// 		textAlign: "center",
+// 		marginTop: 20,
+// 		fontSize: 16,
+// 		color: "#999999",
+// 	},
+// 	floatingButton: {
+// 		position: 'absolute',
+// 		bottom: 40,
+// 		right: 20,
+// 		width: 60, // 원형 버튼 크기
+// 		height: 60,
+// 		borderRadius: 30, // 버튼을 원형으로 만들기 위해 반지름을 설정
+// 		backgroundColor: '#6F6DFF', // 배경색 변경
+// 		alignItems: 'center', // 아이콘 가운데 정렬
+// 		justifyContent: 'center', // 아이콘 가운데 정렬
+// 		shadowColor: '#000', // 그림자 설정
+// 		shadowOffset: { width: 0, height: 4 },
+// 		shadowOpacity: 0.3,
+// 		shadowRadius: 4,
+// 		elevation: 5, // Android 그림자 효과
+// 	},
+	
+// 	backButton: {
+// 		position: "absolute",
+		
+// 		left: 20,
+// 		zIndex: 1,
+// 	  },
+// 	  backButtonText: {
+// 		color: "#FFF",
+// 		fontSize: 18,
+// 		fontWeight: "bold",
+// 	  },
+// 	  row3: {
+// 		flexDirection: "row",
+//     alignItems: "center",
+//     justifyContent: "space-between", // 백버튼과 텍스트를 양 끝으로 배치
+//     position: "relative", // 위치 조정을 위해 relative 사용
+//     paddingHorizontal: 10,
+//     paddingVertical: 15,
+// 	},
+// });
+
+// export default DietSearch;

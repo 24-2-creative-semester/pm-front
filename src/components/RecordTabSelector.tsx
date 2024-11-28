@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     marginBottom: 10,
-    color: "#FFFFFF",
+    color: "#1D1B20",
   },
   tab: {
     flex: 1,
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   },
   tabText: {
     fontSize: 16,
-    color: "#FFFFFF",
+    color: "#FFF",
   },
   activeTabText: {
     color: "#6F6CFF",

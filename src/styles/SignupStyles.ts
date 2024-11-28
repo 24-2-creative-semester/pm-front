@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   title: {
     margin: 24,
     marginTop: 70,
-    color: "#FFFFFF",
+    color: "#1D1B20",
     fontSize: 24,
     fontWeight: "600",
     marginBottom: 24,
@@ -24,11 +24,11 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 15,
-    color: "#FFFFFF",
+    color: "#1D1B20",
   },  
   label: {
     marginLeft: 24,
-    color: "#FFFFFF",
+    color: "#1D1B20",
     fontSize: 16,
     marginBottom: 8,
   },
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   selectedGenderButtonText: {
-    color: "#FFFFFF",
+    color: "#1D1B20",
   },
   input: {
     marginLeft: 24,
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#625E67",
     borderRadius: 8,
     paddingHorizontal: 20,
-    color: "#FFFFFF",
+    color: "#1D1B20",
     marginBottom: 24,
   },
   inputPwd: {
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#625E67",
     borderRadius: 8,
     paddingHorizontal: 20,
-    color: "#FFFFFF",
+    color: "#1D1B20",
     marginBottom: 8,
   },
   passwordHint: {
@@ -98,12 +98,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#6F6CFF4D", // 흐린 버튼 색상
   },
   submitButtonText: {
-    color: "#FFFFFF",
+    color: "#1D1B20",
     fontSize: 20,
     fontWeight: "600",
   },
   disabledSubmitButtonText: {
-    color: "#FFFFFF80", // 흐린 텍스트 색상
+    color: "#1D1B2080", // 흐린 텍스트 색상
   },
 });
 

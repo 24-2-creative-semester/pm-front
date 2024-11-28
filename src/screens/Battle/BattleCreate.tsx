@@ -74,8 +74,15 @@ function BattleCreate() {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
 
-      {/* 대결 생성하기 텍스트 */}
-      <Text style={styles.headerText}>대결 생성하기</Text>
+      <View style={styles.row3}>
+					<TouchableOpacity
+						style={styles.backButton}
+						onPress={() => navigation.goBack()}
+					>
+						<Text style={styles.backButtonText}>←</Text>
+					</TouchableOpacity>
+					<Text style={styles.text20}>{"대결 생성"}</Text>
+				</View>
 
       {/* 단계 표시 */}
       <View style={styles.steps}>
@@ -159,7 +166,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   label: {
-    color: '#ffffff',
+    color: '#FFF',
     fontSize: 16,
     marginBottom: 5,
   },
@@ -182,7 +189,34 @@ const styles = StyleSheet.create({
       backgroundColor: '#7c77ff',
     },
     buttonText: {
-      color: '#ffffff',
+      color: '#FFF',
       fontSize: 18,
+    },
+    backButton: {
+      position: "absolute",
+      top:15,
+      left: -5,
+      zIndex: 1,
+      },
+      backButtonText: {
+      color: "#FFF",
+      fontSize: 18,
+      fontWeight: "bold",
+      },
+      row3: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between", // 백버튼과 텍스트를 양 끝으로 배치
+      position: "relative", // 위치 조정을 위해 relative 사용
+      paddingHorizontal: 10,
+      paddingVertical: 15,
+      paddingBottom:100
+    },
+    text20: {
+      flex: 1, // 텍스트가 가운데 배치될 수 있도록 flex 설정
+      textAlign: "center", // 텍스트를 중앙 정렬
+      fontSize: 18,
+      color: "#FFF",
+      fontWeight: "bold",
     },
 });

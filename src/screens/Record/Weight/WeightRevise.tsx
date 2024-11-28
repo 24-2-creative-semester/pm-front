@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#7c77ff",
   },
   buttonText: {
-    color: "#ffffff",
+    color: "#1D1B20",
     fontSize: 18,
   },
 });

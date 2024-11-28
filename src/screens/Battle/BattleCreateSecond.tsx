@@ -1,10 +1,11 @@
 import { SafeAreaView, View, ScrollView, Image, Text, StyleSheet, TextInput, TouchableOpacity, StatusBar } from "react-native";
 import React, { useState, useEffect } from 'react';
-import { RouteProp,useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, 	} from '@react-navigation/native';
 import { useRoute } from "@react-navigation/native";
-import { RootStackParamList } from '../../../App';
+import { RootStackParamList } from '../../navigations/types';
 import { StackNavigationProp } from '@react-navigation/stack';
-
+import Clipboard from '@react-native-clipboard/clipboard';
+import { Alert } from 'react-native';
 
 type BattleCreateSecondRouteProp = RouteProp<RootStackParamList, "BattleCreateSecond">;
 type BattleCreateSecondNavigationProp = StackNavigationProp<RootStackParamList, 'BattleCreateSecond'>;
@@ -14,12 +15,38 @@ export default () => {
 	const navigation = useNavigation<BattleCreateSecondNavigationProp>(); // 타입 지정
 	const [BattleDescription, setBattleDescription] = useState("");
 
+	const copyToClipboard = () => {
+		if (inviteCode) {
+			Clipboard.setString(inviteCode); // 초대 코드를 클립보드에 복사
+			Alert.alert("복사 완료", "초대 코드가 클립보드에 복사되었습니다."); // 알림 표시
+		} else {
+			Alert.alert("오류", "초대 코드를 불러올 수 없습니다.");
+		}
+	};
+
 	return (
 		<SafeAreaView style={styles.container}>
-			<ScrollView style={styles.scrollView}>
+			<ScrollView
+  style={styles.scrollView}
+>
+				<View style={styles.row3}>
+					<TouchableOpacity
+						style={styles.backButton}
+						onPress={() => navigation.goBack()}
+					>
+						<Text style={styles.backButtonText}>←</Text>
+					</TouchableOpacity>
+					<Text style={styles.text20}>{"식단 검색"}</Text>
+				</View>
 				<View style={styles.column}>
+					{/* 단계 표시 */}
 					<View style={styles.column2}>
 						{/* 초대 코드 표시 */}
+						<View style={styles.steps}>
+							<View style={[styles.circle, { backgroundColor: '#6F6DFF' }]}><Text style={styles.stepText}>1</Text></View>
+							<View style={styles.line} />
+							<View style={[styles.circle, { backgroundColor: '#6F6DFF' }]}><Text style={styles.stepText}>2</Text></View>
+						</View>
 						<View style={styles.row}>
 							<Text style={styles.text}>{"초대 코드"}</Text>
 							<Text style={styles.text2}>
@@ -27,14 +54,11 @@ export default () => {
 							</Text>
 						</View>
 						<View style={styles.row2}>
-							<Text style={styles.text3}>
-								{"초대 코드 복사"}
-							</Text>
-							<View style={styles.box2}>
-							</View>
-							<Text style={styles.text4}>
-								{"초대하기"}
-							</Text>
+							<TouchableOpacity onPress={copyToClipboard}>
+								<Text style={styles.text3}>
+									{"초대 코드 복사하기"}
+								</Text>
+							</TouchableOpacity>
 						</View>
 						<Text style={styles.text5}>
 							{"설명"}
@@ -43,103 +67,18 @@ export default () => {
 							<Text style={styles.textInput}>
 								{"초대코드를 복사하고 상대방에게 전달하세요!"}
 							</Text>
-							
+
 						</View>
 						<View style={[styles.view2, { backgroundColor: "#6F6DFF" }]}>
-								<TouchableOpacity onPress={() => navigation.navigate("BattleMain")}>
-									<Text style={styles.text7}>
-										{"확인"}
-									</Text>
-								</TouchableOpacity>
-							</View>
-						<View style={styles.column4}>
-							<View style={styles.row3}>
-								<Image
-									source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-									resizeMode={"stretch"}
-									style={styles.image2}
-								/>
-								<Image
-									source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-									resizeMode={"stretch"}
-									style={styles.image2}
-								/>
-								<Image
-									source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-									resizeMode={"stretch"}
-									style={styles.image2}
-								/>
-								<Image
-									source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-									resizeMode={"stretch"}
-									style={styles.image2}
-								/>
-								<Image
-									source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-									resizeMode={"stretch"}
-									style={styles.image2}
-								/>
-							</View>
-							<View style={styles.row4}>
-								<Text style={styles.text8}>
-									{"기록"}
+							<TouchableOpacity onPress={() => navigation.navigate("BattleMain")}>
+								<Text style={styles.text7}>
+									{"확인"}
 								</Text>
-								<Text style={styles.text9}>
-									{"대결"}
-								</Text>
-								<Text style={styles.text10}>
-									{"홈"}
-								</Text>
-								<Text style={styles.text11}>
-									{"타이머"}
-								</Text>
-								<Text style={styles.text12}>
-									{"운동메이트"}
-								</Text>
-							</View>
-							<View style={styles.box3}>
-							</View>
+							</TouchableOpacity>
 						</View>
+
 					</View>
-					<View style={styles.absoluteColumn}>
-						<View style={styles.row5}>
-							<Text style={styles.text13}>
-								{"9:41"}
-							</Text>
-							<View style={styles.row6}>
-								<View style={styles.box4}>
-								</View>
-								<View style={styles.box5}>
-								</View>
-							</View>
-							<Image
-								source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-								resizeMode={"stretch"}
-								style={styles.image3}
-							/>
-							<Image
-								source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-								resizeMode={"stretch"}
-								style={styles.image4}
-							/>
-							<View style={styles.view3}>
-								<View style={styles.box6}>
-								</View>
-							</View>
-							<View style={styles.box7}>
-							</View>
-						</View>
-						<View style={styles.row7}>
-							<Image
-								source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-								resizeMode={"stretch"}
-								style={styles.image5}
-							/>
-							<Text style={styles.text14}>
-								{"대결 생성하기"}
-							</Text>
-						</View>
-					</View>
+
 				</View>
 			</ScrollView>
 		</SafeAreaView>
@@ -149,7 +88,7 @@ export default () => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#FFFFFF",
+		backgroundColor: "#1D1B20",
 	},
 	absoluteColumn: {
 		position: "absolute",
@@ -157,7 +96,7 @@ const styles = StyleSheet.create({
 		right: 0,
 		left: 0,
 		height: 135,
-		backgroundColor: "#1D1B20",
+		backgroundColor: "#FFF",
 		paddingRight: 31,
 	},
 	// textInput 스타일 추가
@@ -169,6 +108,9 @@ const styles = StyleSheet.create({
 		color: "#BABABA", // 텍스트 색상 설정
 		fontSize: 16,
 		textAlignVertical: 'top', // 멀티라인 텍스트가 위쪽에 정렬되도록 설정
+	},
+	steps :{
+		marginLeft:40,
 	},
 	box: {
 		height: 2,
@@ -183,35 +125,37 @@ const styles = StyleSheet.create({
 	},
 	box3: {
 		height: 5,
-		backgroundColor: "#FFFFFF",
+		backgroundColor: "#FFF",
 		borderRadius: 100,
 		marginHorizontal: 127,
 	},
 	box4: {
 		width: 80,
 		height: 37,
-		backgroundColor: "#000000",
+		backgroundColor: "#FFF",
 		borderRadius: 100,
 	},
 	box5: {
 		width: 37,
 		height: 37,
-		backgroundColor: "#000000",
+		backgroundColor: "#FFF",
 		borderRadius: 100,
 	},
 	box6: {
 		height: 9,
-		backgroundColor: "#FFFFFF",
+		backgroundColor: "#FFF",
 		borderRadius: 2,
 		marginTop: 2,
 	},
 	box7: {
 		width: 1,
 		height: 4,
-		backgroundColor: "#FFFFFF",
+		backgroundColor: "#FFF",
 	},
 	column: {
 		marginTop: 1,
+		marginLeft:10,
+		backgroundColor: "#FFF",
 	},
 	column2: {
 		backgroundColor: "#1D1B20",
@@ -267,6 +211,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		marginBottom: 7,
 		marginHorizontal: 29,
+		backgroundColor: "#1D1B20",
 	},
 	row4: {
 		flexDirection: "row",
@@ -286,7 +231,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
-		backgroundColor: "#000000",
+		backgroundColor: "#1D1B20",
 		borderRadius: 100,
 		marginRight: 22,
 	},
@@ -297,10 +242,10 @@ const styles = StyleSheet.create({
 	},
 	scrollView: {
 		flex: 1,
-		backgroundColor: "#FFFFFF",
+		backgroundColor: "#1D1B20",
 	},
 	text: {
-		color: "#FFFFFF",
+		color: "#FFF",
 		fontSize: 20,
 		marginRight: 34,
 	},
@@ -320,7 +265,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	text5: {
-		color: "#FFFFFF",
+		color: "#FFF",
 		fontSize: 20,
 		marginBottom: 11,
 		marginLeft: 24,
@@ -330,7 +275,7 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 	},
 	text7: {
-		color: "#FFFFFF",
+		color: "#FFF",
 		fontSize: 20,
 	},
 	text8: {
@@ -359,13 +304,13 @@ const styles = StyleSheet.create({
 		fontSize: 10,
 	},
 	text13: {
-		color: "#FFFFFF",
+		color: "#FFF",
 		fontSize: 16,
 		marginRight: 4,
 		flex: 1,
 	},
 	text14: {
-		color: "#FFFFFF",
+		color: "#FFF",
 		fontSize: 20,
 		flex: 1,
 	},
@@ -388,7 +333,7 @@ const styles = StyleSheet.create({
 	},
 	view3: {
 		width: 25,
-		borderColor: "#FFFFFF",
+		borderColor: "#1D1B20",
 		borderRadius: 4,
 		borderWidth: 1,
 		paddingHorizontal: 2,
@@ -415,5 +360,33 @@ const styles = StyleSheet.create({
 		height: 2,
 		backgroundColor: '#3a3a3a',
 		marginHorizontal: 5,
+	},
+	backButton: {
+		position: "absolute",
+		top: 15,
+		left: -5,
+		zIndex: 1,
+	},
+	backButtonText: {
+		color: "#FFF",
+		fontSize: 18,
+		fontWeight: "bold",
+	},
+	row30: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between", // 백버튼과 텍스트를 양 끝으로 배치
+		position: "relative", // 위치 조정을 위해 relative 사용
+		paddingHorizontal: 10,
+		paddingVertical: 15,
+		paddingBottom: 100
+	},
+	text20: {
+		flex: 1, // 텍스트가 가운데 배치될 수 있도록 flex 설정
+		textAlign: "center", // 텍스트를 중앙 정렬
+		fontSize: 18,
+		color: "#1D1B20",
+		fontWeight: "bold",
+		paddingTop:20
 	},
 });

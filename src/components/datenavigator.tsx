@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import { useNavigation } from "@react-navigation/native";
 
 interface DateNavigatorProps {
   initialDate?: string;
@@ -15,6 +16,8 @@ const DateNavigator: React.FC<DateNavigatorProps> = ({
     initialDate || new Date().toISOString().split("T")[0]
   );
 
+  const navigation = useNavigation();
+
   const updateDate = (days: number) => {
     const currentDate = new Date(selectedDate);
     currentDate.setDate(currentDate.getDate() + days);
@@ -25,12 +28,18 @@ const DateNavigator: React.FC<DateNavigatorProps> = ({
     }
   };
 
+  const navigateToCalendar = () => {
+    navigation.navigate("Calendar", { selectedDate }); // Calendar 화면으로 이동, 선택된 날짜 전달
+  };
+
   return (
     <View style={styles.row}>
       <TouchableOpacity onPress={() => updateDate(-1)}>
         <Icon name="chevron-back-outline" size={30} color="white" />
       </TouchableOpacity>
-      <Text style={styles.dateText}> {selectedDate} </Text>
+      <TouchableOpacity onPress={navigateToCalendar}>
+        <Text style={styles.dateText}> {selectedDate} </Text>
+      </TouchableOpacity>
       <TouchableOpacity onPress={() => updateDate(1)}>
         <Icon name="chevron-forward-outline" size={30} color="white" />
       </TouchableOpacity>
@@ -48,7 +57,7 @@ const styles = StyleSheet.create({
     top: 0,
   },
   dateText: {
-    color: "#FFFFFF",
+    color: "#FFF",
     fontSize: 25,
   },
 });

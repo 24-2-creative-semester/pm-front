@@ -4,8 +4,9 @@ import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const BodySpecific: React.FC<{ route: any }> = ({ route }) => {
-  const { imageId, date } = route.params; // 전달된 imageId와 date를 수신
+  const { imageId } = route.params; // 전달된 imageId를 수신
   const [imageBase64, setImageBase64] = useState<string | null>(null);
+  const [imageDate, setImageDate] = useState<string | null>(null); // 이미지의 날짜 상태 추가
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -32,13 +33,16 @@ const BodySpecific: React.FC<{ route: any }> = ({ route }) => {
           },
         }
       );
-      console.log(response);
+
       if (response.ok) {
         const data = await response.json(); // JSON으로 파싱
         console.log("API 응답 데이터:", data);
 
         if (data.isSuccess && data.result) {
-          setImageBase64(data.result); // `result`에서 Base64 이미지 데이터를 가져와 저장
+          // ImageDto 구조의 데이터를 분리
+          const { base64, localDate } = data.result;
+          setImageBase64(base64); // Base64 이미지 데이터 저장
+          setImageDate(localDate); // 날짜 데이터 저장
         } else {
           console.error("API 응답 데이터 오류:", data.message);
           Alert.alert("오류", "이미지를 불러오지 못했습니다.");
@@ -67,7 +71,11 @@ const BodySpecific: React.FC<{ route: any }> = ({ route }) => {
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Text style={styles.backButtonText}>←</Text>
       </TouchableOpacity>
-      <Text style={styles.date}>{formatDate(date)}의 눈바디 사진</Text>
+      {imageDate ? (
+        <Text style={styles.date}>{formatDate(imageDate)}의 눈바디 사진</Text>
+      ) : (
+        <Text style={styles.date}>날짜 정보를 불러오는 중입니다...</Text>
+      )}
       {imageBase64 ? (
         <Image
           source={{ uri: `data:image/jpeg;base64,${imageBase64}` }} // Base64 데이터를 이미지로 표시

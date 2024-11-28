@@ -131,8 +131,12 @@ const BodyMain: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.dateText}>{date}</Text>
-      {/* 날짜와 탭 네비게이션 */}
+      {/* 중앙 상단 날짜 텍스트 */}
+      <View style={styles.dateContainer}>
+        <Text style={styles.dateText}>{`< ${date} >`}</Text>
+      </View>
+
+      {/* 탭 네비게이션 */}
       <View style={styles.header}>
         <RecordTabSelector tabs={tabs} activeTab="BodyMain" />
       </View>
@@ -159,7 +163,7 @@ const BodyMain: React.FC = () => {
         </View>
       </ScrollView>
     </View>
-  );  
+  );
 };
 
 const styles = StyleSheet.create({
@@ -167,11 +171,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#1D1B20",
   },
+  dateContainer: {
+    marginTop: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   dateText: {
     color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 5,
+    fontSize: 25,
+    textAlign: "center",
   },
   header: {
     backgroundColor: "#1D1B20",

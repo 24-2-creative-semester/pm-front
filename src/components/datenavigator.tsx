@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
 interface DateNavigatorProps {
-  initialDate?: string; // 초기 날짜를 전달받을 수 있도록 설정
-  onDateChange?: (date: string) => void; // 날짜가 변경될 때 실행될 콜백
+  initialDate?: string;
+  onDateChange?: (date: string) => void; // 날짜 변경 콜백
 }
 
 const DateNavigator: React.FC<DateNavigatorProps> = ({
@@ -17,7 +17,7 @@ const DateNavigator: React.FC<DateNavigatorProps> = ({
 
   const updateDate = (days: number) => {
     const currentDate = new Date(selectedDate);
-    currentDate.setDate(currentDate.getDate() + days); // 날짜 변경
+    currentDate.setDate(currentDate.getDate() + days);
     const updatedDate = currentDate.toISOString().split("T")[0];
     setSelectedDate(updatedDate);
     if (onDateChange) {
@@ -28,11 +28,11 @@ const DateNavigator: React.FC<DateNavigatorProps> = ({
   return (
     <View style={styles.row}>
       <TouchableOpacity onPress={() => updateDate(-1)}>
-        <Icon name="chevron-back-outline" size={32} color="red" />
+        <Icon name="chevron-back-outline" size={30} color="white" />
       </TouchableOpacity>
-      <Text style={styles.dateText}>    {selectedDate}    </Text>
+      <Text style={styles.dateText}> {selectedDate} </Text>
       <TouchableOpacity onPress={() => updateDate(1)}>
-        <Icon name="chevron-forward-outline" size={32} color="red" />
+        <Icon name="chevron-forward-outline" size={30} color="white" />
       </TouchableOpacity>
     </View>
   );
@@ -40,17 +40,16 @@ const DateNavigator: React.FC<DateNavigatorProps> = ({
 
 const styles = StyleSheet.create({
   row: {
-      flexDirection: "row",
-      alignItems: "center",
-      marginBottom: 20,
-      marginTop: 10,
-      // marginHorizontal: 33,
-      position: 'absolute', // 부모 컨테이너 기준으로 고정
-      top: 0, // 화면 상단에 붙이기
-   },
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+    marginTop: 10,
+    position: "absolute",
+    top: 0,
+  },
   dateText: {
     color: "#FFFFFF",
-      fontSize: 28,
+    fontSize: 25,
   },
 });
 

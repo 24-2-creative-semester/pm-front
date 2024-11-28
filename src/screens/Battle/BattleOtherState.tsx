@@ -56,7 +56,7 @@ const BattleOtherState = ({ route, navigation }: { route: BattleOtherStateRouteP
 
 				const data = await response.json();
 				console.log(data);
-				
+
 				console.log("otherstate",data);
 				if (data.isSuccess) {
 					setBattleData(data.result);
@@ -94,6 +94,11 @@ const BattleOtherState = ({ route, navigation }: { route: BattleOtherStateRouteP
 	return (
 		<SafeAreaView style={styles.container}>
 			<ScrollView style={styles.scrollView}>
+			<View style={styles.row}>
+							<Text style={styles.text11}>
+								{"대결 상태"}
+							</Text>
+							</View>
 				<View style={styles.column}>
 					<View style={styles.column2}>
 						<View style={styles.column3}>
@@ -183,67 +188,12 @@ const BattleOtherState = ({ route, navigation }: { route: BattleOtherStateRouteP
 
 						</View>
 						<View style={styles.column9}>
-							<View style={styles.row4}>
-								<Image
-									source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-									resizeMode={"stretch"}
-									style={styles.image3}
-								/>
-								<Image
-									source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-									resizeMode={"stretch"}
-									style={styles.image3}
-								/>
-								<Image
-									source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-									resizeMode={"stretch"}
-									style={styles.image3}
-								/>
-								<Image
-									source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-									resizeMode={"stretch"}
-									style={styles.image3}
-								/>
-								<Image
-									source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-									resizeMode={"stretch"}
-									style={styles.image3}
-								/>
-							</View>
-							<View style={styles.row5}>
-								<Text style={styles.text5}>
-									{"기록"}
-								</Text>
-								<Text style={styles.text6}>
-									{"대결"}
-								</Text>
-								<Text style={styles.text7}>
-									{"홈"}
-								</Text>
-								<Text style={styles.text8}>
-									{"타이머"}
-								</Text>
-								<Text style={styles.text9}>
-									{"운동메이트"}
-								</Text>
-							</View>
-							<View style={styles.box2}>
-							</View>
+							
+							
+							
 						</View>
 					</View>
-					<View style={styles.absoluteColumn}>
-						
-						<View style={styles.row8}>
-							<Image
-								source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-								resizeMode={"stretch"}
-								style={styles.image6}
-							/>
-							<Text style={styles.text11}>
-								{"대결 상태"}
-							</Text>
-						</View>
-					</View>
+					
 				</View>
 				</View>
 			</ScrollView>
@@ -446,12 +396,12 @@ const styles = StyleSheet.create({
 	},
 	text3: {
 		color: "#FFFFFF",
-		fontSize: 20,
+		fontSize: 17,
 		marginBottom: 14,
 	},
 	text4: {
 		color: "#FFFFFF",
-		fontSize: 20,
+		fontSize: 17,
 	},
 	text5: {
 		color: "#7C7C7C",

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   ScrollView,
@@ -8,12 +8,11 @@ import {
   Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import RecordTabSelector from "../../../components/RecordTabSelector";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useFocusEffect } from "@react-navigation/native";
-import { useCallback } from "react";
+import HeaderLayout from "../../../components/HeaderLayout";
 import { RecordStackParamList } from "../../../navigations/RecordStackNavigator";
 
 interface Exercise {
@@ -29,18 +28,21 @@ const ExerciseMain: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [totalCalories, setTotalCalories] = useState(0);
+  const [selectedDate, setSelectedDate] = useState<string>(
+    new Date().toISOString().split("T")[0]
+  );
 
   useFocusEffect(
     useCallback(() => {
-      fetchTodayExercises(); // 화면에 다시 포커스가 들어오면 데이터 새로 가져오기
-    }, [])
+      fetchExercisesByDate(selectedDate); // 화면에 포커스가 들어올 때 데이터 갱신
+    }, [selectedDate])
   );
 
-  const fetchTodayExercises = async () => {
+  const fetchExercisesByDate = async (date: string) => {
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
       const response = await fetch(
-        "http://172.16.86.241:8080/exercise/todayList",
+        `http://172.16.86.241:8080/exercise/todayList?today=${date}`, // 날짜 기반 API로 수정
         {
           method: "GET",
           headers: {
@@ -50,32 +52,32 @@ const ExerciseMain: React.FC = () => {
         }
       );
       const data = await response.json();
-      console.log("Today Exercises:", data);
-  
+      console.log("Exercises for Date:", data);
+
       if (response.ok && data.isSuccess) {
         const updatedExercises = data.result.map((exercise: any) => ({
           exerciseName: exercise.exerciseName,
           exerciseCalories: exercise.exerciseCalories,
-          exerciseTime: Math.round(exercise.exerciseTime * 60), // **시간을 분으로 변환**
+          exerciseTime: Math.round(exercise.exerciseTime * 60), // 시간을 분으로 변환
           exerciseId: exercise.memberExerciseId,
         }));
-  
+
         setExercises(updatedExercises);
-  
+
         const totalCalories = updatedExercises.reduce(
           (sum: number, exercise: any) => sum + exercise.exerciseCalories,
           0
         );
         setTotalCalories(totalCalories);
       } else {
-        // Alert.alert("오류", data.message || "운동 정보를 불러올 수 없습니다.");
+        setExercises([]);
+        setTotalCalories(0);
       }
     } catch (error) {
       console.error("운동 데이터 불러오기 실패:", error);
       Alert.alert("오류", "운동 정보를 불러오는 중 문제가 발생했습니다.");
     }
   };
-  
 
   const handleAddExercise = () => {
     navigation.navigate("ExerciseSearch"); // 운동 검색 화면으로 이동
@@ -98,7 +100,7 @@ const ExerciseMain: React.FC = () => {
 
       if (response.ok && data.isSuccess) {
         Alert.alert("삭제 완료", "운동이 성공적으로 삭제되었습니다.");
-        fetchTodayExercises(); // 데이터 새로고침
+        fetchExercisesByDate(selectedDate); // 데이터 새로고침
       } else {
         Alert.alert("오류", data.message || "운동 삭제 중 문제가 발생했습니다.");
       }
@@ -109,18 +111,11 @@ const ExerciseMain: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {/* 상단 네비게이션 및 날짜 */}
+    <HeaderLayout
+      selectedDate={selectedDate}
+      onDateChange={(date) => setSelectedDate(date)}
+    >
       <ScrollView style={styles.scrollView}>
-        <View style={styles.column}>
-          <View style={styles.row3}>
-            <Icon name="chevron-back-outline" size={32} color="#FFFFFF" />
-            <Text style={styles.text2}>2024 09 14</Text>
-            <Icon name="chevron-forward-outline" size={32} color="#FFFFFF" />
-          </View>
-          <RecordTabSelector />
-        </View>
-
         {/* 오늘 소모한 칼로리 */}
         <View style={styles.card}>
           <Text style={styles.cardTitle}>오늘 소모한 칼로리</Text>
@@ -150,32 +145,13 @@ const ExerciseMain: React.FC = () => {
           ))}
         </View>
       </ScrollView>
-    </View>
+    </HeaderLayout>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#1D1B20",
-  },
   scrollView: {
     flex: 1,
-  },
-  column: {
-    backgroundColor: "#1D1B20",
-    paddingVertical: 11,
-  },
-  row3: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 32,
-    marginHorizontal: 30,
-  },
-  text2: {
-    color: "#FFFFFF",
-    fontSize: 22,
   },
   card: {
     backgroundColor: "#6F6CFF",

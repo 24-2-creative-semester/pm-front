@@ -5,17 +5,16 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   Alert,
 } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
-import RecordTabSelector from "../../../components/RecordTabSelector";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import { useNavigation } from "@react-navigation/native";
+import RecordTabSelector from "../../../components/RecordTabSelector";
 
 const BodyMain: React.FC = () => {
   const [todayImage, setTodayImage] = useState<string | null>(null);
+  const [date, setDate] = useState<string>(""); // 날짜 상태 추가
   const navigation = useNavigation();
 
   const tabs = [
@@ -26,14 +25,16 @@ const BodyMain: React.FC = () => {
   ];
 
   useEffect(() => {
-    checkTodayImage();
+    // 오늘의 날짜를 설정
+    const today = new Date().toISOString().split("T")[0];
+    setDate(today);
+    checkTodayImage(today);
   }, []);
 
   // 오늘의 이미지 존재 여부 확인
-  const checkTodayImage = async () => {
+  const checkTodayImage = async (today: string) => {
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
-      const today = new Date().toISOString().split("T")[0];
       const response = await fetch(
         `http://172.16.86.241:8080/api/isImageDate?date=${today}`,
         {
@@ -118,7 +119,7 @@ const BodyMain: React.FC = () => {
       const data = await response.json();
       if (response.ok && data.isSuccess) {
         Alert.alert("업로드 성공", "이미지가 성공적으로 업로드되었습니다.");
-        checkTodayImage(); // 업로드 후 이미지 갱신 및 확인
+        checkTodayImage(date); // 업로드 후 이미지 갱신 및 확인
       } else {
         Alert.alert("오류", data.message || "이미지 업로드 중 문제가 발생했습니다.");
       }
@@ -130,11 +131,13 @@ const BodyMain: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      {/* 탭 네비게이션 */}
-      <ScrollView style={styles.scrollView}>
+      <Text style={styles.dateText}>{date}</Text>
+      {/* 날짜와 탭 네비게이션 */}
+      <View style={styles.header}>
         <RecordTabSelector tabs={tabs} activeTab="BodyMain" />
-
-        {/* 오늘의 눈바디 */}
+      </View>
+      {/* 콘텐츠 영역 */}
+      <ScrollView style={styles.scrollView}>
         <View style={styles.content}>
           {todayImage === null ? (
             <View style={styles.section}>
@@ -144,10 +147,7 @@ const BodyMain: React.FC = () => {
               <TouchableOpacity style={styles.button} onPress={handleTakePhoto}>
                 <Text style={styles.buttonText}>사진 찍기</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={handleUploadPhoto}
-              >
+              <TouchableOpacity style={styles.button} onPress={handleUploadPhoto}>
                 <Text style={styles.buttonText}>사진 등록하기</Text>
               </TouchableOpacity>
             </View>
@@ -159,13 +159,26 @@ const BodyMain: React.FC = () => {
         </View>
       </ScrollView>
     </View>
-  );
+  );  
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#1D1B20",
+  },
+  dateText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  header: {
+    backgroundColor: "#1D1B20",
+    paddingVertical: 10,
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#333",
   },
   scrollView: {
     flex: 1,

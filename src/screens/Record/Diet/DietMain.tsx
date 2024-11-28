@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RecordTabSelector from "../../../components/RecordTabSelector";
 import DateNavigator from "../../../components/datenavigator";
+import HeaderLayout from "../../../components/HeaderLayout";
 
 type DietMainNavigationProp = StackNavigationProp<RootStackParamList, 'DietMain'>;
 
@@ -22,12 +23,15 @@ type DietData = {
 const DietMain: React.FC = () => {
 	// 날짜 선택 버튼 핸들러
 
-
 	const navigation = useNavigation<DietMainNavigationProp>();
 	const [dietData, setDietData] = useState<any>(null);  // 서버에서 받아올 데이터 상태
 	const [loading, setLoading] = useState(true);  // 데이터 로딩 상태
 	const [error, setError] = useState<string | null>(null);  // 오류 상태
-
+	const [selectedDate, setSelectedDate] = useState<string>(
+		new Date(new Date().setHours(new Date().getHours() + 9)) // 한국 시간으로 설정
+		  .toISOString()
+		  .split("T")[0]
+	  );
 
 	// 날짜와 memberID 설정
 	const inputtodayDate = new Date();
@@ -38,6 +42,7 @@ const DietMain: React.FC = () => {
 	// 서버에서 데이터 가져오는 함수
 	const fetchDietData = async (date: string) => {
 		try {
+			setLoading(true);
 			const accessToken = await AsyncStorage.getItem('accessToken');
 			console.log(date);
 			const response = await fetch(`http://172.16.86.241:8080/food/eatingByDate?date=${date}`, {
@@ -77,10 +82,9 @@ const DietMain: React.FC = () => {
 		}
 	};
 
-	// 컴포넌트가 마운트될 때 데이터 가져오기
 	useEffect(() => {
-		fetchDietData(todayDate);
-	}, []);
+		fetchDietData(selectedDate); // 날짜가 변경될 때마다 데이터 갱신
+	  }, [selectedDate]);
 
 	// 로딩 상태 처리
 	if (loading) {
@@ -92,24 +96,13 @@ const DietMain: React.FC = () => {
 		return <Text>{error}</Text>;
 	}
 
-
 	return (
 		<SafeAreaView style={styles.container}>
+			<HeaderLayout
+				selectedDate={selectedDate}
+				onDateChange={(date) => setSelectedDate(date)}
+			>
 			<ScrollView style={styles.scrollView}>
-				<View style={styles.column}>
-
-					<View style={styles.row3}>
-            <DateNavigator/>
-						{/* <Icon name="chevron-back-outline" size={32} color="red" />
-						<TouchableOpacity
-							onPress={() => navigation.navigate('Calendar')} // 클릭 시 Calendar 화면으로 이동
-						>
-							<Text style={styles.text2}>{"2024.09.14"}</Text>
-						</TouchableOpacity>
-						<Icon name="chevron-forward-outline" size={32} color="red" /> */}
-					</View>
-					<RecordTabSelector />
-				</View>
 				<View style={styles.column2}>
 					
 					<Text style={styles.text6}>
@@ -260,6 +253,7 @@ const DietMain: React.FC = () => {
 
 				</View>
 			</ScrollView>
+			</HeaderLayout>
 		</SafeAreaView>
 	)
 }

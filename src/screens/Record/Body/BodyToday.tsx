@@ -13,12 +13,18 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const BodyToday: React.FC<{ navigation: any }> = ({ navigation }) => {
   const [todayImageBase64, setTodayImageBase64] = useState<string | null>(null);
+  const [date, setDate] = useState<Date>(new Date()); // 날짜 상태를 Date 객체로 변경
 
   useEffect(() => {
-    fetchTodayImage();
-  }, []);
+    fetchTodayImage(formatDate(date));
+  }, [date]);
 
-  const fetchTodayImage = async () => {
+  // 날짜를 YYYY-MM-DD 형식으로 포맷하는 함수
+  const formatDate = (date: Date): string => {
+    return date.toISOString().split("T")[0];
+  };
+
+  const fetchTodayImage = async (formattedDate: string) => {
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
 
@@ -27,13 +33,8 @@ const BodyToday: React.FC<{ navigation: any }> = ({ navigation }) => {
         return;
       }
 
-      // 현재 날짜에 9시간 추가해 한국 시간으로 변환
-      const now = new Date();
-      const koreaTime = new Date(now.getTime() + 9 * 60 * 60 * 1000); // 9시간 추가
-      const today = koreaTime.toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식
-
       const response = await fetch(
-        `http://172.16.86.241:8080/api/getImageListDate?date=${today}`,
+        `http://172.16.86.241:8080/api/getImageListDate?date=${formattedDate}`,
         {
           method: "GET",
           headers: {
@@ -66,8 +67,33 @@ const BodyToday: React.FC<{ navigation: any }> = ({ navigation }) => {
     }
   };
 
+  // 이전 날짜로 이동
+  const handlePrevDate = () => {
+    const prevDate = new Date(date);
+    prevDate.setDate(date.getDate() - 1);
+    setDate(prevDate);
+  };
+
+  // 다음 날짜로 이동
+  const handleNextDate = () => {
+    const nextDate = new Date(date);
+    nextDate.setDate(date.getDate() + 1);
+    setDate(nextDate);
+  };
+
   return (
     <View style={styles.container}>
+      {/* 날짜 네비게이터 */}
+      <View style={styles.dateNavigator}>
+        <TouchableOpacity onPress={handlePrevDate}>
+          <Icon name="chevron-back-outline" size={30} color="#FFFFFF" />
+        </TouchableOpacity>
+        <Text style={styles.dateText}>{formatDate(date)}</Text>
+        <TouchableOpacity onPress={handleNextDate}>
+          <Icon name="chevron-forward-outline" size={30} color="#FFFFFF" />
+        </TouchableOpacity>
+      </View>
+
       <RecordTabSelector />
       <Text style={styles.title}>오늘의 눈바디</Text>
       {todayImageBase64 ? (
@@ -97,10 +123,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
+  dateNavigator: {
+    flexDirection: "row",
+    alignItems: "center",
+    // marginVertical: 20,
+  },
+  dateText: {
+    color: "#FFFFFF",
+    fontSize: 25,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginHorizontal: 10,
+  },
   title: {
     color: "#FFFFFF",
     fontSize: 22,
-    marginTop: 90,
+    marginTop: 20,
     marginBottom: 20,
   },
   image: {

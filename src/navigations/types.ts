@@ -37,7 +37,7 @@ export type RootStackParamList = {
   
   WeightAfter:undefined;
   WeightBefore:undefined;
-  WeightRevise:undefined;
+  WeightRevise:{date:string};
 
   WeightCalendarScreen:undefined;
 
@@ -46,4 +46,6 @@ export type RootStackParamList = {
 
   TimerRunning:undefined;
   TimerSetting:undefined;
+
+  mealtime:undefined;
 };

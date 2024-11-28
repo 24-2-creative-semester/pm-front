@@ -1,38 +1,91 @@
 import React, { useState } from "react";
-import { SafeAreaView, View, ScrollView, Text, Image, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { SafeAreaView, View, ScrollView, Text, Image, StyleSheet, TextInput, TouchableOpacity, } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
-export default () => {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from "../../../navigations/types";// RootStackParamList를 불러옵니다.
+import { useRoute, RouteProp,useNavigation } from '@react-navigation/native';
 
-	const [name, Setfoodname] = useState('');
-	const [weight, Setfoodweight] = useState('');
-	const [kcal, Setfoodkcal] = useState('');
+type DietEnrollRouteProp = RouteProp<RootStackParamList, 'DietEnroll'>; // 올바른 타입 정의
+type DietEnrollNavigationProp = StackNavigationProp<RootStackParamList, 'DietEnroll'>;
+
+type DietEnrollProps = {
+	route: DietEnrollRouteProp;
+  };
+   
+  const DietEnroll = ({ route }: DietEnrollProps) => {
+	const { mealtime } = route.params;  // 'mealtime' 값을 받음
+	const navigation = useNavigation<DietEnrollNavigationProp>();
+	const [foodName, Setfoodname] = useState('');
+	const [foodweight, Setfoodweight] = useState('');
+	const [foodCalories, Setfoodkcal] = useState('');
 	const [protein, Setfoodprotein] = useState('');
-	const [Carbohydrate, SetfoodCarbohydrate] = useState('');
+	const [carbohydrate, SetfoodCarbohydrate] = useState('');
 	const [fat, Setfoodfat] = useState('');
-	const [dietaryfiber, Setfooddietaryfiber] = useState('');
-	const [Sodium, SetfoodSodium] = useState('');
+	const [dietaryFiber, Setfooddietaryfiber] = useState('');
+	const [sodium, SetfoodSodium] = useState('');
 	const [sugar, Setfoodsugar] = useState('');
+	const [manufacturingCompany, setmanufacturingCompany] = useState('');
 
+	
+	const weight = parseFloat(foodweight);
+
+    // 입력된 중량으로 나누기
+    const getCalculatedValue = (value: string) => {
+        const numericValue = parseFloat(value);
+        return isNaN(numericValue) || isNaN(weight) || weight === 0 ? 0 : numericValue / weight;
+    };
 
 	// 버튼 비활성화 조건: 모든 입력 필드가 비어있는 경우
 	const isButtonDisabled =
-		!name && !weight && !kcal && !protein && !Carbohydrate && !fat && !dietaryfiber && !Sodium && !sugar;
+		!foodName && !foodweight && !foodCalories && !protein && !carbohydrate && !fat && !dietaryFiber && !sodium && !sugar;
 
-	const sendDataToServer = () => {
-		// 서버로 데이터 전송하는 로직 추가
-		console.log("데이터 전송:", {
-			name,
-			weight,
-			kcal,
-			protein,
-			Carbohydrate,
-			fat,
-			dietaryfiber,
-			Sodium,
-			sugar,
-		});
-	};
-
+		const sendDataToServer = async () => {
+			const url = 'http://172.16.86.241:8080/food/addFood'; // 여기에 API 엔드포인트 URL 입력
+			const payload = {
+				foodName,
+				manufacturingCompany,
+				foodCalories: getCalculatedValue(foodCalories),
+				protein: getCalculatedValue(protein),
+				carbohydrate: getCalculatedValue(carbohydrate),
+				fat: getCalculatedValue(fat),
+				dietaryFiber: getCalculatedValue(dietaryFiber),
+				sodium: getCalculatedValue(sodium),
+				sugar: getCalculatedValue(sugar),
+			};
+		
+			// 보내는 데이터 로그 출력 (서버에 보내기 전에)
+			console.log("Sending data to server:", JSON.stringify(payload));
+		
+			try {
+				const accessToken = await AsyncStorage.getItem('accessToken');
+				const response = await fetch(url, {
+					method: 'POST',
+					headers: {
+						'Authorization': `${accessToken}`, // 토큰을 Authorization 헤더에 추가
+						'Content-Type': 'application/json', // JSON 형식의 데이터를 보내기 위해 헤더 추가
+					},
+					body: JSON.stringify(payload),
+				});
+		
+				// 서버 응답이 실패한 경우
+				if (!response.ok) {
+					const errorText = await response.text(); // 응답 본문을 텍스트로 읽어봄
+					console.error(`서버 응답 오류: ${response.status}`);
+					console.error('응답 본문:', errorText); // 응답 본문을 확인
+					throw new Error(`서버 응답 오류: ${response.status}`);
+				}
+		
+				// 응답을 JSON으로 파싱하여 로그에 출력
+				const data = await response.json();
+				console.log("DietEnroll response", data);  // 응답 데이터 로그로 확인
+		
+				// 서버 응답 성공 시 DietSearch 화면으로 이동
+				navigation.navigate('DietSearch', { mealtime: mealtime });  // 'DietSearch'는 React Navigation에 등록된 화면 이름
+			} catch (error) {
+				console.error('데이터 전송 실패:', error);
+			}
+		};
 	return (
 		<SafeAreaView style={styles.container}>
 			<ScrollView style={styles.scrollView}>
@@ -79,9 +132,22 @@ export default () => {
 						</Text>
 						<TextInput
 							style={styles.box5}
-							value={name}
+							value={foodName}
 							onChangeText={Setfoodname}
 							placeholder="음식 이름 입력"
+						/>
+
+					</View>
+					<View style={styles.row4}>
+						<Text style={styles.text3}>
+							{"제조회사"}
+						</Text>
+						<TextInput
+							style={styles.box5}
+							value={manufacturingCompany}
+							onChangeText={setmanufacturingCompany}
+							keyboardType="numeric"
+							placeholder="회사 입력"
 						/>
 
 					</View>
@@ -91,7 +157,7 @@ export default () => {
 						</Text>
 						<TextInput
 							style={styles.box5}
-							value={weight}
+							value={foodweight}
 							onChangeText={Setfoodweight}
 							keyboardType="numeric"
 							placeholder="중량 입력"
@@ -104,7 +170,7 @@ export default () => {
 						</Text>
 						<TextInput
 							style={styles.box5}
-							value={kcal}
+							value={foodCalories}
 							onChangeText={Setfoodkcal}
 							keyboardType="numeric"
 							placeholder="칼로리 입력"
@@ -130,7 +196,7 @@ export default () => {
 						</Text>
 						<TextInput
 							style={styles.box5}
-							value={Carbohydrate}
+							value={carbohydrate}
 							onChangeText={SetfoodCarbohydrate}
 							keyboardType="numeric"
 							placeholder="탄수화물 입력"
@@ -158,7 +224,7 @@ export default () => {
 
 						<TextInput
 							style={styles.box5}
-							value={dietaryfiber}
+							value={dietaryFiber}
 							onChangeText={Setfooddietaryfiber}
 							keyboardType="numeric"
 							placeholder="식이섬유 입력"
@@ -172,7 +238,7 @@ export default () => {
 
 						<TextInput
 							style={styles.box5}
-							value={Sodium}
+							value={sodium}
 							onChangeText={SetfoodSodium}
 							keyboardType="numeric"
 							placeholder="나트륨 입력"
@@ -200,7 +266,7 @@ export default () => {
 						]}
 						disabled={isButtonDisabled}
 						onPress={sendDataToServer}>
-					
+
 						<Text style={styles.buttonText}>완료</Text>
 					</TouchableOpacity>
 
@@ -455,3 +521,5 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 	},
 });
+
+export default DietEnroll;

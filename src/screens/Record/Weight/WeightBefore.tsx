@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView,Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { RootStackParamList } from '../../../navigations/types';
 
-const WeightBefore = () => {
+const WeightRegisterScreen = ({ route, navigation }: any) =>{
   const [memberWeight, setMemberWeight] = useState('');
   const [skeletalmuscle, setSkeletalmuscle] = useState('');
   const [bodyfat, setBodyfat] = useState('');
 
   const isButtonDisabled = memberWeight === '' || skeletalmuscle === '' || bodyfat === '';
-
+  const dateFromDietMain = route.params?.date || new Date().toISOString().split('T')[0];
   const sendDataToServer = async () => {
     try {
       const response = await fetch('http://172.16.86.241:8080/createweight', {
@@ -22,16 +21,26 @@ const WeightBefore = () => {
           memberWeight: parseFloat(memberWeight),
           memberSkeletalmuscle: parseFloat(skeletalmuscle),
           memberBodyfat: parseFloat(bodyfat),
-          today: new Date().toISOString().split('T')[0], // 오늘 날짜 (yyyy-mm-dd)
-          memberId: 2, // 예시로 memberId 2 사용
+          today: dateFromDietMain, // 전달받은 날짜 사용
+          
         }),
       });
 
       const data = await response.json();
-
+      console.log("weightbefor",dateFromDietMain);
       // 서버 응답 처리
       if (data.isSuccess) {
-        Alert.alert('성공', '체중이 성공적으로 등록되었습니다.');
+        Alert.alert('성공', '체중이 성공적으로 등록되었습니다.', [
+          {
+            text: '확인',
+            onPress: () => {
+              // WeightAfter로 데이터와 날짜 전달 후 화면 이동
+              navigation.navigate('WeightAfter', {
+                date: dateFromDietMain,
+              });
+            },
+          },
+        ]);
       } else {
         Alert.alert('실패', '체중 등록에 실패하였습니다.');
       }
@@ -201,4 +210,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WeightBefore;
+export default WeightRegisterScreen;

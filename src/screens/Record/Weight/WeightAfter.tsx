@@ -3,14 +3,16 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { RootStackParamList } from '../../../navigations/types';
+import { RootStackParamList } from "../../../navigations/types";
 import { StackNavigationProp } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 type WeightAfterScreenNavigationProp = StackNavigationProp<RootStackParamList, 'WeightRevise'>;
 
-const WeightAfter = () => {
+const WeightDetailScreen = ({ route }: any) => {
   const navigation = useNavigation<WeightAfterScreenNavigationProp>();
-
+  const dateFromWeighBefore = route.params?.date || new Date().toISOString().split('T')[0];
   const [weightData, setWeightData] = useState({
     memberWeight: '',
     memberBodyfat: '',
@@ -21,16 +23,15 @@ const WeightAfter = () => {
 
   // 서버로 데이터를 요청하는 함수
   const fetchWeightDetails = async () => {
+    const accessToken = await AsyncStorage.getItem('accessToken');
+  console.log("weightAfterdate",dateFromWeighBefore);
     try {
-      const response = await fetch('http://172.16.86.241:8080/dayweight', {
-        method: 'POST',
+      const response = await fetch(`http://172.16.86.241:8080/dayweight?today=${dateFromWeighBefore}`, {
+        method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
+          'Authorization': `${accessToken}`,
         },
-        body: JSON.stringify({
-          today: '2024-11-07',  // 원하는 날짜 (today)
-          memberId: 1,  // 예시로 memberId 1 사용
-        }),
+        
       });
 
       const data = await response.json();
@@ -56,13 +57,13 @@ const WeightAfter = () => {
   // 컴포넌트가 렌더링될 때 서버에서 데이터를 받아오기 위한 useEffect
   useEffect(() => {
     fetchWeightDetails();
-  }, []); // 빈 배열을 넣어 한번만 실행되도록
+  }, [weightData.memberName]); // 빈 배열을 넣어 한번만 실행되도록
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Icon name="chevron-back-outline" size={26} color="white" style={styles.backIcon} />
-        <Text style={styles.dateText}>{weightData.day}</Text>
+        <Text style={styles.dateText}>{dateFromWeighBefore}</Text>
         <Icon name="ellipsis-horizontal" size={26} color="white" style={styles.menuIcon} />
       </View>
 
@@ -77,7 +78,7 @@ const WeightAfter = () => {
         <Text style={styles.cardHeader}>{weightData.memberName}님의 오늘 몸무게</Text>
         <TouchableOpacity
           style={styles.editButton}
-          onPress={() => navigation.navigate('WeightRevise')} // 수정된 부분
+          onPress={() => navigation.navigate('WeightRevise', { date: dateFromWeighBefore })} // 날짜 전달} // 수정된 부분
         >
           <Text style={styles.editButtonText}>수정</Text>
         </TouchableOpacity>
@@ -200,4 +201,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WeightAfter;
+export default WeightDetailScreen;

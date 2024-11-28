@@ -1,44 +1,107 @@
-import React, { useState } from "react";
-import { SafeAreaView, View, ScrollView, Text, Image, StyleSheet,TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { SafeAreaView, View, ScrollView, Text, Image, StyleSheet,TouchableOpacity, } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useRoute, RouteProp,useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from "../../../navigations/types";// RootStackParamList를 불러옵니다.
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StackNavigationProp } from '@react-navigation/stack';
+
+type DietDetailRouteProp = RouteProp<RootStackParamList, 'DietDetail'>; // 올바른 타입 정의
+type DietDetailNavigationProp = StackNavigationProp<RootStackParamList, 'DietDetail'>;
+
 export default () => {
 	const [quantity, setQuantity] = useState(1); // 수량 기본값 1
-  
+	const navigation = useNavigation<DietDetailNavigationProp>();
 	const increaseQuantity = () => setQuantity((prev) => prev + 1); // 수량 증가
 	const decreaseQuantity = () =>
 	  setQuantity((prev) => (prev > 1 ? prev - 1 : prev)); // 수량 감소 (최소값 1)
+
+	const route = useRoute<DietDetailRouteProp>(); // route에 타입 지정
+  	const { foodid, mealtime } = route.params; // 'foodid'와 'mealtime'을 제대로 받아옴
+
+	  const [foodDetails, setFoodDetails] = useState({
+		foodName: '',
+		foodCalories: 0,
+		manufacturingCompany: '',
+		protein: 0,
+		carbohydrate: 0,
+		fat: 0,
+		dietaryFiber: 0,
+		sodium: 0,
+		sugar: 0
+	  });
+
+	  const [loading, setLoading] = useState(true);
+
+  // foodId를 사용해 GET 방식으로 서버에서 데이터 요청
+  const fetchFoodDetails = async () => {
+	try {
+	  const response = await fetch(`http://172.16.86.241:8080/food/search?foodId=${foodid}`);
+	  if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
+	  }
+	  const data = await response.json();
+	  console.log('Response Data:', data);
+  
+	  setFoodDetails(data.result); // result만 상태로 설정
+	} catch (error) {
+	  console.error("Failed to fetch food details:", error);
+	} finally {
+		setLoading(false);
+	}
+  };
+
+
+  useEffect(() => {
+	fetchFoodDetails();
+  }, []);
+	
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.text}>Loading...</Text>
+      </SafeAreaView>
+    );
+  }
+
+  const handleAddToServer = async () => {
+	const accessToken = await AsyncStorage.getItem('accessToken');
+	
+	
+	try {
+	  // 서버로 POST 요청 보내기
+	  const response = await fetch('http://172.16.86.241:8080/food/addEatingFood', {
+		method: 'POST',
+		headers: {
+		  'Authorization': `${accessToken}`, // Authorization 헤더 추가
+		  'Content-Type': 'application/json', // JSON 형식 명시
+		},
+		body: JSON.stringify({
+		  foodId: foodid,       // 서버에서 요구하는 Key 값
+		  eatingAmount: quantity,
+		  foodTime: mealtime,
+		}),
+	  });
+  
+	  // 응답 확인
+	  if (response.ok) {
+		console.log('Data successfully sent to server');
+		// 서버로 데이터 전송 성공 시 DietMain 화면으로 이동
+		navigation.navigate('DietMain'); // 화면 이동
+	  } else {
+		throw new Error(`Failed to add data: ${response.status}`);
+	  }
+	} catch (error) {
+	  console.error('Error while sending data to server:', error);
+	}
+  };
 
 	return (
 		<SafeAreaView style={styles.container}>
 			<ScrollView  style={styles.scrollView}>
 				<View style={styles.column}>
-					<View style={styles.row}>
-						<Text style={styles.text}>
-							{"9:41"}
-						</Text>
-						<View style={styles.row2}>
-							<View style={styles.box}>
-							</View>
-							<View style={styles.box2}>
-							</View>
-						</View>
-						<Image
-							source = {{uri: "https://i.imgur.com/1tMFzp8.png"}} 
-							resizeMode = {"stretch"}
-							style={styles.image}
-						/>
-						<Image
-							source = {{uri: "https://i.imgur.com/1tMFzp8.png"}} 
-							resizeMode = {"stretch"}
-							style={styles.image2}
-						/>
-						<View style={styles.view}>
-							<View style={styles.box3}>
-							</View>
-						</View>
-						<View style={styles.box4}>
-						</View>
-					</View>
+					
 					<View style={styles.row3}>
 						<Icon name="chevron-back-outline" size={32} color="red" />
 						<Text style={styles.text2}>
@@ -49,19 +112,15 @@ export default () => {
 				<View style={styles.column2}>
 					<View style={styles.row4}>
 						<Text style={styles.text3}>
-							{"하림 닭가슴살"}
+							{foodDetails.foodName}
 						</Text>
 
 						<TouchableOpacity
-						style={styles.view2}
-						//</View>onPress={sendDataToServer}
-					>
-						<Text style={styles.text4}>추가</Text>
-					</TouchableOpacity>
-
-						
-
-
+							style={styles.view2}
+							onPress={handleAddToServer} // 추가 버튼을 눌렀을 때 POST 요청
+						>
+							<Text style={styles.text4}>추가</Text>
+						</TouchableOpacity>
 					</View>
 					<View style={styles.row5}>
 						<Text style={styles.text5}>
@@ -81,7 +140,7 @@ export default () => {
 						</Text>
 						<View style={styles.view3}>
 							<Text style={styles.text7}>
-								{"g"}
+								{"100g"}
 							</Text>
 						</View>
 					</View>
@@ -91,7 +150,7 @@ export default () => {
 								{"칼로리"}
 							</Text>
 							<Text style={styles.text9}>
-								{"120kcal"}
+								{foodDetails.foodCalories}
 							</Text>
 						</View>
 						<View style={styles.row7}>
@@ -99,7 +158,7 @@ export default () => {
 								{"단백질"}
 							</Text>
 							<Text style={styles.text9}>
-								{"50g"}
+								{foodDetails.protein}
 							</Text>
 						</View>
 						<View style={styles.row7}>
@@ -107,7 +166,7 @@ export default () => {
 								{"지방"}
 							</Text>
 							<Text style={styles.text9}>
-								{"2g"}
+								{foodDetails.fat}
 							</Text>
 						</View>
 						<View style={styles.row7}>
@@ -115,7 +174,7 @@ export default () => {
 								{"탄수화물"}
 							</Text>
 							<Text style={styles.text9}>
-								{"1g"}
+								{foodDetails.carbohydrate}
 							</Text>
 						</View>
 						<View style={styles.row7}>
@@ -123,7 +182,7 @@ export default () => {
 								{"식이섬유"}
 							</Text>
 							<Text style={styles.text9}>
-								{"2g"}
+								{foodDetails.dietaryFiber}
 							</Text>
 						</View>
 						<View style={styles.row7}>
@@ -131,15 +190,23 @@ export default () => {
 								{"나트륨"}
 							</Text>
 							<Text style={styles.text9}>
-								{"1g"}
+								{foodDetails.sodium}
 							</Text>
 						</View>
-						<View style={styles.row8}>
+						<View style={styles.row7}>
 							<Text style={styles.text8}>
 								{"당류"}
 							</Text>
 							<Text style={styles.text9}>
-								{"20g"}
+								{foodDetails.sugar}
+							</Text>
+						</View>
+						<View style={styles.row8}>
+							<Text style={styles.text8}>
+								{"제조회사"}
+							</Text>
+							<Text style={styles.text9}>
+								{foodDetails.manufacturingCompany}
 							</Text>
 						</View>
 					</View>
@@ -196,6 +263,7 @@ export default () => {
 		</SafeAreaView>
 	)
 }
+
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -436,9 +504,9 @@ const styles = StyleSheet.create({
 		width: 89,
 		backgroundColor: "#625F67",
 		borderRadius: 8,
-		paddingTop: 16,
-		paddingBottom: 4,
-		paddingLeft: 70,
+		paddingTop: 10,
+		paddingBottom: 10,	
+		paddingLeft: 22,
 		paddingRight: 10,
 	},
 });

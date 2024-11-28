@@ -2,36 +2,61 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView,Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { RootStackParamList } from '../../../navigations/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from "../../../navigations/types";
+type WeighReviseNavigationProp = StackNavigationProp<RootStackParamList, 'DietMain'>;
 
-const WeightRevise = () => {
+const WeightRegisterScreen= ({ route }: any) =>{
   const [memberWeight, setMemberWeight] = useState('');
   const [skeletalmuscle, setSkeletalmuscle] = useState('');
   const [bodyfat, setBodyfat] = useState('');
+  const navigation = useNavigation<WeighReviseNavigationProp>(); // 타입 지정
+
+  const dateFromWeighAfter = route.params?.date || new Date().toISOString().split('T')[0];
 
   const isButtonDisabled = memberWeight === '' || skeletalmuscle === '' || bodyfat === '';
 
   const sendDataToServer = async () => {
+    const accessToken = await AsyncStorage.getItem('accessToken');
+    const requestData = {
+      memberWeight: parseFloat(memberWeight),
+      memberSkeletalmuscle: parseFloat(skeletalmuscle),
+      memberBodyfat: parseFloat(bodyfat),
+      token:accessToken
+      //today: dateFromWeighAfter,
+    };
+  
+    
     try {
-      const response = await fetch('http://172.16.86.241:8080/createweight', {
+      //console.log('보내는 데이터:', requestData); // 데이터를 확인하기 위한 로그 추가
+      const response = await fetch('http://172.16.86.241:8080/rewriteweight', {
         method: 'PUT',
         headers: {
+          'Authorization': `${accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           memberWeight: parseFloat(memberWeight),
           memberSkeletalmuscle: parseFloat(skeletalmuscle),
           memberBodyfat: parseFloat(bodyfat),
-          today: new Date().toISOString().split('T')[0], // 오늘 날짜 (yyyy-mm-dd)
-          memberId: 2, // 예시로 memberId 2 사용
+          today: dateFromWeighAfter,
         }),
       });
 
       const data = await response.json();
-
+      console.log(data);
       // 서버 응답 처리
       if (data.isSuccess) {
-        Alert.alert('성공', '체중이 성공적으로 등록되었습니다.');
+        Alert.alert('성공', '체중이 성공적으로 등록되었습니다.', [
+          {
+            text: '확인',
+            onPress: () => navigation.navigate('WeightAfter', {
+              date: dateFromWeighAfter,
+            }), // 성공 시 WeightAfter 화면으로 이동
+          },
+        ]);
       } else {
         Alert.alert('실패', '체중 등록에 실패하였습니다.');
       }
@@ -46,7 +71,7 @@ const WeightRevise = () => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.header}>
           <Icon name="chevron-back-outline" size={26} color="white" style={styles.backIcon} />
-          <Text style={styles.dateText}>2024 09 14</Text>
+          <Text style={styles.dateText}>{dateFromWeighAfter}</Text>
           <Icon name="ellipsis-horizontal" size={26} color="white" style={styles.menuIcon} />
         </View>
 
@@ -92,7 +117,7 @@ const WeightRevise = () => {
         disabled={isButtonDisabled}
         onPress={sendDataToServer} // 버튼 눌렀을 때 서버로 데이터 전송
       >
-        <Text style={styles.buttonText}>등록</Text>
+        <Text style={styles.buttonText}>수정</Text>
       </TouchableOpacity>
 
         <View style={styles.bottomNav}>
@@ -201,4 +226,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WeightRevise;
+export default WeightRegisterScreen;

@@ -1,73 +1,93 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, View, ScrollView, Text, Image, StyleSheet, FlatList, TextInput } from "react-native";
+import { SafeAreaView, View, ScrollView, Text, Image, StyleSheet, FlatList, TextInput,TouchableOpacity } from "react-native";
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from "../../../navigations/types";
+import { useNavigation,RouteProp } from "@react-navigation/native";
+import Icon from 'react-native-vector-icons/Ionicons';  // 아이콘 추가
+
+type DietSearchRouteProp = RouteProp<RootStackParamList, 'DietSearch'>;
+type DietSearchNavigationProp = StackNavigationProp<RootStackParamList, 'DietSearch'>;
 
 type FoodItem = {
-	food_name: string;
-	food_calories: number;
+	foodname: string;
+	foodCalories: number;
+	foodId: number;
+	manufacturingCompany: string;
 };
 
+type DietSearchProps = {
+	route: DietSearchRouteProp;
+  };
 
-//임의의 데이터
-const mockData: FoodItem[] = [
-	{ food_name: "맛없는 서브웨이", food_calories: 120 },
-	{ food_name: "불닭볶음면", food_calories: 1200 },
-	{ food_name: "카레", food_calories: 150 },
-	{ food_name: "chicken", food_calories: 500 },
-	{ food_name: "피자", food_calories: 600 },
-	{ food_name: "햄버거", food_calories: 700 },
-];
+  const DietSearch = ({ route }: DietSearchProps) => {
+	const { mealtime } = route.params; // 'morning' 값 받기
+	const [data, setData] = useState<FoodItem[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [searchText, setSearchText] = useState("");
+	const navigation = useNavigation<DietSearchNavigationProp>();  // 수정: 정확한 타입 지정
 
-
-export default () => {
-	const [data, setData] = useState<FoodItem[]>([]); // 서버에서 가져온 데이터를 저장할 상태
-	const [loading, setLoading] = useState(true); // 로딩 상태
-	const [searchText, setSearchText] = useState(""); // 입력 상태를 관리
 	const filteredData = searchText
-		? data.filter((item) =>
-				item.food_name.toLowerCase().includes(searchText.toLowerCase())
-		  )
-		: data;
+  ? data.filter((item) =>
+      item.foodname.toLowerCase().includes(searchText.toLowerCase())
+    )
+  : data;
 
-	const renderFoodItem = ({ item }: { item: FoodItem }) => (
-		<View style={styles.column4}>
-			<View style={styles.row5}>
-				<View style={styles.box4}></View>
-				<Text style={styles.text4}>{item.food_name}</Text>
-				<View style={styles.box5}></View>
-			</View>
-			<Text style={styles.text5}>{item.food_calories} kcal</Text>
-		</View>
-	);
+//console.log("Filtered Data:", filteredData);  // 필터링된 데이터 확인
+//console.log("Search Text:", searchText);
+//console.log("Filtered Data:", filteredData);
 
-	// 데이터 가져오기
-	const fetchData = async () => {
+	  const fetchData = async () => {
 		try {
-			const response = await fetch("https://api.example.com/foods"); // 서버 URL
-			//const result = await response.json(); // JSON 응답 처리
-			const result: { result: FoodItem[] } = await response.json(); // 응답 타입 지정
-			//setData(result.result); // 데이터 저장
-			// 서버 요청 대신 mockData를 사용
-			setData(mockData);
+		  const response = await fetch("http://172.16.86.241:8080/food/searchAll");
+		  if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		  }
+		  const result = await response.json();
+		  //console.log("API Response:", result);  // 응답 확인
+		  setData(result.result);  // 데이터 상태 업데이트
 		} catch (error) {
-			console.error("데이터 로드 실패:", error);
-			// 서버 요청 대신 mockData를 사용
-			setData(mockData);
+		  console.error("Failed to fetch data:", error);
 		} finally {
-			setLoading(false); // 로딩 종료
+		  setLoading(false);
 		}
-	};
-
-	useEffect(() => {
-		fetchData(); // 컴포넌트 마운트 시 데이터 가져오기
-	}, []);
-
+	  };
+	  
+	  
+	  useEffect(() => {
+		fetchData();
+	  }, []);
+  
 	if (loading) {
-		return (
-			<SafeAreaView style={styles.container}>
-				<Text style={styles.loadingText}>데이터를 불러오는 중...</Text>
-			</SafeAreaView>
-		);
+	  return (
+		<SafeAreaView style={styles.container}>
+		  <Text style={styles.loadingText}>Loading data...</Text>
+		</SafeAreaView>
+	  );
 	}
+  
+	const renderFoodItem = ({ item }: { item: FoodItem }) => {
+		//console.log("Rendering item:", item);  // 항목 렌더링 시 데이터를 확인
+		
+		return (
+		  <TouchableOpacity
+			style={styles.column4}
+			onPress={() => {
+			  // navigate 메서드를 사용하여 DietEnroll로 이동
+			  navigation.navigate('DietDetail', {
+				foodid: item.foodId,
+				mealtime: mealtime,
+			  });
+			}}
+		  >
+			<View style={styles.row5}>
+			  <View style={styles.box4}></View>
+			  <Text style={styles.text4}>{item.foodname}</Text>
+			  <View style={styles.box5}></View>
+			</View>
+			<Text style={styles.text5}>{item.foodCalories} kcal</Text>
+		  </TouchableOpacity>
+		);
+	  };
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -130,19 +150,20 @@ export default () => {
 				</View>
 
 				{/* 음식 카드 영역 */}
+				
 				<View style={styles.flatListContainer}>
 					<FlatList
 						data={filteredData}
 						renderItem={renderFoodItem}
-						keyExtractor={(item, index) => index.toString()}
+						keyExtractor={(item) => item.foodId.toString()}  // 변경된 부분
 						contentContainerStyle={styles.foodCardContainer}
 						ListEmptyComponent={<Text style={styles.emptyText}>검색 결과가 없습니다.</Text>}
 					
-					/>
+					/> 	
 				</View>
 
 
-				<View style={styles.column4}>
+				{/* <View style={styles.column4}>
 					<View style={styles.row5}>
 						<View style={styles.box6}>
 						</View>
@@ -175,7 +196,7 @@ export default () => {
 					<Text style={styles.text5}>
 						{"120kcal"}
 					</Text>
-				</View>
+				</View> */}
 				<Image
 					source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
 					resizeMode={"stretch"}
@@ -228,8 +249,22 @@ export default () => {
 					</View>
 					<View style={styles.box8}>
 					</View>
+					
 				</View>
 			</View>
+			{/* 아이콘 추가 */}
+			<TouchableOpacity
+				style={styles.floatingButton}
+				onPress={() => {
+					if (mealtime) {
+						navigation.navigate('DietEnroll', { mealtime: mealtime });
+					  } else {
+						console.log("mealtime 값이 정의되지 않았습니다.");
+					  }
+				}}
+			>
+				<Icon name="add-circle-outline" size={32} color="red" />
+			</TouchableOpacity>
 
 		</SafeAreaView >
 	)
@@ -498,4 +533,12 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		color: "#999999",
 	},
+	floatingButton: {
+		position: 'absolute',
+		bottom: 30,
+		right: 20,
+		backgroundColor: 'transparent',  // 투명한 배경
+	},
 });
+
+export default DietSearch;

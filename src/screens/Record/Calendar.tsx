@@ -37,7 +37,7 @@ const WeightCalendarScreen = () => {
          },
       });
       const data = await response.json();
-      console.log(data);
+      console.log("calendar:",data);
 
       if (data.isSuccess) {
         const newMarkedDates: Record<string, { selected: boolean; selectedColor: string }> = {};

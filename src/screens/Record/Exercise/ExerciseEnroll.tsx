@@ -51,6 +51,9 @@ const ExerciseEnroll: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.backButtonText}>←</Text>
+      </TouchableOpacity>
       <View style={styles.inputContainer}>
         <Text style={styles.label}>이름</Text>
         <TextInput
@@ -85,7 +88,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#1D1B20",
     padding: 20,
   },
+  backButtonText: {
+    color: "#FFF",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  searchBar: {
+    backgroundColor: "#252525",
+    padding: 10,
+    marginTop:60,
+    margin: 20,
+    borderRadius: 8,
+  },
   inputContainer: {
+    marginTop:20,
     marginBottom: 20,
   },
   label: {

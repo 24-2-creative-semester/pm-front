@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, Image, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { View, FlatList, Image, TouchableOpacity, StyleSheet, Alert, Text } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface EyeBodyDto {
@@ -60,6 +60,10 @@ const SeeAllBody: React.FC<{ navigation: any }> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.backButtonText}>←</Text>
+      </TouchableOpacity>
+      <Text style = {styles.BodyListTitle}>눈바디 사진 전체 보기</Text>
       <FlatList
         data={images}
         numColumns={3}
@@ -81,8 +85,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#1D1B20",
+    padding:20,
+  },
+  backButton: {
+    position: "absolute",
+    top: 20,
+    left: 20,
+    zIndex: 1,
+  },
+  backButtonText: {
+    color: "#FFF",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  BodyListTitle:{
+    fontSize: 20,
+    color:"#FFF",
+    fontWeight:"bold",
+    justifyContent: "center",
+    alignItems:"center",
+    marginTop:50,
   },
   image: {
+    marginTop:40,
     width: 100,
     height: 100,
     margin: 5,

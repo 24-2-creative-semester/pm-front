@@ -68,6 +68,7 @@ const BodyToday: React.FC<{ navigation: any }> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <RecordTabSelector />
       <Text style={styles.title}>오늘의 눈바디</Text>
       {todayImageBase64 ? (
         <Image
@@ -77,12 +78,13 @@ const BodyToday: React.FC<{ navigation: any }> = ({ navigation }) => {
       ) : (
         <Text style={styles.noImageText}>오늘의 눈바디가 없습니다.</Text>
       )}
+
+      {/* 하단 우측 원형 버튼 */}
       <TouchableOpacity
-        style={styles.addButton}
+        style={styles.floatingButton}
         onPress={() => navigation.navigate("SeeAllBody")}
       >
-        <Icon name="images-outline" size={32} color="#FFFFFF" />
-        <Text style={styles.addButtonText}>전체 보기</Text>
+        <Icon name="grid-outline" size={30} color="#FFF" />
       </TouchableOpacity>
     </View>
   );
@@ -93,12 +95,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#1D1B20",
     alignItems: "center",
-    justifyContent: "center",
     padding: 20,
   },
   title: {
     color: "#FFFFFF",
     fontSize: 22,
+    marginTop: 90,
     marginBottom: 20,
   },
   image: {
@@ -113,20 +115,21 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
   },
-  addButton: {
-    flexDirection: "row",
+  floatingButton: {
+    position: "absolute",
+    bottom: 100,
+    right: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     backgroundColor: "#6F6CFF",
-    borderRadius: 8,
-    paddingVertical: 15,
-    paddingHorizontal: 20,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
-  },
-  addButtonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    marginLeft: 10,
+    elevation: 5, // 안드로이드 그림자
+    shadowColor: "#000", // iOS 그림자
+    shadowOffset: { width: 0, height: 2 }, // iOS 그림자 오프셋
+    shadowOpacity: 0.3, // iOS 그림자 투명도
+    shadowRadius: 3, // iOS 그림자 반경
   },
 });
 

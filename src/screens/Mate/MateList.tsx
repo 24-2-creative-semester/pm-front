@@ -190,7 +190,6 @@ const MateList = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop:20,
     flex: 1,
     backgroundColor: "#1A1A1A",
     padding: 20,
@@ -199,7 +198,7 @@ const styles = StyleSheet.create({
     marginTop:20,
     fontSize: 22,
     color: "#FFF",
-    marginBottom: 20,
+    marginBottom: 30,
     textAlign: "center",
   },
   highlight: {

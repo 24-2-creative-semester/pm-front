@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image, Alert } from "react-native";
+import { View, Text, StyleSheet, Image, Alert, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const BodySpecific: React.FC<{ route: any }> = ({ route }) => {
   const { imageId, date } = route.params; // 전달된 imageId와 date를 수신
   const [imageBase64, setImageBase64] = useState<string | null>(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetchImage(); // 컴포넌트 로드 시 이미지 가져오기
@@ -52,9 +54,20 @@ const BodySpecific: React.FC<{ route: any }> = ({ route }) => {
     }
   };
 
+  const formatDate = (isoString: string) => {
+    const date = new Date(isoString);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // 월은 0부터 시작하므로 1을 더함
+    const day = date.getDate();
+    return `${year}년 ${month}월 ${day}일`; // "YYYY년 MM월 DD일" 형식으로 반환
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.date}>{date}의 눈바디 사진</Text>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.backButtonText}>←</Text>
+      </TouchableOpacity>
+      <Text style={styles.date}>{formatDate(date)}의 눈바디 사진</Text>
       {imageBase64 ? (
         <Image
           source={{ uri: `data:image/jpeg;base64,${imageBase64}` }} // Base64 데이터를 이미지로 표시
@@ -75,8 +88,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 20,
   },
+  backButton: {
+    position: "absolute",
+    top: 20,
+    left: 20,
+    zIndex: 1,
+  },
+  backButtonText: {
+    color: "#FFF",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
   date: {
     color: "#FFFFFF",
+    marginTop: 20,
     fontSize: 20,
     marginBottom: 20,
   },

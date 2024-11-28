@@ -14,7 +14,6 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
-
 import { RecordStackParamList } from "../../../navigations/RecordStackNavigator";
 
 interface Exercise {
@@ -58,7 +57,7 @@ const ExerciseMain: React.FC = () => {
           exerciseName: exercise.exerciseName,
           exerciseCalories: exercise.exerciseCalories,
           exerciseTime: Math.round(exercise.exerciseTime * 60), // **시간을 분으로 변환**
-          exerciseId: exercise.exerciseId,
+          exerciseId: exercise.memberExerciseId,
         }));
   
         setExercises(updatedExercises);
@@ -86,7 +85,7 @@ const ExerciseMain: React.FC = () => {
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
       const response = await fetch(
-        `http://172.16.86.241:8080/exercise/deleteExercise?exerciseId=${exerciseId}`,
+        `http://172.16.86.241:8080/exercise/deleteMemberExercise?memberExerciseId=${exerciseId}`,
         {
           method: "DELETE",
           headers: {

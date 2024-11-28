@@ -33,7 +33,7 @@ const RecordTabSelector: React.FC = () => {
       try {
         const accessToken = await AsyncStorage.getItem("accessToken");
         console.log("Current Date (Korean):", currentDate);
-  
+
         const response = await fetch(
           `http://172.16.86.241:8080/api/isImageDate?date=${currentDate}`,
           {
@@ -44,17 +44,12 @@ const RecordTabSelector: React.FC = () => {
             },
           }
         );
-  
+
         const data = await response.json();
         console.log("Response Data:", data);
-  
+
         if (response.ok && data.isSuccess) {
-          // result가 true면 BodyToday로, false면 BodyMain으로 이동
-          if (data.result === true) {
-            navigation.navigate("BodyToday");
-          } else {
-            navigation.navigate("BodyMain");
-          }
+          navigation.navigate(data.result ? "BodyToday" : "BodyMain");
         } else {
           Alert.alert("오류", data.message || "데이터 확인 중 오류가 발생했습니다.");
         }
@@ -63,11 +58,9 @@ const RecordTabSelector: React.FC = () => {
         Alert.alert("오류", "데이터 확인 중 문제가 발생했습니다.");
       }
     } else {
-      // 다른 탭의 경우 기본 이동 처리
       navigation.navigate(tabRoute);
     }
   };
-  
 
   return (
     <View style={styles.tabContainer}>
@@ -80,7 +73,8 @@ const RecordTabSelector: React.FC = () => {
           <Text
             style={[
               styles.tabText,
-              route.name === tab.route && styles.activeTabText, // 현재 Route와 비교
+              (route.name === tab.route || (route.name === "BodyToday" && tab.route === "BodyMain")) &&
+                styles.activeTabText, // BodyToday와 BodyMain 동기화
             ]}
           >
             {tab.name}

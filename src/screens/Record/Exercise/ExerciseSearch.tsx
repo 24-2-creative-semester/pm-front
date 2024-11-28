@@ -83,6 +83,9 @@ const ExerciseSearch: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.backButtonText}>←</Text>
+      </TouchableOpacity>
       <View style={styles.searchBar}>
         <TextInput
           style={styles.searchInput}
@@ -119,9 +122,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#1D1B20",
   },
+  backButton: {
+    position: "absolute",
+    top: 20,
+    left: 20,
+    zIndex: 1,
+  },
+  backButtonText: {
+    color: "#FFF",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
   searchBar: {
     backgroundColor: "#252525",
     padding: 10,
+    marginTop:60,
     margin: 20,
     borderRadius: 8,
   },

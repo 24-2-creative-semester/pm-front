@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView,Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
+import RecordTabSelector from "../../../components/RecordTabSelector";
 
 const WeightRegisterScreen = ({ route, navigation }: any) =>{
   const [memberWeight, setMemberWeight] = useState('');
@@ -22,7 +23,6 @@ const WeightRegisterScreen = ({ route, navigation }: any) =>{
           memberSkeletalmuscle: parseFloat(skeletalmuscle),
           memberBodyfat: parseFloat(bodyfat),
           today: dateFromDietMain, // 전달받은 날짜 사용
-          
         }),
       });
 
@@ -58,13 +58,13 @@ const WeightRegisterScreen = ({ route, navigation }: any) =>{
           <Text style={styles.dateText}>2024 09 14</Text>
           <Icon name="ellipsis-horizontal" size={26} color="white" style={styles.menuIcon} />
         </View>
-
-        <View style={styles.tabContainer}>
+        <RecordTabSelector />
+        {/* <View style={styles.tabContainer}>
           <Text style={styles.tabText}>식단</Text>
           <Text style={styles.tabText}>운동</Text>
           <Text style={styles.tabText}>눈바디</Text>
           <Text style={[styles.tabText, styles.activeTab]}>체중</Text>
-        </View>
+        </View> */}
 
         <Text style={styles.messageText}>아직 체중이 등록되지 않았어요. 오늘의 체중을 등록하세요!</Text>
 
@@ -104,13 +104,6 @@ const WeightRegisterScreen = ({ route, navigation }: any) =>{
         <Text style={styles.buttonText}>등록</Text>
       </TouchableOpacity>
 
-        <View style={styles.bottomNav}>
-          <Icon name="document-text-outline" size={30} color="white" />
-          <Icon name="trophy-outline" size={30} color="white" />
-          <Icon name="home-outline" size={30} color="white" />
-          <Icon name="stopwatch-outline" size={30} color="white" />
-          <Icon name="people-outline" size={30} color="white" />
-        </View>
       </ScrollView>
     </SafeAreaView>
   );

@@ -72,64 +72,77 @@ const BattleList = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View style={styles.column}>
-          {members.map((member, index) => (
-            <TouchableOpacity
-              key={member.battleId}
-              style={styles.column2}
-              onPress={() =>
-                navigation.navigate("BattleOtherState", {
-                  battleId: member.battleId, // battleId 전달
-                })
-              }
-            >
-              <View style={styles.row}>
-                <Image
-                  source={{ uri: member.opponentImage || "https://i.imgur.com/1tMFzp8.png" }}
-                  resizeMode={"stretch"}
-                  style={styles.column3}
-                />
-                <View style={styles.column4}>
-                  <View style={styles.row2}>
-                    <Text style={styles.text}>{member.opponentName}</Text>
-                    {isTargetDateReached(member.targetDay) ? (
-                      <TouchableOpacity
-                        onPress={(e) => {
-                          e.stopPropagation(); // 카드 클릭과 분리
-                          navigation.navigate("BattleResult", {
-                            battleId: member.battleId, // battleId 전달
-                            memberId: member.memberId, // memberId 전달
-                          });
-                        }}
-                      >
-                        <Text style={styles.resultButton}>결과보기</Text>
-                      </TouchableOpacity>
-                    ) : (
-                      <Text style={styles.text2}>
-                        {"D-" + calculateDays(member.startDay, member.targetDay)}
-                      </Text>
-                    )}
+        {/* 상단 제목 */}
+        <Text style={styles.header}>대결 목록</Text>
+        {members.length > 0 ? (
+          <View style={styles.column}>
+            {members.map((member, index) => (
+              <TouchableOpacity
+                key={member.battleId}
+                style={styles.column2}
+                onPress={() =>
+                  navigation.navigate("BattleOtherState", {
+                    battleId: member.battleId, // battleId 전달
+                  })
+                }
+              >
+                <View style={styles.row}>
+                  <Image
+                    source={{ uri: member.opponentImage || "https://i.imgur.com/1tMFzp8.png" }}
+                    resizeMode={"stretch"}
+                    style={styles.column3}
+                  />
+                  <View style={styles.column4}>
+                    <View style={styles.row2}>
+                      <Text style={styles.text}>{member.opponentName}</Text>
+                      {isTargetDateReached(member.targetDay) ? (
+                        <TouchableOpacity
+                          onPress={(e) => {
+                            e.stopPropagation(); // 카드 클릭과 분리
+                            navigation.navigate("BattleResult", {
+                              battleId: member.battleId, // battleId 전달
+                              memberId: member.memberId, // memberId 전달
+                            });
+                          }}
+                        >
+                          <Text style={styles.resultButton}>결과보기</Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <Text style={styles.text2}>
+                          {"D-" + calculateDays(member.startDay, member.targetDay)}
+                        </Text>
+                      )}
+                    </View>
+                    <Text style={styles.text3}>
+                      {member.startDay} - {member.targetDay}
+                    </Text>
                   </View>
-                  <Text style={styles.text3}>
-                    {member.startDay} - {member.targetDay}
-                  </Text>
                 </View>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        ) : (
+          // 데이터가 없을 때 표시할 문구
+          <View style={styles.noDataContainer}>
+            <Text style={styles.noDataText}>현재 진행중인 데이터가 없습니다</Text>
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
-  );
+  );  
 };
-
-export default BattleList;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#FFFFFF",
-        
+        backgroundColor: "#1D1B20",
+    },
+    header: {
+      fontSize: 20,
+      color:"FFF",
+      fontWeight: "bold",
+      textAlign: "center",
+      marginVertical: 10,
     },
     absoluteColumn: {
         position: "absolute",
@@ -142,7 +155,7 @@ const styles = StyleSheet.create({
     },
     box: {
         height: 5,
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#1D1B20",
         borderRadius: 100,
         marginHorizontal: 127,
     },
@@ -160,7 +173,7 @@ const styles = StyleSheet.create({
     },
     box4: {
         height: 9,
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#1D1B20",
         borderRadius: 2,
         marginTop: 2,
     },
@@ -401,4 +414,15 @@ const styles = StyleSheet.create({
       color: "#007bff",
       textDecorationLine: "underline",
     },
+    noDataContainer: {
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 20,
+    },
+    noDataText: {
+      fontSize: 16,
+      color: "gray",
+    },
 });
+
+export default BattleList;

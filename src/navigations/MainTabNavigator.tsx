@@ -16,8 +16,8 @@ const MainTabNavigator = () => {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: '#1A1A1A',
-          position: 'absolute',
-          height: 60,
+          position: 'relative',
+          height: 70,
           borderTopWidth:0,
         },
       }}

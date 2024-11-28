@@ -1,109 +1,123 @@
-import React from "react";
-import { SafeAreaView, View, ScrollView, Text, Image, StyleSheet, } from "react-native";
-import { RootStackParamList } from '../../navigations/types'; // RootStackParamList를 정의한 경로
+import React, { useState, useEffect } from "react";
+import { SafeAreaView, View, ScrollView, Text, Image, StyleSheet } from "react-native";
 
-export default () => {
-	return (
-		<SafeAreaView style={styles.container}>
-			<ScrollView  style={styles.scrollView}>
-				<View style={styles.column}>
-					<View style={styles.row}>
-						<Text style={styles.text}>
-							{"9:41"}
-						</Text>
-						<View style={styles.row2}>
-							<View style={styles.box}>
-							</View>
-							<View style={styles.box2}>
-							</View>
-						</View>
-						<Image
-							source = {{uri: "https://i.imgur.com/1tMFzp8.png"}} 
-							resizeMode = {"stretch"}
-							style={styles.image}
-						/>
-						<Image
-							source = {{uri: "https://i.imgur.com/1tMFzp8.png"}} 
-							resizeMode = {"stretch"}
-							style={styles.image2}
-						/>
-						<View style={styles.view}>
-							<View style={styles.box3}>
-							</View>
-						</View>
-						<View style={styles.box4}>
-						</View>
-					</View>
-					<View style={styles.row3}>
-						<Image
-							source = {{uri: "https://i.imgur.com/1tMFzp8.png"}} 
-							resizeMode = {"stretch"}
-							style={styles.image3}
-						/>
-						<Text style={styles.text2}>
-							{"대결 상대"}
-						</Text>
-					</View>
-					<Text style={styles.text3}>
-						{"대결상대님의 식단"}
-					</Text>
-					<Text style={styles.text4}>
-						{"아침식사"}
-					</Text>
-					<View style={styles.view2}>
-						<Text style={styles.text5}>
-							{"하림 닭가슴살"}
-						</Text>
-					</View>
-					<Text style={styles.text4}>
-						{"점심식사"}
-					</Text>
-					<View style={styles.box5}>
-					</View>
-					<Text style={styles.text4}>
-						{"저녁식사"}
-					</Text>
-					<View style={styles.box5}>
-					</View>
-					<Text style={styles.text4}>
-						{"간식"}
-					</Text>
-					<View style={styles.box5}>
-					</View>
-					<Text style={styles.text4}>
-						{"최종 칼로리 소모량"}
-					</Text>
-					<View style={styles.column2}>
-						<View style={styles.row4}>
-							<Text style={styles.text6}>
-								{"먹은 식단"}
-							</Text>
-							<Text style={styles.text7}>
-								{"120kcal"}
-							</Text>
-						</View>
-						<View style={styles.row4}>
-							<Text style={styles.text6}>
-								{"식단 총량 칼로리"}
-							</Text>
-							<Text style={styles.text7}>
-								{"120kcal"}
-							</Text>
-						</View>
-						<View style={styles.row5}>
-							<Text style={styles.text6}>
-								{"운동 총량 칼로리"}
-							</Text>
-							<Text style={styles.text7}>
-								{"120kcal"}
-							</Text>
-						</View>
-					</View>
-				</View>
-			</ScrollView>
-		</SafeAreaView>
-	)
-}
+const BattleOpponentDiet = ({ route }: any) => {
+	const { opponentid } = route.params;
+  const [mealData, setMealData] = useState({
+    morning: [],
+    lunch: [],
+    dinner: [],
+    snack: [],
+    eatingCalories: 0,
+    exerciseCalories: 0,
+  });
+
+  // Extract opponentId from route.params
+  
+
+  useEffect(() => {
+   // console.log("Opponent ID:", opponentid); // To check if the ID is being passed correctly
+
+    // Fetch data using the opponentId
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://172.16.86.241:8080/getTodayInfo?memberId=${opponentid}`);
+        const data = await response.json();
+		console.log("제발",data);
+        // Update state with the fetched data
+        setMealData({
+          morning: data.morning || [],
+          lunch: data.lunch || [],
+          dinner: data.dinner || [],
+          snack: data.snack || [],
+          eatingCalories: data.TotalFoodCalories || 0,
+          exerciseCalories: data.TotalExerciseCalories || 0,
+        });
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+
+    fetchData();
+  }, [opponentid]); // Re-run effect when opponentId changes
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.column}>
+          <View style={styles.row3}>
+            <Image
+              source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
+              resizeMode="stretch"
+              style={styles.image3}
+            />
+            <Text style={styles.text2}>{"대결 상대"}</Text>
+				  </View>
+				  <Text style={styles.text3}>{"대결상대님의 식단"}</Text>
+
+				  {/* Render meals */}
+				  <Text style={styles.text4}>{"아침식사"}</Text>
+          <View style={styles.row7}>
+					  <Text style={styles.text12}>
+						  {mealData?.morning?.length > 0
+							  ? mealData.morning.map((item: string, index: number) => (
+								  <Text key={index}>{item}</Text>
+							  ))
+							  : "데이터 없음"}
+					  </Text>
+			  </View>
+
+			  <Text style={styles.text4}>{"점심식사"}</Text>
+			  <View style={styles.row7}>
+					  <Text style={styles.text12}>
+						  {mealData?.lunch?.length > 0
+							  ? mealData.lunch.map((item: string, index: number) => (
+								  <Text key={index}>{item}</Text>
+							  ))
+							  : "데이터 없음"}
+					  </Text>
+			  </View>
+
+          <Text style={styles.text4}>{"저녁식사"}</Text>
+          <View style={styles.row7}>
+					  <Text style={styles.text12}>
+						  {mealData?.dinner?.length > 0
+							  ? mealData.dinner.map((item: string, index: number) => (
+								  <Text key={index}>{item}</Text>
+							  ))
+							  : "데이터 없음"}
+					  </Text>
+			  </View>
+
+          <Text style={styles.text4}>{"간식"}</Text>
+          <View style={styles.row7}>
+					  <Text style={styles.text12}>
+						  {mealData?.snack?.length > 0
+							  ? mealData.snack.map((item: string, index: number) => (
+								  <Text key={index}>{item}</Text>
+							  ))
+							  : "데이터 없음"}
+					  </Text>
+			  </View>
+
+          <Text style={styles.text4}>{"최종 칼로리 소모량"}</Text>
+          <View style={styles.column2}>
+            <View style={styles.row4}>
+              <Text style={styles.text6}>{"먹은 식단 칼로리"}</Text>
+              <Text style={styles.text7}>{`${mealData.eatingCalories} kcal`}</Text>
+            </View>
+            <View style={styles.row4}>
+              <Text style={styles.text6}>{"운동 총량 칼로리"}</Text>
+              <Text style={styles.text7}>{`${mealData.exerciseCalories} kcal`}</Text>
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -202,6 +216,17 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "FFFFFF",
 	},
+	row7: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		backgroundColor: "#B7B5BA",
+		borderRadius: 8,
+		paddingVertical: 14,
+		paddingHorizontal: 13,
+		marginBottom: 29,
+		marginHorizontal: 24,
+	},
 	text: {
 		color: "FFFFFF",
 		fontSize: 16,
@@ -235,6 +260,10 @@ const styles = StyleSheet.create({
 		marginRight: 4,
 		flex: 1,
 	},
+	text12: {
+		color: "#000000",
+		fontSize: 18,
+	},
 	text7: {
 		color: "#6F6CFF",
 		fontSize: 18,
@@ -256,3 +285,4 @@ const styles = StyleSheet.create({
 		marginHorizontal: 24,
 	},
 });
+export default BattleOpponentDiet;

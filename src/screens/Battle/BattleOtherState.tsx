@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, View, ScrollView, ImageBackground, Text, Image, StyleSheet, ActivityIndicator, } from "react-native";
+import { SafeAreaView, View, ScrollView, ImageBackground, Text, Image, StyleSheet, ActivityIndicator,TouchableOpacity  } from "react-native";
 import { RouteProp } from "@react-navigation/native";
-import { RootStackParamList } from '../../navigations/types';
+import { RootStackParamList } from "../../navigations/types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type BattleOtherStateRouteProp = RouteProp<RootStackParamList, "BattleOtherState">;
 
-const BattleOtherState = ({ route }: { route: BattleOtherStateRouteProp }) => {
+const BattleOtherState = ({ route, navigation }: { route: BattleOtherStateRouteProp, navigation: any }) => {
 	const { battleId } = route.params; // battleId 받아오기
+  
 
 	type BattleData = {
 		member1Name: string;
@@ -19,6 +20,7 @@ const BattleOtherState = ({ route }: { route: BattleOtherStateRouteProp }) => {
 		member1AttainmentRate: number;
 		member2AttainmentRate: number;
 		targetDay: string;
+		opponentId: number;
 	};
 
 
@@ -27,7 +29,7 @@ const BattleOtherState = ({ route }: { route: BattleOtherStateRouteProp }) => {
 	const [loading, setLoading] = useState(true);
 	const [daysLeft, setDaysLeft] = useState<number | null>(null);
 	const today = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD" 형태로 포맷
-
+	
 	const calculateDays = (start: string, end: string) => {
 		const startDate = new Date(start);
 		const endDate = new Date(end);
@@ -37,19 +39,25 @@ const BattleOtherState = ({ route }: { route: BattleOtherStateRouteProp }) => {
 
 	// API 호출
 	useEffect(() => {
+
+
+
 		const fetchBattleData = async () => {
+			const accessToken = await AsyncStorage.getItem('accessToken');
+
 			try {
-				const accessToken = await AsyncStorage.getItem('accessToken');
 				const response = await fetch(`http://172.16.86.241:8080/battlestatus?battleId=${battleId}`, {
 					method: "GET",
 					headers: {
-						"Content-Type": "application/json",
-						Authorization: `${accessToken}`,
+						'Authorization': `${accessToken}`, // Authorization 헤더 추가
 					},
+					
 				});
 
 				const data = await response.json();
-
+				console.log(data);
+				
+				console.log("otherstate",data);
 				if (data.isSuccess) {
 					setBattleData(data.result);
 				} else {
@@ -100,7 +108,7 @@ const BattleOtherState = ({ route }: { route: BattleOtherStateRouteProp }) => {
 											<View style={[
 												styles.box,
 												{
-													width: `${battleData.member1AttainmentRate}%`,
+													width: `${Math.min(battleData.member1AttainmentRate, 100)}%`,
 												},]} />
 										</View>
 
@@ -137,53 +145,41 @@ const BattleOtherState = ({ route }: { route: BattleOtherStateRouteProp }) => {
 								</View>
 
 								<Text style={styles.absoluteText}>
-									{"D-" + calculateDays(today, battleData.targetDay)}
+									{calculateDays(today, battleData.targetDay) > 0
+										? `D-${calculateDays(today, battleData.targetDay)}`
+										: "일정 만료"}
 								</Text>
 							</View>
 
-							<View style={styles.column5}>
-								<View style={styles.row}>
-									<Text style={styles.text}>
-										{battleData.member2Name}
-									</Text>
-									<View style={styles.view2}>
-										<View style={[
-											styles.box,
-											{
-												width: `${battleData.member2AttainmentRate}%`,
-											},]} />
-									</View>
-								</View>
-								<Text style={styles.text2}>
-									{`${battleData.member2AttainmentRate}%`}
+							{/* 멤버 2 카드 (상대방 카드 클릭시 BattleOpponentDiet 화면으로 이동) */}
+					<View style={styles.column5}>
+						<TouchableOpacity onPress={() => navigation.navigate("BattleOpponentDiet", { opponentid: battleData.opponentId })}>
+							<View style={styles.row}>
+								<Text style={styles.text}>
+									{battleData.member2Name}
+									
 								</Text>
-								<View style={styles.row2}>
-									<View style={styles.column6}>
-										<Text style={styles.text3}>
-											{"시작 몸무게"}
-										</Text>
-										<Text style={styles.text4}>
-											{"목표 몸무게"}
-										</Text>
-									</View>
-									<View style={styles.column7}>
-										<Text style={styles.text3}>
-											{battleData.member2StartWeight}kg
-										</Text>
-										<Text style={styles.text4}>
-											{battleData.member2TargetWeight}kg
-										</Text>
-									</View>
-									<View style={styles.column8}>
-										<Image
-											source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-											resizeMode={"stretch"}
-
-										/>
-
-									</View>
+								<View style={styles.view2}>
+									<View style={[styles.box, { width: `${Math.min(battleData.member2AttainmentRate, 100)}%` }]} />
 								</View>
 							</View>
+							<Text style={styles.text2}>
+								{`${battleData.member2AttainmentRate}%`}
+							</Text>
+							<View style={styles.row2}>
+								<View style={styles.column6}>
+									<Text style={styles.text3}>{"시작 몸무게"}</Text>
+									<Text style={styles.text4}>{"목표 몸무게"}</Text>
+								</View>
+								<View style={styles.column7}>
+									<Text style={styles.text3}>{battleData.member2StartWeight}kg</Text>
+									<Text style={styles.text4}>{battleData.member2TargetWeight}kg</Text>
+								</View>
+								<View style={styles.column8}>
+									<Image source={{ uri: "https://i.imgur.com/1tMFzp8.png" }} resizeMode={"stretch"} />
+								</View>
+							</View>
+						</TouchableOpacity>
 
 						</View>
 						<View style={styles.column9}>
@@ -236,33 +232,7 @@ const BattleOtherState = ({ route }: { route: BattleOtherStateRouteProp }) => {
 						</View>
 					</View>
 					<View style={styles.absoluteColumn}>
-						<View style={styles.row6}>
-							<Text style={styles.text10}>
-								{"9:41"}
-							</Text>
-							<View style={styles.row7}>
-								<View style={styles.box3}>
-								</View>
-								<View style={styles.box4}>
-								</View>
-							</View>
-							<Image
-								source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-								resizeMode={"stretch"}
-								style={styles.image4}
-							/>
-							<Image
-								source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-								resizeMode={"stretch"}
-								style={styles.image5}
-							/>
-							<View style={styles.view3}>
-								<View style={styles.box5}>
-								</View>
-							</View>
-							<View style={styles.box6}>
-							</View>
-						</View>
+						
 						<View style={styles.row8}>
 							<Image
 								source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
@@ -274,6 +244,7 @@ const BattleOtherState = ({ route }: { route: BattleOtherStateRouteProp }) => {
 							</Text>
 						</View>
 					</View>
+				</View>
 				</View>
 			</ScrollView>
 		</SafeAreaView>

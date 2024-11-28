@@ -6,6 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RecordTabSelector from "../../../components/RecordTabSelector";
+import DateNavigator from "../../../components/datenavigator";
 
 type DietMainNavigationProp = StackNavigationProp<RootStackParamList, 'DietMain'>;
 
@@ -33,35 +34,6 @@ const DietMain: React.FC = () => {
 	inputtodayDate.setHours(inputtodayDate.getHours() + 9); // 한국 시간(KST)으로 맞추기
 	const todayDate = inputtodayDate.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
 	console.log("today", Date())
-
-	// 체중 버튼 클릭 핸들러 함수 추가
-const handleWeightPress = async () => {
-    try {
-        const accessToken = await AsyncStorage.getItem('accessToken');
-        const response = await fetch(`http://172.16.86.241:8080/checkweight?today=${todayDate}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `${accessToken}`,
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error('체중 데이터를 확인하는 데 실패했습니다.');
-        }
-
-        const data = await response.json();
-
-        // 서버에서 false 반환 시 WeightBefore, true 반환 시 WeightAfter로 이동
-        if (data.result === false) {
-			navigation.navigate('WeightBefore', { date: todayDate }); // 날짜 전달
-        } else {
-            navigation.navigate('WeightAfter', { date: todayDate }); // 날짜 전달
-        }
-    } catch (error) {
-        console.error('Error checking weight:', error);
-        setError('체중 데이터를 확인하는 중 오류가 발생했습니다.');
-    }
-};
 
 	// 서버에서 데이터 가져오는 함수
 	const fetchDietData = async (date: string) => {
@@ -108,7 +80,7 @@ const handleWeightPress = async () => {
 	// 컴포넌트가 마운트될 때 데이터 가져오기
 	useEffect(() => {
 		fetchDietData(todayDate);
-	}, [todayDate]);
+	}, []);
 
 	// 로딩 상태 처리
 	if (loading) {
@@ -127,19 +99,19 @@ const handleWeightPress = async () => {
 				<View style={styles.column}>
 
 					<View style={styles.row3}>
-						<Icon name="chevron-back-outline" size={32} color="red" />
+            <DateNavigator/>
+						{/* <Icon name="chevron-back-outline" size={32} color="red" />
 						<TouchableOpacity
 							onPress={() => navigation.navigate('Calendar')} // 클릭 시 Calendar 화면으로 이동
 						>
 							<Text style={styles.text2}>{"2024.09.14"}</Text>
 						</TouchableOpacity>
-						<Icon name="chevron-forward-outline" size={32} color="red" />
+						<Icon name="chevron-forward-outline" size={32} color="red" /> */}
 					</View>
 					<RecordTabSelector />
 				</View>
 				<View style={styles.column2}>
-					<View style={styles.box5}>
-					</View>
+					
 					<Text style={styles.text6}>
 						{"오늘의 목표 달성률"}
 					</Text>
@@ -216,10 +188,10 @@ const handleWeightPress = async () => {
 						<Text style={styles.text12}>
 							{dietData?.morning?.length > 0
 								? dietData.morning.map((item: string, index: number) => (
-									<Text key={index}>{item}</Text>
+									<Text key={index}>{item}{"\n"}</Text>
 								))
 								: "데이터 없음"}						</Text>
-						<Icon name="close-outline" size={32} color="red" />
+						{/* <Icon name="close-outline" size={32} color="red" /> */}
 					</View>
 
 					{/* 점심식사 */}
@@ -239,7 +211,7 @@ const handleWeightPress = async () => {
 						{dietData?.lunch?.length > 0 ? (
 							dietData.lunch.map((item: string, index: number) => (
 								<Text key={index} style={styles.text12}>
-									{item}
+									{item}{"\n"}
 								</Text>
 							))
 						) : (
@@ -261,10 +233,10 @@ const handleWeightPress = async () => {
 						<Text style={styles.text12}>
 							{dietData?.dinner?.length > 0
 								? dietData.dinner.map((item: string, index: number) => (
-									<Text key={index}>{item}</Text>
+									<Text key={index}>{item}{"\n"}</Text>
 								))
 								: "데이터 없음"}						</Text>
-						<Icon name="close-outline" size={32} color="red" />
+						{/* <Icon name="close-outline" size={32} color="red" /> */}
 					</View>
 					<View style={styles.row6}>
 						<Text style={styles.text11}>
@@ -280,10 +252,10 @@ const handleWeightPress = async () => {
 						<Text style={styles.text12}>
 							{dietData?.snack?.length > 0
 								? dietData.snack.map((item: string, index: number) => (
-									<Text key={index}>{item}</Text>
+									<Text key={index}>{item}{"\n"}</Text>
 								))
 								: "데이터 없음"}						</Text>
-						<Icon name="close-outline" size={32} color="red" />
+						{/* <Icon name="close-outline" size={32} color="red" /> */}
 					</View>
 
 				</View>

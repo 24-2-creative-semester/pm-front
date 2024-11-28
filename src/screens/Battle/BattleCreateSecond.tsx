@@ -1,15 +1,17 @@
 import { SafeAreaView, View, ScrollView, Image, Text, StyleSheet, TextInput, TouchableOpacity, StatusBar } from "react-native";
 import React, { useState, useEffect } from 'react';
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp,useNavigation } from '@react-navigation/native';
 import { useRoute } from "@react-navigation/native";
-import { RootStackParamList } from '../../navigations/types';
+import { RootStackParamList } from '../../../App';
+import { StackNavigationProp } from '@react-navigation/stack';
+
 
 type BattleCreateSecondRouteProp = RouteProp<RootStackParamList, "BattleCreateSecond">;
-
+type BattleCreateSecondNavigationProp = StackNavigationProp<RootStackParamList, 'BattleCreateSecond'>;
 export default () => {
 	const route = useRoute<BattleCreateSecondRouteProp>();
 	const { inviteCode } = route.params; // 초대 코드 추출
-  
+	const navigation = useNavigation<BattleCreateSecondNavigationProp>(); // 타입 지정
 	const [BattleDescription, setBattleDescription] = useState("");
 
 	return (
@@ -38,20 +40,18 @@ export default () => {
 							{"설명"}
 						</Text>
 						<View style={styles.view}>
-							<TextInput
-								style={[styles.textInput, { color: "#BABABA" }]} // 텍스트 색상 고정
-								value={BattleDescription}
-								onChangeText={setBattleDescription}
-								placeholder="설명 내용을 입력하세요"
-								placeholderTextColor="#BABABA"
-								multiline
-							/>
-						</View>
-						<View style={[styles.view2, { backgroundColor: BattleDescription ? "#6F6DFF" : "#625E67" }]}>
-							<Text style={styles.text7}>
-								{"생성하기"}
+							<Text style={styles.textInput}>
+								{"초대코드를 복사하고 상대방에게 전달하세요!"}
 							</Text>
+							
 						</View>
+						<View style={[styles.view2, { backgroundColor: "#6F6DFF" }]}>
+								<TouchableOpacity onPress={() => navigation.navigate("BattleMain")}>
+									<Text style={styles.text7}>
+										{"확인"}
+									</Text>
+								</TouchableOpacity>
+							</View>
 						<View style={styles.column4}>
 							<View style={styles.row3}>
 								<Image
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#6F6CFF4D",
 		borderRadius: 8,
 		paddingVertical: 19,
-		marginBottom: 91,
+		marginBottom: 10,
 		marginHorizontal: 24,
 	},
 	view3: {

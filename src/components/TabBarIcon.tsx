@@ -34,9 +34,12 @@ const TabBarIcon = ({ focused, icon, label }: TabBarIconProps) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    width: 70,
+    justifyContent: 'center',
+    width: 60,
+    height:60,
   },
   icon: {
+    marginTop:25,
     width: 25,
     height: 25,
   },

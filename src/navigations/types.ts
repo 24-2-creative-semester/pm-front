@@ -21,9 +21,13 @@ export type RootStackParamList = {
   Timer: undefined; // Timer 추가
   MateList: undefined; // Mate 추가
   DietMain : undefined;
-  DietDetail:undefined;
-  DietEnroll:undefined;
-  DietSearch:undefined;
+  DietDetail: {
+    foodid: number;
+    mealtime: string;
+  };
+  DietEnroll: { mealtime: string };
+  DietSearch: { mealtime: string };
+
 
   BattleCreate :undefined;
   BattleCreateSecond: { inviteCode: string };
@@ -35,17 +39,17 @@ export type RootStackParamList = {
   inviteCode:undefined;
   BattleParticipate: undefined;
   
-  WeightAfter:undefined;
-  WeightBefore:undefined;
-  WeightRevise:{date:string};
+  WeightAfter: { date: string };
+  WeightBefore: { date: string };
+  WeightRevise: { date: string };
 
   WeightCalendarScreen:undefined;
 
   SeeAllBody :undefined;
   BodyToday:undefined;
 
-  TimerRunning:undefined;
-  TimerSetting:undefined;
+  TimerRunning: { totalSeconds: number };
+  TimerSetting: undefined;
 
-  mealtime:undefined;
+  DateNavigator:undefined;
 };

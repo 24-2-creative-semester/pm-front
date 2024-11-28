@@ -93,35 +93,7 @@ type DietSearchProps = {
 		<SafeAreaView style={styles.container}>
 
 			<View style={styles.column}>
-				<View style={styles.row}>
-					<Text style={styles.text}>
-						{"9:41"}
-					</Text>
-					<View style={styles.row2}>
-						<View style={styles.box}>
-						</View>
-						<View style={styles.box2}>
-						</View>
-					</View>
-					<Image
-						source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-						resizeMode={"stretch"}
-						style={styles.image}
-					/>
-					<Image
-						source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-						resizeMode={"stretch"}
-						style={styles.image2}
-					/>
-					<View style={styles.column2}>
-						<View style={styles.view}>
-							<View style={styles.box3}>
-							</View>
-						</View>
-						<View style={styles.absoluteBox}>
-						</View>
-					</View>
-				</View>
+				
 				<View style={styles.row3}>
 					<Image
 						source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
@@ -197,60 +169,7 @@ type DietSearchProps = {
 						{"120kcal"}
 					</Text>
 				</View> */}
-				<Image
-					source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-					resizeMode={"stretch"}
-					style={styles.image6}
-				/>
-				<View style={styles.column6}>
-					<View style={styles.row6}>
-						<Image
-							source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-							resizeMode={"stretch"}
-							style={styles.image7}
-						/>
-						<Image
-							source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-							resizeMode={"stretch"}
-							style={styles.image7}
-						/>
-						<Image
-							source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-							resizeMode={"stretch"}
-							style={styles.image7}
-						/>
-						<Image
-							source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-							resizeMode={"stretch"}
-							style={styles.image7}
-						/>
-						<Image
-							source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-							resizeMode={"stretch"}
-							style={styles.image7}
-						/>
-					</View>
-					<View style={styles.row7}>
-						<Text style={styles.text6}>
-							{"기록"}
-						</Text>
-						<Text style={styles.text7}>
-							{"대결"}
-						</Text>
-						<Text style={styles.text8}>
-							{"홈"}
-						</Text>
-						<Text style={styles.text9}>
-							{"타이머"}
-						</Text>
-						<Text style={styles.text10}>
-							{"운동메이트"}
-						</Text>
-					</View>
-					<View style={styles.box8}>
-					</View>
-					
-				</View>
+				
 			</View>
 			{/* 아이콘 추가 */}
 			<TouchableOpacity
@@ -525,7 +444,7 @@ const styles = StyleSheet.create({
 		//flex: 1, // 화면의 나머지 공간을 차지
 		marginHorizontal: 20, // 양 옆 여백 추가
 		marginBottom: 10, // 하단 여백 추가
-		height: 200,
+		height: 630,
 	},
 	emptyText: {
 		textAlign: "center",
@@ -535,9 +454,10 @@ const styles = StyleSheet.create({
 	},
 	floatingButton: {
 		position: 'absolute',
-		bottom: 30,
+		bottom: 70,
 		right: 20,
 		backgroundColor: 'transparent',  // 투명한 배경
+		
 	},
 });
 

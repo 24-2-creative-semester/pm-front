@@ -57,6 +57,39 @@ const RecordTabSelector: React.FC = () => {
         console.error("API 호출 오류:", error);
         Alert.alert("오류", "데이터 확인 중 문제가 발생했습니다.");
       }
+    } else if (tabRoute === "WeightBefore") {
+      // 체중 확인 요청
+      try {
+        const accessToken = await AsyncStorage.getItem("accessToken");
+        console.log("Checking weight for date:", currentDate);
+
+        const response = await fetch(
+          `http://172.16.86.241:8080/checkweight?today=${currentDate}`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              Authorization: `${accessToken}`,
+            },
+          }
+        );
+
+        const data = await response.json();
+        console.log("Response Data:", data);
+
+        if (response.ok && data.isSuccess) {
+          // true: 체중 등록됨 -> WeightAfter로 이동
+          // false: 체중 미등록 -> WeightBefore로 이동
+          navigation.navigate(data.result ? "WeightAfter" : "WeightBefore", {
+            date: currentDate,
+          });
+        } else {
+          Alert.alert("오류", data.message || "체중 데이터 확인 중 오류가 발생했습니다.");
+        }
+      } catch (error) {
+        console.error("체중 확인 API 호출 오류:", error);
+        Alert.alert("오류", "체중 데이터 확인 중 문제가 발생했습니다.");
+      }
     } else {
       navigation.navigate(tabRoute);
     }
@@ -87,6 +120,7 @@ const RecordTabSelector: React.FC = () => {
 
 const styles = StyleSheet.create({
   tabContainer: {
+    marginTop: 30,
     flexDirection: "row",
     justifyContent: "space-around",
     marginBottom: 10,

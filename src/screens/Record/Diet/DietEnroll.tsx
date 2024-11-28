@@ -33,7 +33,7 @@ type DietEnrollProps = {
     // 입력된 중량으로 나누기
     const getCalculatedValue = (value: string) => {
         const numericValue = parseFloat(value);
-        return isNaN(numericValue) || isNaN(weight) || weight === 0 ? 0 : numericValue / weight;
+        return isNaN(numericValue) || isNaN(weight) || weight === 0 ? 0 : numericValue / weight * 100;
     };
 
 	// 버튼 비활성화 조건: 모든 입력 필드가 비어있는 경우
@@ -271,54 +271,7 @@ type DietEnrollProps = {
 					</TouchableOpacity>
 
 
-					<View style={styles.column3}>
-						<View style={styles.row6}>
-							<Image
-								source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-								resizeMode={"stretch"}
-								style={styles.image4}
-							/>
-							<Image
-								source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-								resizeMode={"stretch"}
-								style={styles.image4}
-							/>
-							<Image
-								source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-								resizeMode={"stretch"}
-								style={styles.image4}
-							/>
-							<Image
-								source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-								resizeMode={"stretch"}
-								style={styles.image4}
-							/>
-							<Image
-								source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-								resizeMode={"stretch"}
-								style={styles.image4}
-							/>
-						</View>
-						<View style={styles.row7}>
-							<Text style={styles.text4}>
-								{"기록"}
-							</Text>
-							<Text style={styles.text5}>
-								{"대결"}
-							</Text>
-							<Text style={styles.text6}>
-								{"홈"}
-							</Text>
-							<Text style={styles.text7}>
-								{"타이머"}
-							</Text>
-							<Text style={styles.text8}>
-								{"운동메이트"}
-							</Text>
-						</View>
-						<View style={styles.box6}>
-						</View>
-					</View>
+					
 				</View>
 			</ScrollView>
 		</SafeAreaView>

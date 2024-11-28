@@ -46,11 +46,9 @@ const BattleOpponentDiet = ({ route }: any) => {
       <ScrollView style={styles.scrollView}>
         <View style={styles.column}>
           <View style={styles.row3}>
-            <Image
-              source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-              resizeMode="stretch"
+            <Text
               style={styles.image3}
-            />
+            >←</Text>
             <Text style={styles.text2}>{"대결 상대"}</Text>
 				  </View>
 				  <Text style={styles.text3}>{"대결상대님의 식단"}</Text>
@@ -160,8 +158,8 @@ const styles = StyleSheet.create({
 		marginTop: 1,
 	},
 	column2: {
-		backgroundColor: "FFFFFF",
-		borderRadius: 8,
+		backgroundColor: "white",
+		borderRadius: 10,
 		paddingTop: 18,
 		paddingBottom: 42,
 		paddingHorizontal: 16,
@@ -234,7 +232,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	text2: {
-		color: "FFFFFF",
+		alignItems:"center",
+		color: "white",
 		fontSize: 20,
 		flex: 1,
 	},
@@ -245,7 +244,7 @@ const styles = StyleSheet.create({
 		marginLeft: 25,
 	},
 	text4: {
-		color: "FFFFFF",
+		color: "white",
 		fontSize: 20,
 		marginBottom: 22,
 		marginLeft: 24,

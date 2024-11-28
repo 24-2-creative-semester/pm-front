@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, View, Text, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
 // API에서 받아올 데이터 타입 정의
 interface BattleResult {
@@ -14,6 +15,7 @@ interface BattleResult {
 const BattleResultScreen = ({ route }: any) => {
   const { battleId } = route.params; // route.params로 battleId 받아오기
   const [result, setResult] = useState<BattleResult | null>(null);
+  const navigation = useNavigation(); // 네비게이션 객체 사용
 
   // BattleResult API 호출
   const fetchBattleResult = async () => {
@@ -36,6 +38,8 @@ const BattleResultScreen = ({ route }: any) => {
       );
 
       const data = await response.json();
+      
+      console.log(data);
       if (data.isSuccess) {
         setResult(data.result); // 결과 상태 업데이트
       } else {
@@ -49,8 +53,15 @@ const BattleResultScreen = ({ route }: any) => {
   // 데이터 로드
   useEffect(() => {
     fetchBattleResult(); // 비동기 함수 호출
-  }, [battleId]);
 
+    // 3초 후 BattleList 화면으로 이동
+    const timer = setTimeout(() => {
+      navigation.navigate("BattleList");
+    }, 3000);
+
+    // 컴포넌트 언마운트 시 타이머 정리
+    return () => clearTimeout(timer);
+  }, [battleId]);
   if (!result) {
     return (
       <SafeAreaView style={styles.container}>

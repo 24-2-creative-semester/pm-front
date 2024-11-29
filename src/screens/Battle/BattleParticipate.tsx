@@ -27,7 +27,7 @@ const handleParticipate = async () => {
 
 		try {
 			// 서버로 POST 요청 보내기
-			const response = await fetch('http://172.16.86.241:8080/acceptbattle', {
+			const response = await fetch('http://192.168.45.176:8080/acceptbattle', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

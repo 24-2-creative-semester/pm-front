@@ -45,7 +45,7 @@ const DietMain: React.FC = () => {
 			setLoading(true);
 			const accessToken = await AsyncStorage.getItem('accessToken');
 			console.log(date);
-			const response = await fetch(`http://172.16.86.241:8080/food/eatingByDate?date=${date}`, {
+			const response = await fetch(`http://192.168.45.176:8080/food/eatingByDate?date=${date}`, {
 				method: 'GET',
 				headers: {
 					'Authorization': `${accessToken}` // 토큰을 Authorization 헤더에 추가
@@ -57,6 +57,7 @@ const DietMain: React.FC = () => {
 			}
 			const data = await response.json();
 			console.log('checkDietMaindata', data);
+			
 			if (data.result) {
 				setDietData(data.result);
 			} else {

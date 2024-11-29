@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { SafeAreaView, View, ScrollView, Text, Image, StyleSheet } from "react-native";
 
 const BattleOpponentDiet = ({ route }: any) => {
-	const { opponentid } = route.params;
+  const { opponentid } = route.params;
   const [mealData, setMealData] = useState({
     morning: [],
     lunch: [],
@@ -16,29 +16,30 @@ const BattleOpponentDiet = ({ route }: any) => {
   
 
   useEffect(() => {
-   // console.log("Opponent ID:", opponentid); // To check if the ID is being passed correctly
+   console.log("Opponent ID:", opponentid); // To check if the ID is being passed correctly
 
     // Fetch data using the opponentId
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://172.16.86.241:8080/getTodayInfo?memberId=${opponentid}`);
+        const response = await fetch(`http://192.168.45.176:8080/getTodayInfo?memberId=${opponentid}`);
         const data = await response.json();
 		console.log("제발",data);
         // Update state with the fetched data
         setMealData({
-          morning: data.morning || [],
-          lunch: data.lunch || [],
-          dinner: data.dinner || [],
-          snack: data.snack || [],
-          eatingCalories: data.TotalFoodCalories || 0,
-          exerciseCalories: data.TotalExerciseCalories || 0,
-        });
+			morning: data.result.morning || [],
+			lunch: data.result.lunch || [],
+			dinner: data.result.dinner || [],
+			snack: data.result.snack || [],
+			eatingCalories: data.result.eatingCaloreis || 0, // Corrected typo
+			exerciseCalories: data.resultexerciseCalories || 0,
+		  });		  
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
     };
 
     fetchData();
+	console.log(mealData);
   }, [opponentid]); // Re-run effect when opponentId changes
 
   return (
@@ -59,7 +60,7 @@ const BattleOpponentDiet = ({ route }: any) => {
 					  <Text style={styles.text12}>
 						  {mealData?.morning?.length > 0
 							  ? mealData.morning.map((item: string, index: number) => (
-								  <Text key={index}>{item}</Text>
+								  <Text key={index}>{item} , </Text>
 							  ))
 							  : "데이터 없음"}
 					  </Text>

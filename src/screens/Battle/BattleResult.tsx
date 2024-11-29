@@ -27,7 +27,7 @@ const BattleResultScreen = ({ route }: any) => {
       }
 
       const response = await fetch(
-        `http://172.16.86.241:8080/battleresult?battleId=${battleId}`, // battleId 동적 문자열 처리
+        `http://192.168.45.176:8080/battleresult?battleId=${battleId}`, // battleId 동적 문자열 처리
         {
           method: "GET",
           headers: {
@@ -38,7 +38,7 @@ const BattleResultScreen = ({ route }: any) => {
       );
 
       const data = await response.json();
-      
+
       console.log(data);
       if (data.isSuccess) {
         setResult(data.result); // 결과 상태 업데이트

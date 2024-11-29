@@ -33,7 +33,7 @@ export type RootStackParamList = {
   BattleCreateSecond: { inviteCode: string };
   BattleList:undefined;
   BattleMain:undefined;
-  BattleOpponentDiet:undefined;
+  BattleOpponentDiet:{opponentid:string};
   BattleOtherState: { battleId: string }; // battleId 전달 정의
   BattleResult: { battleId: string; memberId: string }; // battleId와 memberId 정의
   inviteCode:undefined;

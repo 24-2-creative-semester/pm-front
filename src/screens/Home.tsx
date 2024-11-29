@@ -20,7 +20,7 @@ const Home: React.FC = () => {
   const fetchSimpleInfo = async () => {
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
-      const response = await fetch("http://172.16.86.241:8080/simpleInfo", {
+      const response = await fetch("http://192.168.45.176:8080/simpleInfo", {
         method: "GET",
         headers: {
           Authorization: `${accessToken}`,
@@ -44,7 +44,7 @@ const Home: React.FC = () => {
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
       const response = await fetch(
-        "http://172.16.86.241:8080/food/targetCalories",
+        "http://192.168.45.176:8080/food/targetCalories",
         {
           method: "GET",
           headers: {
@@ -73,7 +73,7 @@ const Home: React.FC = () => {
       const today = koreaTime.toISOString().split("T")[0];
 
       const response = await fetch(
-        `http://172.16.86.241:8080/food/eatingByDate?date=${today}`,
+        `http://192.168.45.176:8080/food/eatingByDate?date=${today}`,
         {
           method: "GET",
           headers: {

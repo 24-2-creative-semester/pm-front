@@ -49,7 +49,7 @@ const Signup = () => {
     }
   
     try {
-      const response = await fetch(`http://172.16.86.241:8080/signup/local`, {
+      const response = await fetch(`http://192.168.45.176:8080/signup/local`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

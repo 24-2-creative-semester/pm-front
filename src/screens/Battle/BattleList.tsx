@@ -20,7 +20,7 @@ type BattleListScreenNavigationProp = StackNavigationProp<RootStackParamList, 'B
 const calculateDays = (start: string, end: string) => {
   const startDate = new Date(start);
   const endDate = new Date(end);
-  const diffTime = endDate.getTime() - startDate.getTime();
+  const diffTime = endDate.getTime() - startDate.getTime() -(1000 * 60 * 60 * 24);
   return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 };
 
@@ -38,7 +38,7 @@ const BattleList = () => {
         return;
       }
 
-      const url = `http://172.16.86.241:8080/battlelist`; // URL 수정
+      const url = `http://192.168.45.176:8080/battlelist`; // URL 수정
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -87,11 +87,17 @@ const BattleList = () => {
                 }
               >
                 <View style={styles.row}>
-                  <Image
+                  {/* <Image
                     source={{ uri: member.opponentImage || "https://i.imgur.com/1tMFzp8.png" }}
                     resizeMode={"stretch"}
                     style={styles.column3}
-                  />
+                  /> */}
+                      <Image
+                        source={{
+                          uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAIVBMVEXY2Njz8/Pq6urv7+/h4eHb29vo6Oje3t7j4+Pt7e3p6ekmc3lwAAADMElEQVR4nO2bC3KDMAxEMeab+x+4JZQBEkhBlq2NZt8JvGOtPkZUFSGEEEIIIYQQQgghhBBCCCEEnXbo6hjDLzHW3dBan0dEO9ThjfrrxDQHKv60NNZnu0ETz2Q8w+xbpPQfZTyl9NZnvEB7GlS7AIP3SnNFxgR4fHVXdYTQWZ/1A+14XUcII2x4tf+6fE8EVXJXB6qS+zpAldzyx8Jofep3buSrLXC563L9eAWsnrRSHSFg2eRSX3JMbX32Lb1cRwhIHaQg865E69OviJ0+g+P3pAsBupLEC8G5koSUNQOSuBJqyAJGLRnShQzWGp4kRxZKbKXrCMFaw4SCRTBMomARDJMIB5E9CGOJgtcx3J7Yn8wgdCluhGjogMi/FEIhmXBjdjdC3BRENy2Km6bRTRvvZrDyM+q6eXxw8xzk5oHOz5Opm0dsP58V3Hzo8fPpzc3HUD+fp90sDPhZ4fCzVONnzcnN4pmfVUA/y5mVm3XZys8Cs5+V8srNkv+Ek98uJpz8CDPh5NekGRc/ixFCCCHky2mb4TGO8cLkHuM4PoYGsGfph1r0Ih/rAWc2Oexz74DRE59PHre0GE8pvcoiykxnF2O96Ln3nNFGSqMs4ymlfIT9/1Qio/ADS6vojVe6gilMZUXrnFKbKfeeqiWUed5OXti4QgHTZ3THltxv9fnDaiFveOVKukfkTMRJmxr3yaakiM23ZLJ8cR2ZlBjoyKKksD8W1H1ipENdiWQ/QwflrYJidfAd1b2bQn3JMYrdiknCWlFLXSo/VqSgZRNDg8wo2STzPHgFlZnRPLAmNILLNGMtKGQus5K+J73Am5X0PckL9MYlZCW1mJin3oXEFAzikIk0l8BcSOKVAF1I2pVA1JCFlFpiffY9ch0wuXdGnoFVvnPqIf6JCaJd3CJtHQH69z3Sbh4ssuSxZX3ud2Q6oKrhjKwmwllEahI4i0hNAjJSbZGNV9anPkKiA64cTkhKIlijNSNptwCTlixtPawPfcRDIARoyl2RzLtuhACWEVkhcSPE+szHUAgaFIIGhaBBIWhQCBoUggaFoEEhaFAIGhSCBoWgQSFoUAgap8f9Ac1KQOtCVp1TAAAAAElFTkSuQmCC",
+                        }}
+                        style={styles.profile}
+                      />
                   <View style={styles.column4}>
                     <View style={styles.row2}>
                       <Text style={styles.text}>{member.opponentName}</Text>
@@ -143,6 +149,11 @@ const styles = StyleSheet.create({
       fontWeight: "bold",
       textAlign: "center",
       marginVertical: 10,
+    },
+    profile: {
+      width: 70,
+      height: 70,
+      borderRadius: 10,
     },
     absoluteColumn: {
         position: "absolute",

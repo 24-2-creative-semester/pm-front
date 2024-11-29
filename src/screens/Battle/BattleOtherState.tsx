@@ -16,13 +16,14 @@ const BattleOtherState = ({ route }: { route: any }) => {
       const accessToken = await AsyncStorage.getItem("accessToken");
       try {
         const response = await fetch(
-          `http://172.16.86.241:8080/battlestatus?battleId=${battleId}`,
+          `http://192.168.45.176:8080/battlestatus?battleId=${battleId}`,
           {
             method: "GET",
             headers: { Authorization: `${accessToken}` },
           }
         );
         const data = await response.json();
+		console.log("opponent ID 받아오니?",data);
         if (data.isSuccess) {
           setBattleData(data.result);
         } else {
@@ -123,7 +124,7 @@ const BattleOtherState = ({ route }: { route: any }) => {
           <TouchableOpacity
             onPress={() =>
               navigation.navigate("BattleOpponentDiet", {
-                opponentId: battleData.opponentId,
+                opponentid: battleData.opponentId,
               })
             }
           >

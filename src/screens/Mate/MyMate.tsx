@@ -33,7 +33,7 @@ const MyMate = () => {
     setLoading(true);
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
-      const response = await fetch("http://172.16.86.241:8080/myposts", {
+      const response = await fetch("http://192.168.45.176:8080/myposts", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -58,7 +58,7 @@ const MyMate = () => {
     setLoading(true);
     try {
       const accessToken = await AsyncStorage.getItem('accessToken');
-      const response = await fetch(`http://172.16.86.241:8080/myapplicants`, {
+      const response = await fetch(`http://192.168.45.176:8080/myapplicants`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -81,7 +81,7 @@ const MyMate = () => {
   // 게시글 삭제 함수
   const deletePost = async (postId: number) => {
     try {
-      const response = await fetch("http://172.16.86.241:8080/deletepost", {
+      const response = await fetch("http://192.168.45.176:8080/deletepost", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -103,7 +103,7 @@ const MyMate = () => {
   // 참여 취소 함수
   const cancelApplication = async (postId: number) => {
     try {
-      const response = await fetch("http://172.16.86.241:8080/deleteapplicant", {
+      const response = await fetch("http://192.168.45.176:8080/deleteapplicant", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

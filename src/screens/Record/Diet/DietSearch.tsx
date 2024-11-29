@@ -1,781 +1,225 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, View, ScrollView, Text, Image, StyleSheet, FlatList, TextInput,TouchableOpacity } from "react-native";
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from "../../../navigations/types";
-import { useNavigation,RouteProp } from "@react-navigation/native";
-import Icon from 'react-native-vector-icons/Ionicons';  // 아이콘 추가
-
-type DietSearchRouteProp = RouteProp<RootStackParamList, 'DietSearch'>;
-type DietSearchNavigationProp = StackNavigationProp<RootStackParamList, 'DietSearch'>;
+import {
+  SafeAreaView,
+  View,
+  Text,
+  FlatList,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/Ionicons"; // Icon library
 
 type FoodItem = {
-	foodname: string;
-	foodCalories: number;
-	foodId: number;
-	manufacturingCompany: string;
+  foodname: string;
+  foodCalories: number;
+  foodId: number;
+  manufacturingCompany: string;
 };
 
-type DietSearchProps = {
-	route: DietSearchRouteProp;
+const DietSearch = ({ route }: any) => {
+  const { mealtime } = route.params; // 'morning' value received
+  const [data, setData] = useState<FoodItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchText, setSearchText] = useState("");
+  const navigation = useNavigation();
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://192.168.45.176:8080/food/searchAll");
+      const result = await response.json();
+      setData(result.result || []); // Ensure data is an array
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const DietSearch = ({ route }: DietSearchProps) => {
-	const { mealtime } = route.params; // 'morning' 값 받기
-	const [data, setData] = useState<FoodItem[]>([]);
-	const [loading, setLoading] = useState(true);
-	const [searchText, setSearchText] = useState("");
-	const navigation = useNavigation<DietSearchNavigationProp>();  // 수정: 정확한 타입 지정
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-	const filteredData = searchText
-  ? data.filter((item) =>
-      item.foodname.toLowerCase().includes(searchText.toLowerCase())
-    )
-  : data;
+  const filteredData = searchText
+    ? data.filter((item) =>
+        item.foodname.toLowerCase().includes(searchText.toLowerCase())
+      )
+    : data;
 
-//console.log("Filtered Data:", filteredData);  // 필터링된 데이터 확인
-//console.log("Search Text:", searchText);
-//console.log("Filtered Data:", filteredData);
+  const renderFoodItem = ({ item }: { item: FoodItem }) => (
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() =>
+        navigation.navigate("DietDetail", {
+          foodid: item.foodId,
+          mealtime: mealtime,
+        })
+      }
+    >
+      <View style={styles.cardContent}>
+        <Text style={styles.foodName}>{item.foodname}</Text>
+        <Text style={styles.foodCalories}>{item.foodCalories} kcal</Text>
+      </View>
+    </TouchableOpacity>
+  );
 
-	  const fetchData = async () => {
-		try {
-		  const response = await fetch("http://172.16.86.241:8080/food/searchAll");
-		  if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		  }
-		  const result = await response.json();
-		  console.log("API Response:", result);  // 응답 확인
-		  setData(result.result);  // 데이터 상태 업데이트
-		} catch (error) {
-		  console.error("Failed to fetch data:", error);
-		} finally {
-		  setLoading(false);
-		}
-	  };
-	  
-	  
-	  useEffect(() => {
-		fetchData();
-	  }, []);
-  
-	if (loading) {
-	  return (
-		<SafeAreaView style={styles.container}>
-		  <Text style={styles.loadingText}>Loading data...</Text>
-		</SafeAreaView>
-	  );
-	}
-  
-	const renderFoodItem = ({ item }: { item: FoodItem }) => {
-		//console.log("Rendering item:", item);  // 항목 렌더링 시 데이터를 확인
-		
-		return (
-		  <TouchableOpacity
-			style={styles.column4}
-			onPress={() => {
-			  // navigate 메서드를 사용하여 DietEnroll로 이동
-			  navigation.navigate('DietDetail', {
-				foodid: item.foodId,
-				mealtime: mealtime,
-			  });
-			}}
-		  >
-			<View style={styles.row5}>
-			  <View style={styles.box4}></View>
-			  <Text style={styles.text4}>{item.foodname}</Text>
-			  <View style={styles.box5}></View>
-			</View>
-			<Text style={styles.text5}>{item.foodCalories} kcal</Text>
-		  </TouchableOpacity>
-		);
-	  };
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.loadingText}>Loading data...</Text>
+      </SafeAreaView>
+    );
+  }
 
-	return (
-		<SafeAreaView style={[styles.container]}>
-			<View style={styles.column}>
-				<View style={styles.row3}>
-					<TouchableOpacity
-						style={styles.backButton}
-						onPress={() => navigation.goBack()}
-					>
-						<Text style={styles.backButtonText}>←</Text>
-					</TouchableOpacity>
-					<Text style={styles.text2}>{"식단 검색"}</Text>
-				</View>
-			</View>
-			<View style={styles.column3}>
-				<View style={styles.row4}>
-					
-					<TextInput
-						//style={styles.searchInput}
-						placeholder="식단을 검색하세요"
-						value={searchText}
-						onChangeText={(text) => setSearchText(text)} // 입력값 업데이트
+  return (
+    <SafeAreaView style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.backButtonText}>←</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>식단 검색</Text>
+      </View>
 
-					/>
-				</View>
+      {/* Search Input */}
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="식단을 검색하세요"
+          value={searchText}
+          onChangeText={(text) => setSearchText(text)}
+        />
+      </View>
 
-				{/* 음식 카드 영역 */}
+      {/* Food List */}
+      <FlatList
+        data={filteredData}
+        renderItem={renderFoodItem}
+        keyExtractor={(item) => item.foodId.toString()}
+        contentContainerStyle={styles.listContent}
+        ListEmptyComponent={
+          <Text style={styles.emptyText}>검색 결과가 없습니다.</Text>
+        }
+        showsVerticalScrollIndicator={false}
+      />
 
-				<View style={styles.flatListContainer}>
-					<FlatList
-						data={filteredData}
-						renderItem={renderFoodItem}
-						keyExtractor={(item) => item.foodId.toString()}
-						contentContainerStyle={styles.foodCardContainer}
-						ListEmptyComponent={<Text style={styles.emptyText}>검색 결과가 없습니다.</Text>}
-						showsVerticalScrollIndicator={false} // 스크롤바 숨김
-					/>
-				</View>
-
-
-				{/* <View style={styles.column4}>
-					<View style={styles.row5}>
-						<View style={styles.box6}>
-						</View>
-						<Text style={styles.text4}>
-							{"불닭볶음면 (150g)"}
-						</Text>
-						<View style={styles.box5}>
-						</View>
-
-					</View>
-					<Text style={styles.text5}>
-						{"1200kcal"}
-					</Text>
-				</View>
-				<View style={styles.column5}>
-					<View style={styles.row5}>
-						<View style={styles.box7}>
-						</View>
-						<Text style={styles.text4}>
-							{"카레 (150g)"}
-						</Text>
-						<View style={styles.box5}>
-						</View>
-						<Image
-							source={{ uri: "https://i.imgur.com/1tMFzp8.png" }}
-							resizeMode={"stretch"}
-							style={styles.image5}
-						/>
-					</View>
-					<Text style={styles.text5}>
-						{"120kcal"}
-					</Text>
-				</View> */}
-				
-			</View>
-			{/* 아이콘 추가 */}
-			<TouchableOpacity
-				style={styles.floatingButton}
-				onPress={() => {
-					if (mealtime) {
-						navigation.navigate('DietEnroll', { mealtime: mealtime });
-					  } else {
-						console.log("mealtime 값이 정의되지 않았습니다.");
-					  }
-				}}
-			>
-				{/* <Icon name="add-circle-outline" size={32} color="red" /> */}
-				<Icon name="add" size={32} color="#FFFFFF" />
-			</TouchableOpacity>
-
-		</SafeAreaView >
-	)
-}
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#FFFFFF",
-	},
-	absoluteBox: {
-		position: "absolute",
-		bottom: 4,
-		right: -1,
-		width: 1,
-		height: 4,
-		backgroundColor: "#FFFFFF",
-	},
-	box: {
-		width: 80,
-		height: 37,
-		backgroundColor: "#000000",
-		borderRadius: 100,
-	},
-	box2: {
-		width: 37,
-		height: 37,
-		backgroundColor: "#000000",
-		borderRadius: 100,
-	},
-	box3: {
-		height: 9,
-		backgroundColor: "#FFFFFF",
-		borderRadius: 2,
-		marginTop: 2,
-	},
-	box4: {
-		width: 1,
-		height: 24,
-		backgroundColor: "#00FF7B",
-		marginTop: 7,
-		marginRight: 16,
-	},
-	box5: {
-		flex: 1,
-	},
-	box6: {
-		width: 1,
-		height: 24,
-		backgroundColor: "#FF0072",
-		marginTop: 7,
-		marginRight: 16,
-	},
-	box7: {
-		width: 1,
-		height: 24,
-		backgroundColor: "#FFD400",
-		marginTop: 7,
-		marginRight: 16,
-	},
-	box8: {
-		height: 5,
-		backgroundColor: "#FFFFFF",
-		borderRadius: 100,
-		marginHorizontal: 127,
-	},
-	column: {
-		backgroundColor: "#1D1B20",
-		paddingTop: 11,
-		paddingBottom: 10,
-		paddingRight: 32,
-	},
-	column2: {
-		width: 25,
-	},
-	column3: {
-		backgroundColor: "#1D1B20",
-		paddingTop: 24,
-	},
-	column4: {
-		backgroundColor: "#FFFFFF",
-		borderRadius: 8,
-		paddingVertical: 8,
-		marginBottom: 20,
-		marginHorizontal: 24,
-	},
-	column5: {
-		backgroundColor: "#FFFFFF",
-		borderRadius: 8,
-		paddingVertical: 8,
-		marginBottom: 157,
-		marginHorizontal: 24,
-	},
-	column6: {
-		backgroundColor: "#1D1B20",
-		paddingTop: 28,
-		paddingBottom: 8,
-	},
-	image: {
-		width: 18,
-		height: 12,
-		marginRight: 8,
-	},
-	image2: {
-		width: 17,
-		height: 11,
-		marginRight: 8,
-	},
-	image3: {
-		width: 9,
-		height: 19,
-		marginRight: 118,
-	},
-	image4: {
-		width: 20,
-		height: 20,
-		marginRight: 11,
-	},
-	image5: {
-		width: 19,
-		height: 19,
-	},
-	image6: {
-		width: 56,
-		height: 56,
-		marginBottom: 24,
-		marginHorizontal: 24,
-	},
-	image7: {
-		width: 27,
-		height: 27,
-	},
-	row: {
-		flexDirection: "row",
-		alignItems: "center",
-		marginBottom: 37,
-		marginLeft: 57,
-	},
-	row2: {
-		width: 125,
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-		backgroundColor: "#000000",
-		borderRadius: 100,
-		marginRight: 23,
-	},
-	row3: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center", // 텍스트를 중앙 정렬
-		position: "relative", // 백버튼을 상대적으로 배치
-		paddingVertical: 15,
-	},
-	row4: {
-		flexDirection: "row",
-		alignItems: "center",
-		backgroundColor: "#625F67",
-		borderRadius: 8,
-		paddingVertical: 9,
-		paddingHorizontal: 10,
-		marginBottom: 32,
-		marginHorizontal: 24,
-	},
-	row5: {
-		flexDirection: "row",
-		marginBottom: 9,
-		marginHorizontal: 8,
-	},
-	row6: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-		marginBottom: 7,
-		marginHorizontal: 29,
-	},
-	row7: {
-		flexDirection: "row",
-		alignItems: "center",
-		marginBottom: 19,
-		marginHorizontal: 21,
-	},
-	scrollView: {
-		flex: 1,
-		backgroundColor: "#FFFFFF",
-	},
-	text: {
-		color: "#FFFFFF",
-		fontSize: 16,
-		marginRight: 4,
-		flex: 1,
-	},
-	text2: {
-		fontSize: 18,
-		color: "#FFFFFF",
-		fontWeight: "bold",
-		textAlign: "center",
-	},
-	text3: {
-		color: "#47434E",
-		fontSize: 16,
-		flex: 1,
-	},
-	text4: {
-		color: "#000000",
-		fontSize: 18,
-		marginTop: 10,
-	},
-	text5: {
-		color: "#625F67",
-		fontSize: 16,
-		marginLeft: 33,
-	},
-	text6: {
-		color: "#7C7C7C",
-		fontSize: 10,
-		marginRight: 4,
-		flex: 1,
-	},
-	text7: {
-		color: "#7C7C7C",
-		fontSize: 10,
-		marginRight: 66,
-	},
-	text8: {
-		color: "#7161FF",
-		fontSize: 10,
-		marginRight: 62,
-	},
-	text9: {
-		color: "#7C7C7C",
-		fontSize: 10,
-		marginRight: 44,
-	},
-	text10: {
-		color: "#7C7C7C",
-		fontSize: 10,
-	},
-	view: {
-		borderColor: "#FFFFFF",
-		borderRadius: 4,
-		borderWidth: 1,
-		paddingHorizontal: 2,
-	},
-	loadingText: {
-		textAlign: "center",
-		marginTop: 20,
-		fontSize: 18,
-		color: "#888",
-	}, foodListContainer: {
-		flex: 1,
-		padding: 8,
-		//height: 400,
-	},
-	foodCardContainer: {
-		paddingBottom: 16,
-		height: 400,
-	},
-	flatListContainer: {
-		//flex: 1, // 화면의 나머지 공간을 차지
-		marginHorizontal: 7, // 양 옆 여백 추가
-		marginBottom: 10, // 하단 여백 추가
-		height: 630,
-	},
-	emptyText: {
-		textAlign: "center",
-		marginTop: 20,
-		fontSize: 16,
-		color: "#999999",
-	},
-	floatingButton: {
-		position: 'absolute',
-		bottom: 40,
-		right: 20,
-		width: 60, // 원형 버튼 크기
-		height: 60,
-		borderRadius: 30, // 버튼을 원형으로 만들기 위해 반지름을 설정
-		backgroundColor: '#6F6DFF', // 배경색 변경
-		alignItems: 'center', // 아이콘 가운데 정렬
-		justifyContent: 'center', // 아이콘 가운데 정렬
-		shadowColor: '#000', // 그림자 설정
-		shadowOffset: { width: 0, height: 4 },
-		shadowOpacity: 0.3,
-		shadowRadius: 4,
-		elevation: 5, // Android 그림자 효과
-	},
-	  backButton: {
-		position: "absolute", // 백버튼 위치를 고정
-		left: 20, // 왼쪽 여백
-		zIndex: 1, // 다른 요소 위로 표시
-	},
-	  backButtonText: {
-		color: "#FFF",
-		fontSize: 18,
-		fontWeight: "bold",
-	  },
-	
-});
+      {/* Floating Button */}
+      <TouchableOpacity
+        style={styles.floatingButton}
+        onPress={() =>
+          navigation.navigate("DietEnroll", { mealtime: mealtime })
+        }
+      >
+        <Icon name="add" size={32} color="#FFFFFF" />
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+};
 
 export default DietSearch;
-
-
-// const styles = StyleSheet.create({
-// 	container: {
-// 		flex: 1,
-// 		backgroundColor: "#1D1B20",
-// 	},
-// 	absoluteBox: {
-// 		position: "absolute",
-// 		bottom: 4,
-// 		right: -1,
-// 		width: 1,
-// 		height: 4,
-// 		backgroundColor: "#1D1B20",
-// 	},
-// 	box: {
-// 		width: 80,
-// 		height: 37,
-// 		backgroundColor: "#1D1B20",
-// 		borderRadius: 100,
-// 	},
-// 	box2: {
-// 		width: 37,
-// 		height: 37,
-// 		backgroundColor: "#1D1B20",
-// 		borderRadius: 100,
-// 	},
-// 	box3: {
-// 		height: 9,
-// 		backgroundColor: "#1D1B20",
-// 		borderRadius: 2,
-// 		marginTop: 2,
-// 	},
-// 	box4: {
-// 		width: 1,
-// 		height: 24,
-// 		backgroundColor: "#00FF7B",
-// 		marginTop: 7,
-// 		marginRight: 16,
-// 	},
-// 	box5: {
-// 		flex: 1,
-// 	},
-// 	box6: {
-// 		width: 1,
-// 		height: 24,
-// 		backgroundColor: "#FF0072",
-// 		marginTop: 7,
-// 		marginRight: 16,
-// 	},
-// 	box7: {
-// 		width: 1,
-// 		height: 24,
-// 		backgroundColor: "#FFD400",
-// 		marginTop: 7,
-// 		marginRight: 16,
-// 	},
-// 	box8: {
-// 		height: 5,
-// 		backgroundColor: "#1D1B20",
-// 		borderRadius: 100,
-// 		marginHorizontal: 127,
-// 	},
-// 	column: {
-// 		backgroundColor: "#1D1B20",
-// 		paddingTop: 11,
-// 		paddingBottom: 29,
-// 		paddingRight: 32,
-// 	},
-// 	column2: {
-// 		width: 25,
-// 	},
-// 	column3: {
-// 		backgroundColor: "#1D1B20",
-// 		paddingTop: 24,
-// 	},
-// 	column4: {
-// 		backgroundColor: "#1D1B20",
-// 		borderRadius: 8,
-// 		paddingVertical: 8,
-// 		marginBottom: 20,
-// 		marginHorizontal: 24,
-// 		flex:1,
-// 	},
-// 	column5: {
-// 		backgroundColor: "#1D1B20",
-// 		borderRadius: 8,
-// 		paddingVertical: 8,
-// 		marginBottom: 157,
-// 		marginHorizontal: 24,
-// 	},
-// 	column6: {
-// 		backgroundColor: "#1D1B20",
-// 		paddingTop: 28,
-// 		paddingBottom: 8,
-// 	},
-// 	image: {
-// 		width: 18,
-// 		height: 12,
-// 		marginRight: 8,
-// 	},
-// 	image2: {
-// 		width: 17,
-// 		height: 11,
-// 		marginRight: 8,
-// 	},
-// 	image3: {
-// 		width: 9,
-// 		height: 19,
-// 		marginRight: 118,
-// 	},
-// 	image4: {
-// 		width: 20,
-// 		height: 20,
-// 		marginRight: 11,
-// 	},
-// 	image5: {
-// 		width: 19,
-// 		height: 19,
-// 	},
-// 	image6: {
-// 		width: 56,
-// 		height: 56,
-// 		marginBottom: 24,
-// 		marginHorizontal: 24,
-// 	},
-// 	image7: {
-// 		width: 27,
-// 		height: 27,
-// 	},
-// 	row: {
-// 		flexDirection: "row",
-// 		alignItems: "center",
-// 		marginBottom: 37,
-// 		marginLeft: 57,
-// 	},
-// 	row2: {
-// 		width: 125,
-// 		flexDirection: "row",
-// 		justifyContent: "space-between",
-// 		alignItems: "center",
-// 		backgroundColor: "#1D1B20",
-// 		borderRadius: 100,
-// 		marginRight: 23,
-// 	},
-	
-// 	row4: {
-// 		flexDirection: "row",
-// 		alignItems: "center",
-// 		backgroundColor: "#625F67",
-// 		borderRadius: 8,
-// 		paddingVertical: 9,
-// 		paddingHorizontal: 10,
-// 		marginBottom: 32,
-// 		marginHorizontal: 24,
-// 	},
-// 	row5: {
-// 		flexDirection: "row",
-// 		marginBottom: 9,
-// 		marginHorizontal: 8,
-// 	},
-// 	row6: {
-// 		flexDirection: "row",
-// 		justifyContent: "space-between",
-// 		alignItems: "center",
-// 		marginBottom: 7,
-// 		marginHorizontal: 29,
-// 	},
-// 	row7: {
-// 		flexDirection: "row",
-// 		alignItems: "center",
-// 		marginBottom: 19,
-// 		marginHorizontal: 21,
-// 	},
-// 	scrollView: {
-// 		flex: 1,
-// 		backgroundColor: "#FFF",
-// 	},
-// 	text: {
-// 		color: "#FFF",
-// 		fontSize: 16,
-// 		marginRight: 4,
-// 		flex: 1,
-// 	},
-// 	text2: {
-// 		flex: 1, // 텍스트가 가운데 배치될 수 있도록 flex 설정
-// 		textAlign: "center", // 텍스트를 중앙 정렬
-// 		fontSize: 18,
-// 		color: "#FFF",
-// 		fontWeight: "bold",
-// 	},
-// 	text3: {
-// 		color: "#47434E",
-// 		fontSize: 16,
-		
-// 	},
-// 	text4: {
-// 		color: "#FFF",
-// 		fontSize: 18,
-// 		marginTop: 10,
-// 	},
-// 	text5: {
-// 		color: "#625F67",
-// 		fontSize: 16,
-// 		marginLeft: 33,
-// 	},
-// 	text6: {
-// 		color: "#7C7C7C",
-// 		fontSize: 10,
-// 		marginRight: 4,
-// 		flex: 1,
-// 	},
-// 	text7: {
-// 		color: "#7C7C7C",
-// 		fontSize: 10,
-// 		marginRight: 66,
-// 	},
-// 	text8: {
-// 		color: "#7161FF",
-// 		fontSize: 10,
-// 		marginRight: 62,
-// 	},
-// 	text9: {
-// 		color: "#7C7C7C",
-// 		fontSize: 10,
-// 		marginRight: 44,
-// 	},
-// 	text10: {
-// 		color: "#7C7C7C",
-// 		fontSize: 10,
-// 	},
-// 	view: {
-// 		borderColor: "#FFF",
-// 		borderRadius: 4,
-// 		borderWidth: 1,
-// 		paddingHorizontal: 2,
-// 	},
-// 	loadingText: {
-// 		textAlign: "center",
-// 		marginTop: 20,
-// 		fontSize: 18,
-// 		color: "#888",
-// 	}, foodListContainer: {
-// 		flex: 1,
-// 		padding: 8,
-// 		//height: 400,
-// 	},
-// 	flatListContainer: {
-// 		// flex: 1, // 남은 화면 공간을 모두 사용
-// 		marginHorizontal: 7, // 좌우 여백
-// 		marginBottom: 10, // 하단 여백
-// 	  },
-// 	  foodCardContainer: {
-// 		paddingBottom: 16, // 추가적인 패딩
-// 		paddingTop: 10,
-// 	  },
-// 	emptyText: {
-// 		textAlign: "center",
-// 		marginTop: 20,
-// 		fontSize: 16,
-// 		color: "#999999",
-// 	},
-// 	floatingButton: {
-// 		position: 'absolute',
-// 		bottom: 40,
-// 		right: 20,
-// 		width: 60, // 원형 버튼 크기
-// 		height: 60,
-// 		borderRadius: 30, // 버튼을 원형으로 만들기 위해 반지름을 설정
-// 		backgroundColor: '#6F6DFF', // 배경색 변경
-// 		alignItems: 'center', // 아이콘 가운데 정렬
-// 		justifyContent: 'center', // 아이콘 가운데 정렬
-// 		shadowColor: '#000', // 그림자 설정
-// 		shadowOffset: { width: 0, height: 4 },
-// 		shadowOpacity: 0.3,
-// 		shadowRadius: 4,
-// 		elevation: 5, // Android 그림자 효과
-// 	},
-	
-// 	backButton: {
-// 		position: "absolute",
-		
-// 		left: 20,
-// 		zIndex: 1,
-// 	  },
-// 	  backButtonText: {
-// 		color: "#FFF",
-// 		fontSize: 18,
-// 		fontWeight: "bold",
-// 	  },
-// 	  row3: {
-// 		flexDirection: "row",
-//     alignItems: "center",
-//     justifyContent: "space-between", // 백버튼과 텍스트를 양 끝으로 배치
-//     position: "relative", // 위치 조정을 위해 relative 사용
-//     paddingHorizontal: 10,
-//     paddingVertical: 15,
-// 	},
-// });
-
-// export default DietSearch;
+const styles = StyleSheet.create({
+	container: {
+	  flex: 1,
+	  backgroundColor: "#1D1B20",
+	},
+	header: {
+	  flexDirection: "row",
+	  alignItems: "center",
+	  padding: 15,
+	  backgroundColor: "#1D1B20",
+	},
+	backButton: {
+	  marginRight: 15,
+	},
+	backButtonText: {
+	  color: "#FFFFFF",
+	  fontSize: 20,
+	},
+	headerTitle: {
+	  color: "#FFFFFF",
+	  fontSize: 18,
+	  fontWeight: "bold",
+	  marginBottom:10,
+	},
+	searchContainer: {
+	  backgroundColor: "#1D1B20",
+	  paddingHorizontal: 15,
+	  paddingVertical: 20,
+	},
+	searchInput: {
+	  backgroundColor: "#625F67",
+	  padding: 10,
+	  borderRadius: 8,
+	  fontSize: 16,
+	},
+	listContent: {
+	  paddingHorizontal: 15,
+	  paddingBottom: 60, // Add space for floating button
+	},
+	card: {
+	  backgroundColor: "#FFFFFF",
+	  borderRadius: 10,
+	  padding: 15,
+	  marginBottom: 10,
+	  flexDirection: "row",
+	  alignItems: "center",
+	  justifyContent: "space-between",
+	},
+	colorIndicator: {
+	  width: 5,
+	  height: "100%",
+	  borderRadius: 2,
+	  marginRight: 10,
+	},
+	cardContent: {
+	  flex: 1,
+	  justifyContent: "space-between",
+	},
+	foodName: {
+	  color: "#000000",
+	  fontSize: 16,
+	  fontWeight: "bold",
+	},
+	foodCalories: {
+	  color: "#999999",
+	  fontSize: 14,
+	},
+	closeIcon: {
+	  fontSize: 20,
+	  color: "#999999",
+	  marginLeft: 10,
+	},
+	loadingText: {
+	  textAlign: "center",
+	  marginTop: 20,
+	  fontSize: 18,
+	  color: "#888",
+	},
+	emptyText: {
+	  textAlign: "center",
+	  marginTop: 20,
+	  fontSize: 16,
+	  color: "#999999",
+	},
+	floatingButton: {
+	  position: "absolute",
+	  bottom: 20,
+	  right: 20,
+	  width: 60,
+	  height: 60,
+	  borderRadius: 30,
+	  backgroundColor: "#6F6DFF",
+	  alignItems: "center",
+	  justifyContent: "center",
+	  shadowColor: "#000",
+	  shadowOffset: { width: 0, height: 4 },
+	  shadowOpacity: 0.3,
+	  shadowRadius: 4,
+	  elevation: 5,
+	},
+  });
+  

@@ -44,7 +44,7 @@ const ExerciseDetail: React.FC = () => {
       const accessToken = await AsyncStorage.getItem("accessToken");
       console.log(exerciseId);
       const response = await fetch(
-        "http://172.16.86.241:8080/exercise/doingExercise",
+        "http://192.168.45.176:8080/exercise/doingExercise",
         {
           method: "POST",
           headers: {

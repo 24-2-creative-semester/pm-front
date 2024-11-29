@@ -44,7 +44,7 @@ function BattleCreate() {
         targetDay: format(targetDuration,'yyyy-MM-dd') // "YYYY-MM-DD" 형식으로 날짜를 설정
       };
 
-      const response = await fetch('http://172.16.86.241:8080/createbattle', {
+      const response = await fetch('http://192.168.45.176:8080/createbattle', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

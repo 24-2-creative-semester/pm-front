@@ -23,7 +23,7 @@ const ExerciseEnroll: React.FC = () => {
 
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
-      const response = await fetch("http://172.16.86.241:8080/exercise/save", {
+      const response = await fetch("http://192.168.45.176:8080/exercise/save", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

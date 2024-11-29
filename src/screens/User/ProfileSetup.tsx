@@ -74,7 +74,7 @@ const ProfileSetup = () => {
       }
   
       // JSON 형식으로 데이터 전송
-      const response = await fetch('http://172.16.86.241:8080/profileSetting', {
+      const response = await fetch('http://192.168.45.176:8080/profileSetting', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json', // JSON 형식의 Content-Type

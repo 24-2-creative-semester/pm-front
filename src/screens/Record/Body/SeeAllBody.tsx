@@ -25,7 +25,7 @@ const SeeAllBody: React.FC<{ navigation: any }> = ({ navigation }) => {
 
       console.log("accessToken:", accessToken);
 
-      const response = await fetch("http://172.16.86.241:8080/api/getImageList", {
+      const response = await fetch("http://192.168.45.176:8080/api/getImageList", {
         method: "GET",
         headers: {
           Authorization: `${accessToken}`, // Bearer 토큰 형식으로 설정

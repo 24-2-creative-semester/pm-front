@@ -25,7 +25,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch(`http://172.16.86.241:8080/login/local`, {
+      const response = await fetch(`http://192.168.45.176:8080/login/local`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email, password: password }),
@@ -47,7 +47,7 @@ const Login = () => {
         Alert.alert("로그인 성공", data.message);
   
         try {
-          const profileResponse = await fetch(`http://172.16.86.241:8080/isProfile`, {
+          const profileResponse = await fetch(`http://192.168.45.176:8080/isProfile`, {
             method: "GET",
             headers: {
               Accept: "application/json",

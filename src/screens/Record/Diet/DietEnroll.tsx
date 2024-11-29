@@ -41,7 +41,7 @@ type DietEnrollProps = {
 		!foodName && !foodweight && !foodCalories && !protein && !carbohydrate && !fat && !dietaryFiber && !sodium && !sugar;
 
 		const sendDataToServer = async () => {
-			const url = 'http://172.16.86.241:8080/food/addFood'; // 여기에 API 엔드포인트 URL 입력
+			const url = 'http://192.168.45.176:8080/food/addFood'; // 여기에 API 엔드포인트 URL 입력
 			const payload = {
 				foodName,
 				manufacturingCompany,

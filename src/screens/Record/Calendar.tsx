@@ -35,7 +35,7 @@ const WeightCalendarScreen = () => {
     setIsLoading(true);
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
-      const response = await fetch(`http://172.16.86.241:8080/monthweight?today=${date}`, {
+      const response = await fetch(`http://192.168.45.176:8080/monthweight?today=${date}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

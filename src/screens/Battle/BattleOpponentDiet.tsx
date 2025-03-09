@@ -21,7 +21,7 @@ const BattleOpponentDiet = ({ route }: any) => {
     // Fetch data using the opponentId
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://192.168.45.176:8080/getTodayInfo?memberId=${opponentid}`);
+        const response = await fetch(`/getTodayInfo?memberId=${opponentid}`);
         const data = await response.json();
 		console.log("제발",data);
         // Update state with the fetched data

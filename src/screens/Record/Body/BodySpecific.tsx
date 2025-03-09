@@ -24,7 +24,7 @@ const BodySpecific: React.FC<{ route: any }> = ({ route }) => {
       console.log("요청된 imageId:", imageId);
 
       const response = await fetch(
-        `http://192.168.45.176:8080/api/getImage?id=${imageId}`,
+        `/api/getImage?id=${imageId}`,
         {
           method: "GET",
           headers: {

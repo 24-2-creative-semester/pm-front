@@ -37,7 +37,7 @@ const WeightRegisterScreen = ({ route }: any) => {
 
     try {
       const response = await fetch(
-        "http://192.168.45.176:8080/rewriteweight",
+        "/rewriteweight",
         {
           method: "PUT",
           headers: {

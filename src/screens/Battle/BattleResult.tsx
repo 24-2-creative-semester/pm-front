@@ -27,7 +27,7 @@ const BattleResultScreen = ({ route }: any) => {
       }
 
       const response = await fetch(
-        `http://192.168.45.176:8080/battleresult?battleId=${battleId}`, // battleId 동적 문자열 처리
+        `/battleresult?battleId=${battleId}`, // battleId 동적 문자열 처리
         {
           method: "GET",
           headers: {

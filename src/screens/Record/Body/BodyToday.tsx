@@ -31,7 +31,7 @@ const BodyToday: React.FC<{ navigation: any }> = ({ navigation }) => {
       }
 
       const response = await fetch(
-        `http://192.168.45.176:8080/api/getImageListDate?date=${formattedDate}`,
+        `/api/getImageListDate?date=${formattedDate}`,
         {
           method: "GET",
           headers: {

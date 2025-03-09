@@ -35,7 +35,7 @@ const RecordTabSelector: React.FC = () => {
         console.log("Current Date (Korean):", currentDate);
 
         const response = await fetch(
-          `http://192.168.45.176:8080/api/isImageDate?date=${currentDate}`,
+          `/api/isImageDate?date=${currentDate}`,
           {
             method: "GET",
             headers: {
@@ -64,7 +64,7 @@ const RecordTabSelector: React.FC = () => {
         console.log("Checking weight for date:", currentDate);
 
         const response = await fetch(
-          `http://192.168.45.176:8080/checkweight?today=${currentDate}`,
+          `/checkweight?today=${currentDate}`,
           {
             method: "GET",
             headers: {

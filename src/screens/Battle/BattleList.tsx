@@ -38,7 +38,7 @@ const BattleList = () => {
         return;
       }
 
-      const url = `http://192.168.45.176:8080/battlelist`; // URL 수정
+      const url = `/battlelist`; // URL 수정
       const response = await fetch(url, {
         method: "GET",
         headers: {

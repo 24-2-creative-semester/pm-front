@@ -34,7 +34,7 @@ const ExerciseSearch: React.FC = () => {
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
       const response = await fetch(
-        "http://192.168.45.176:8080/exercise/searchAll",
+        "/exercise/searchAll",
         {
           method: "GET",
           headers: {

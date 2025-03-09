@@ -42,7 +42,7 @@ const ExerciseMain: React.FC = () => {
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
       const response = await fetch(
-        `http://192.168.45.176:8080/exercise/todayList?today=${date}`, // 날짜 기반 API로 수정
+        `/exercise/todayList?today=${date}`, // 날짜 기반 API로 수정
         {
           method: "GET",
           headers: {
@@ -87,7 +87,7 @@ const ExerciseMain: React.FC = () => {
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
       const response = await fetch(
-        `http://192.168.45.176:8080/exercise/deleteMemberExercise?memberExerciseId=${exerciseId}`,
+        `/exercise/deleteMemberExercise?memberExerciseId=${exerciseId}`,
         {
           method: "DELETE",
           headers: {

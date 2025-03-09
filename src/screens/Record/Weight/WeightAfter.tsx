@@ -32,7 +32,7 @@ const WeightDetailScreen = ({ route }: any) => {
     console.log("Fetching data for date:", date);
     try {
       const response = await fetch(
-        `http://192.168.45.176:8080/dayweight?today=${date}`,
+        `/dayweight?today=${date}`,
         {
           method: "GET",
           headers: {

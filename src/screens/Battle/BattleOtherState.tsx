@@ -16,7 +16,7 @@ const BattleOtherState = ({ route }: { route: any }) => {
       const accessToken = await AsyncStorage.getItem("accessToken");
       try {
         const response = await fetch(
-          `http://192.168.45.176:8080/battlestatus?battleId=${battleId}`,
+          `/battlestatus?battleId=${battleId}`,
           {
             method: "GET",
             headers: { Authorization: `${accessToken}` },

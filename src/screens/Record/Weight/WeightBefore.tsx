@@ -23,7 +23,7 @@ const WeightRegisterScreen = ({ route, navigation }: any) => {
 
   const sendDataToServer = async () => {
     try {
-      const response = await fetch("http://192.168.45.176:8080/createweight", {
+      const response = await fetch("/createweight", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

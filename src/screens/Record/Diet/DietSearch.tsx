@@ -27,7 +27,7 @@ const DietSearch = ({ route }: any) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://192.168.45.176:8080/food/searchAll");
+      const response = await fetch("/food/searchAll");
       const result = await response.json();
       setData(result.result || []); // Ensure data is an array
     } catch (error) {

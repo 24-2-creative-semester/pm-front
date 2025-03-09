@@ -36,7 +36,7 @@ export default () => {
 	// foodId를 사용해 GET 방식으로 서버에서 데이터 요청
 	const fetchFoodDetails = async () => {
 		try {
-			const response = await fetch(`http://192.168.45.176:8080/food/search?foodId=${foodid}`);
+			const response = await fetch(`/food/search?foodId=${foodid}`);
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}
@@ -71,7 +71,7 @@ export default () => {
 
 		try {
 			// 서버로 POST 요청 보내기
-			const response = await fetch('http://192.168.45.176:8080/food/addEatingFood', {
+			const response = await fetch('/food/addEatingFood', {
 				method: 'POST',
 				headers: {
 					'Authorization': `${accessToken}`, // Authorization 헤더 추가
